@@ -14,6 +14,7 @@ public class ListingGenerator extends TermIterator {
 	private SymbolTable symTab;
 	private PrintWriter dest;
 	private ArrayList < ParsedLine > term;
+	private CommandListingGenerator localCmdGen;
 	
 	public ListingGenerator(SymbolTable symTab, ArrayList<ParsedLine> term) {
 		this.symTab = symTab;
@@ -24,6 +25,7 @@ public class ListingGenerator extends TermIterator {
 	public void genOutput(PrintWriter writer) {
 		dest = writer;
 		iterateOverTerm(term);
+		localCmdGen = new CommandListingGenerator(symTab);
 	}
 
 	
@@ -35,43 +37,9 @@ public class ListingGenerator extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
-		dest.printf("%s %s %s %s %s",
-				genOpCode(),
-				genModRM(),
-				genSib(),
-				genOffset(),
-				genAbsoluteOper());
+		dest.printf("%-50s %s", localCmdGen.generate(matchedLine),matchedLine);
 	}
 	
-	private String genOpCode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String genModRM() {
-		
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String genSib() {
-		
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String genOffset() {
-		
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String genAbsoluteOper() {
-		
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	protected void whenDirectiveMatched() {
 		if ( matchedLine.matches(defSegEndsPattern) ) {
@@ -119,7 +87,7 @@ public class ListingGenerator extends TermIterator {
 		}
 	}
 	
-	private String genHexFromOperand(Operand oper,int byteSize) {
+	static String genHexFromOperand(Operand oper,int byteSize) {
 		if ( oper instanceof AbsoluteExpr ) {
 			return ListingGenerator.buildDefaultHexRep(
 							(int) ((AbsoluteExpr) oper).evalAbsoluteExpr().GetVaue(),

@@ -17,8 +17,18 @@ public class MemoryOperand extends Operand {
 		return false;
 	}
 		
+	public int getOffset() {
+		
+		return 0;
+	}
+	
 	public boolean isOffsetPresent() {
 		// TODO
+		return false;
+	}
+	
+	public boolean isSibNeeded() {
+		//TODO
 		return false;
 	}
 	
@@ -27,7 +37,7 @@ public class MemoryOperand extends Operand {
 		return 0;
 	}
 	
-	public Register getBast() {
+	public Register getBase() {
 		// TODO
 		return null;
 	}
