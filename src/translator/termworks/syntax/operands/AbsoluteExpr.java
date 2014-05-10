@@ -1,4 +1,4 @@
-package translator.termworks.syntax;
+package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -7,7 +7,6 @@ import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.Constant;
 import translator.table.tablecomponents.Operator;
-import translator.termworks.generating.ListingGenerator;
 
 public class AbsoluteExpr extends Operand {
 	
@@ -77,10 +76,7 @@ public class AbsoluteExpr extends Operand {
 	}
 	
 	private boolean isAbsoluteTerm() {
-		if ( operandAtoms.size() == 1 &&
-				operandAtoms.get(0) instanceof Constant )
-			return true;
-		return false;
+		return operandAtoms.size() == 1 && operandAtoms.get(0) instanceof Constant;
 	}
 	
 	private boolean isParenthesisRemoveNeeded() {

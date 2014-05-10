@@ -46,6 +46,11 @@ public class Variable extends Identifier {
     } 
     
     @Override
+    public String identTypeToString() {
+    	return type.toString();
+    }
+    
+    @Override
     public AtomType getType() {
         return AtomType.Variable;
     }

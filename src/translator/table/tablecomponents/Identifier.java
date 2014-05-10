@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 public class Identifier extends Atom {
     private int offset;	
 	
+    
 // Identifier regular expression 	
  	public final static String identRegex = "[a-zA-Z_@$?][a-zA-Z0-9_@$?]{0,32}";
 
@@ -16,24 +17,11 @@ public class Identifier extends Atom {
 		return ident.matches(allowedIdentifierPattern.pattern());
 	}
         
-    @Override
-    public AtomType getType() {
-        return AtomType.Identifier;
-    }
-    
     public Identifier(String _name) {
         super(_name);
+        offset = - 1;
     }
-
-    public String toString() {
-    	return "Identifier";
-    }
-
-    @Override
-	public Atom searchedPosAtom() {
-		return this;
-	}
-
+	
 	public int getOffset() {
 		return offset;
 	}
@@ -41,5 +29,21 @@ public class Identifier extends Atom {
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
+    @Override
+    public AtomType getType() {
+        return AtomType.Identifier;
+    }
     
+    public String toString() {
+    	return "Identifier";
+    }
+    
+    public String identTypeToString() {
+    	return "no type";
+    }
+
+    @Override
+	public Atom searchedPosAtom() {
+		return this;
+	}
 }

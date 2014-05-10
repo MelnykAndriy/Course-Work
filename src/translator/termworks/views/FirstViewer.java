@@ -6,14 +6,9 @@ import java.util.ArrayList;
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.generating.ListingGenerator;
-import translator.termworks.syntax.AbsoluteExpr;
+import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.table.SymbolTable;
-import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.AtomType;
-import translator.table.tablecomponents.Identifier;
-import translator.table.tablecomponents.Label;
-import translator.table.tablecomponents.Segment;
-import translator.table.tablecomponents.Variable;
+import translator.table.tablecomponents.*;
 
 public class FirstViewer extends TermIterator {
 	private SymbolTable symTab;
@@ -110,7 +105,7 @@ public class FirstViewer extends TermIterator {
 		for (Segment seg : segments ) 
 			writer.printf("%-40s%-8s%-8s\n",
 									seg.getName().toUpperCase(),
-									"TODO",
+									seg.identTypeToString(),
 									ListingGenerator.buildDefaultHexRep(seg.byteSize(),2));
 		writer.println();
 	}
@@ -122,14 +117,12 @@ public class FirstViewer extends TermIterator {
 			for (Identifier sym : seg.getDefSymbols() ) {
 				writer.printf("%-40s%-9s%-8s%s\n",
 											sym.getName().toUpperCase(),
-											"TODO",
+											sym.identTypeToString(),
 											ListingGenerator.buildDefaultHexRep(sym.getOffset(),2),
 										  	seg.getName().toUpperCase() );
 			}
 		}
 		writer.println();
 	}
-	
-
 
 }

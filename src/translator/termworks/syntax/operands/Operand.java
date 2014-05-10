@@ -1,4 +1,4 @@
-package translator.termworks.syntax;
+package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,12 @@ public abstract class Operand extends Atom {
 	}
 	
 	public static Operand makeOperand(ArrayList < Atom > operandAtoms) {
-		if ( AbsoluteExpr.isAbsoluteExpr(operandAtoms) ) {
+		if ( AbsoluteExpr.isAbsoluteExpr(operandAtoms) )
 			return new AbsoluteExpr(operandAtoms);
-		}
+		if ( RegisterOperand.isRegisterOperand(operandAtoms))
+			return new RegisterOperand(operandAtoms);
+		if ( MemoryOperand.isMemoryOperand(operandAtoms) )
+			return new MemoryOperand(operandAtoms);
 		
 		return new UndefinedOperand(operandAtoms);
 	}

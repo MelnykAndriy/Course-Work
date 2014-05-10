@@ -8,6 +8,7 @@ import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 import translator.termworks.StopIterate;
 import translator.termworks.TermIterator;
+import translator.termworks.syntax.operands.Operand;
 
 public class Parser extends TermIterator {
 	private ArrayList < ParsedLine > term;
@@ -109,7 +110,7 @@ public class Parser extends TermIterator {
 	}
 	
 	private ParsedLine segmentProcessing(ParsedLine lexerLine) {
-		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.dataSeg);	
+		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit32);	
 		ArrayList < Atom > atoms = new ArrayList < Atom > ();
 		atoms.add(seg);
 		atoms.add(lexerLine.getAtomAt(1));
@@ -117,7 +118,7 @@ public class Parser extends TermIterator {
 	}
 	
 	private ParsedLine endSegmentProcessing(ParsedLine lexerLine) {
-		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.dataSeg);
+		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit32);
 		ArrayList < Atom > atoms = new ArrayList < Atom > ();
 		atoms.add(seg);
 		atoms.add(lexerLine.getAtomAt(1));

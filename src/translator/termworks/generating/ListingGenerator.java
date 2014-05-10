@@ -7,8 +7,8 @@ import translator.lexer.ParsedLine;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.Variable;
 import translator.termworks.TermIterator;
-import translator.termworks.syntax.AbsoluteExpr;
-import translator.termworks.syntax.Operand;
+import translator.termworks.syntax.operands.AbsoluteExpr;
+import translator.termworks.syntax.operands.Operand;
 
 public class ListingGenerator extends TermIterator {
 	private SymbolTable symTab;
@@ -35,10 +35,43 @@ public class ListingGenerator extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
-		// TODO Auto-generated method stub
-		
+		dest.printf("%s %s %s %s %s",
+				genOpCode(),
+				genModRM(),
+				genSib(),
+				genOffset(),
+				genAbsoluteOper());
 	}
 	
+	private String genOpCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String genModRM() {
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String genSib() {
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String genOffset() {
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String genAbsoluteOper() {
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	protected void whenDirectiveMatched() {
 		if ( matchedLine.matches(defSegEndsPattern) ) {

@@ -4,15 +4,15 @@ package translator.table.tablecomponents;
 import java.util.ArrayList;
 
 public class Segment extends Identifier {
-	public enum SegmentType { codeSeg, dataSeg }; 
-	private SegmentType SegType;	
+	public enum SegmentType { bit16 , bit32 }; 
+	private SegmentType segType;	
 	private int byteSize;
 	private ArrayList < Variable > vars;
 	private ArrayList < Label > labels;
 		
 	public Segment(String _name,SegmentType type) {
 		super(_name);
-		SegType = type;
+		segType = type;
 		byteSize= 0;
 		vars = new ArrayList < Variable > ();
 		labels = new ArrayList < Label > ();
@@ -34,7 +34,7 @@ public class Segment extends Identifier {
 	}
 	
 	public void defLabel(Label lab) {
-		lab.setOffset(0); // TODO 
+		lab.setOffset(byteSize); 
 		labels.add(lab);
 	}
 	
@@ -46,7 +46,7 @@ public class Segment extends Identifier {
 	}
 	
 	public SegmentType getSegmentType() {
-		return SegType;
+		return segType;
 	}
 
 	public synchronized int getByteSize() {
@@ -56,5 +56,11 @@ public class Segment extends Identifier {
     public String toString() {
     	return "Segment";
     }
+
+	@Override
+	public String identTypeToString() {
+		return (segType == SegmentType.bit32)?("32 bit"):("16 bit");
+	}
+    
     
 }

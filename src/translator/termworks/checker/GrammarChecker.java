@@ -10,6 +10,8 @@ import translator.errorhandling.ErrorsTable;
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.*;
+import translator.termworks.syntax.operands.AbsoluteExpr;
+import translator.termworks.syntax.operands.Operand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 

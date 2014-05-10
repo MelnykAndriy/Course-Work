@@ -1,4 +1,4 @@
-package translator.termworks.syntax;
+package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 

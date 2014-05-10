@@ -1,7 +1,7 @@
 package translator.table.tablecomponents;
 
 import translator.exc.PriorityException;
-import translator.termworks.syntax.Operand;
+import translator.termworks.syntax.operands.Operand;
 
 interface Calculable {
 	int MIN_PRIORITY = 13;

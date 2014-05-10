@@ -16,6 +16,7 @@ import translator.exc.BadConstant;
 import translator.exc.NoSuchAtomException;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
+import translator.table.tablecomponents.Label.LabelType;
 
 public class Lexer extends Printable {
 	private SymbolTable tableRef;
@@ -81,7 +82,7 @@ public class Lexer extends Printable {
 		
 	// check if line starts with Label
 		if ( labelMatcher.matches() ) {
-			curParsedLine.add( new Label(labelMatcher.group(1)) );
+			curParsedLine.add( new Label(labelMatcher.group(1),LabelType.NEAR) );
 			line = labelMatcher.group(2);
 		}
 		

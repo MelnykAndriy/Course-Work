@@ -6,8 +6,8 @@ import java.util.TreeMap;
 
 import translator.exc.IncorrectBitSize;
 import translator.exc.PriorityException;
-import translator.termworks.syntax.Operand;
-import translator.termworks.syntax.AbsoluteExpr;
+import translator.termworks.syntax.operands.AbsoluteExpr;
+import translator.termworks.syntax.operands.Operand;
 import translator.table.tablecomponents.*;
 
 
