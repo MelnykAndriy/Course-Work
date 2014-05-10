@@ -70,10 +70,10 @@ public class CommandListingGenerator {
 	private String genSib(int scale, Register base, Register index) {
 		byte sibByte = 0;
 		sibByte |= (scale == 1)?(0):( (scale == 2)?(1):( (scale == 4)?(2):(3) ));
-		sibByte <<= 3;
 		sibByte |= index.getRegNumb();
 		sibByte <<= 3;
 		sibByte |= base.getRegNumb();
+		sibByte <<= 3;
 		return ListingGenerator.buildDefaultHexRep(sibByte,1);
 	}
 
