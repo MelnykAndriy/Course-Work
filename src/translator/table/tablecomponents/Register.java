@@ -14,8 +14,6 @@ public class Register extends Atom {
     // like (segmentRegister,base, ... )
     
     
-    
-    
     public Register(String _name,int bitSize,int regNumb)
     			throws IncorrectBitSize {
         this(_name,bitSize,regNumb,"");
@@ -43,6 +41,10 @@ public class Register extends Atom {
     
     public int GetByteSize() {
         return bitSize*8;
+    }
+    
+    public int getRegNumb() {
+    	return regNumb;
     }
     
     @Override
