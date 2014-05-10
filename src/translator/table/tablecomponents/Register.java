@@ -12,8 +12,6 @@ public class Register extends Atom {
     
     //TODO implement enum that will be encapsulate register appointment
     // like (segmentRegister,base, ... )
-    
-    
     public Register(String _name,int bitSize,int regNumb)
     			throws IncorrectBitSize {
         this(_name,bitSize,regNumb,"");
