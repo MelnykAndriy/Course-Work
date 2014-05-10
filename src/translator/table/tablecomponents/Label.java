@@ -4,7 +4,8 @@ package translator.table.tablecomponents;
 import java.util.regex.Pattern;
 
 public class Label extends Identifier {
-
+	public enum LabelType { Near,Far };
+	
 	public final static String labelRegex = "^\\s*(" + Identifier.identRegex + ")\\s*[:](.*)"; 
 	
 	public final static Pattern labelPattern = Pattern.compile(labelRegex);

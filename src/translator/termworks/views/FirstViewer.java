@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
+import translator.termworks.generating.ListingGenerator;
 import translator.termworks.syntax.AbsoluteExpr;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.Atom;
@@ -66,8 +67,6 @@ public class FirstViewer extends TermIterator {
 
 	}
 
-	
-	
 	private void segmentDef() {
 		symTab.AddSymbol( curProcessSeg = (Segment) matchedLine.getAtomAt(0) );
 		term.add(matchedLine);
@@ -112,7 +111,7 @@ public class FirstViewer extends TermIterator {
 			writer.printf("%-40s%-8s%-8s\n",
 									seg.getName().toUpperCase(),
 									"TODO",
-									buildDefaultHexRep(seg.byteSize() ));
+									ListingGenerator.buildDefaultHexRep(seg.byteSize(),2));
 		writer.println();
 	}
 	
@@ -124,20 +123,13 @@ public class FirstViewer extends TermIterator {
 				writer.printf("%-40s%-9s%-8s%s\n",
 											sym.getName().toUpperCase(),
 											"TODO",
-										  	buildDefaultHexRep(sym.getOffset()),
+											ListingGenerator.buildDefaultHexRep(sym.getOffset(),2),
 										  	seg.getName().toUpperCase() );
 			}
 		}
 		writer.println();
 	}
 	
-	private String buildDefaultHexRep(int value) {
-		StringBuffer fixed = new StringBuffer(Integer.toHexString(value).toUpperCase());
-		int DEFALT_CHARACTER_NUMB = 4;
-		fixed.reverse();
-		while (DEFALT_CHARACTER_NUMB > fixed.length() )
-			fixed.append("0");
-		return fixed.reverse().toString();
-	}
+
 
 }

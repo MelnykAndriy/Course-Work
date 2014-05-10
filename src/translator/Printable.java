@@ -11,11 +11,8 @@ public abstract class Printable {
 	
 	public void genOutput(OutputStream stream) {
 		PrintWriter printer = new PrintWriter(stream);
-		try {
-			genOutput( printer );
-		} finally {
-			printer.close();
-		}
+		genOutput( printer );
+		printer.flush();
 	}
 	
 	public void genOutput(String fname) throws FileNotFoundException { 

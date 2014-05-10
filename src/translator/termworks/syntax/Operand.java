@@ -10,7 +10,7 @@ public abstract class Operand extends Atom {
 	protected ArrayList < Atom > operandAtoms;
 
 	public abstract int calcSizeInBytes() ;
-	
+
 	public Operand(ArrayList < Atom > atoms) {
 		super(Lexer.buildStringFromAtoms(atoms));
 		operandAtoms = atoms;
@@ -36,6 +36,7 @@ public abstract class Operand extends Atom {
 	public AtomType getType() {
 		return null;
 	}
+	
 
     @Override
 	public Atom searchedPosAtom() {

@@ -7,6 +7,7 @@ import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.Constant;
 import translator.table.tablecomponents.Operator;
+import translator.termworks.generating.ListingGenerator;
 
 public class AbsoluteExpr extends Operand {
 	
@@ -39,7 +40,7 @@ public class AbsoluteExpr extends Operand {
 	public int calcSizeInBytes() {
 		return evalAbsoluteExpr().getSizeInBytes();
 	}
-		
+			
 	private static ArrayList < Atom > unaryFix(ArrayList < Atom > absoluteExpr ) {
 		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > ();
 		Atom prevAtom = null;
@@ -59,10 +60,9 @@ public class AbsoluteExpr extends Operand {
 	}
 	
 	public void calc() {
-		ArrayList < Atom > evaledOperandAtoms = new ArrayList < Atom >();
-		evaledOperandAtoms.add(evalAbsoluteExpr());
+		Constant evaluetedConstant = evalAbsoluteExpr();
 		operandAtoms.clear();
-		operandAtoms.add(Operand.makeOperand(evaledOperandAtoms));
+		operandAtoms.add(evaluetedConstant);
 	}
 	
 	public Constant evalAbsoluteExpr (){
