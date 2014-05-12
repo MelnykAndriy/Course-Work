@@ -12,6 +12,7 @@ import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
+import translator.termworks.syntax.operands.UndefinedOperand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 
@@ -92,6 +93,11 @@ public class GrammarChecker extends TermIterator {
 		@Override
 		public void labelErrorsCheck() {
 			Label curLabel = (Label) matchedLine.getAtomAt(0);
+			if ( SymbolTable.isReserved(curLabel.getName()) ) {
+				reporter.reportReservedNameConflicts(matchedLine);
+				return;
+			}
+			
 			if (  checkIfDef(curLabel) )
 				if ( userDefinedNames.get(curLabel.getName().toLowerCase()) == AtomType.Label  ) 
 					reporter.reportAlreadyDefLabel(matchedLine);
@@ -113,9 +119,19 @@ public class GrammarChecker extends TermIterator {
 			if ( operands.size() != cmd.getOperandNumb() ) 
 				reporter.reportWrongOperandNumbInCommands(matchedLine);
 			
-			for (int i = 0; i < operands.size(); i++ )
-				if ( ( (Operand) operands.get(i)).isMissing() )
+			for (int i = 0; i < operands.size(); i++ ) {
+				if ( ( (Operand) operands.get(i)).isMissing() ) {
 					reporter.reportMissingOperand(matchedLine,i + 1);
+					continue;
+				}
+				if ( operands.get(i + 1) instanceof UndefinedOperand) {
+					reporter.reportUndefinedOperand(matchedLine,i);
+				}
+			}
+			if ( !cmd.isOperandsCombinationAllowed(operands) ) {
+				reporter.reportUnsupportedOperands(matchedLine);
+			}
+			
 		}
 		
 		@Override
@@ -157,7 +173,6 @@ public class GrammarChecker extends TermIterator {
 				userDefinedNames.put(seg.getName().toLowerCase(),AtomType.Segment );
 			}
 			curCheckSeg = seg;
-			
 		}
 
 		private void endSegmentErrorsCheck() {
@@ -204,10 +219,15 @@ public class GrammarChecker extends TermIterator {
 					reporter.reportVariableAlreadyDef(matchedLine);
 				else
 					reporter.reportNotVaraibleAlreadyDef(matchedLine);
+				return;
 			}
 			
-			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);
-			
+			if ( SymbolTable.isReserved(defVariable.getName()) ) {
+				reporter.reportReservedNameConflicts(matchedLine);
+				return;
+			}
+			System.out.println("Defined : " +  defVariable.getName());
+			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);	
 		}
 		
 		private boolean AbsoluteExprCheck(AbsoluteExpr initVal) {

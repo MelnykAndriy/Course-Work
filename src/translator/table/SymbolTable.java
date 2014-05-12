@@ -7,13 +7,11 @@ import java.util.TreeMap;
 import translator.table.initializers.*;
 import translator.table.tablecomponents.*;
 
-
 public class SymbolTable {
    // new variant
     private TreeMap<String,Atom> table;
-    public static TreeMap < String , Atom > predefined; 
-    
-    
+    private static TreeMap < String , Atom > predefined; 
+       
     static {
     	predefined = new TreeMap< String, Atom > ();
         CommandInitializer.initialize(predefined);
@@ -37,7 +35,7 @@ public class SymbolTable {
     	}
     }
     
-    public boolean isReserved(String name) {
+    public static boolean isReserved(String name) {
     	return predefined.containsKey(name);
     }
     

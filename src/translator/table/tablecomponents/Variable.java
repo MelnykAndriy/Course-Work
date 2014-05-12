@@ -8,6 +8,11 @@ public class Variable extends Identifier {
 		super( ident.getName() );
 		this.type = type;
 	}
+	
+	public Variable(String name,DataType type) {
+		super( name );
+		this.type = type;
+	}
 		
     public static int GetSize(Variable obj) {
         byte retVal = 0;

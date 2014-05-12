@@ -170,4 +170,25 @@ public class ErrorReporter {
 					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.AbsExpr))));
 	}
 	
+	public void reportReservedNameConflicts( ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.NameConflictsWithReserved,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(0)));
+	}
+
+	public void reportUndefinedOperand(ParsedLine line,int undefOpPos) {
+		errReported++;
+		errTab.report(ErrIdent.UndefOperand,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(undefOpPos) ) );
+	}
+	
+	public void reportUnsupportedOperands(ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.UnsupportedOperands,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Command)) ) );
+	}
+ 	
 }

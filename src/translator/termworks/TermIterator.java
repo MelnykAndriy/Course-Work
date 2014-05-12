@@ -52,17 +52,17 @@ public abstract class TermIterator extends Printable {
 					if ( line.getAtoms().size() == 1) 
 						continue;
 				}
+					
+				if ( line.firstIndexOf(AtomType.Directive) != -1 ) {
+					whenDirectiveMatched();
+					continue;
+				}
 				
 				if ( line.startsWith(labelCmdPattern) | line.startsWith(cmdPattern) ) {
 					whenCommandMatched();
 					continue;
 				}
-							
-				if ( line.firstIndexOf(AtomType.Directive) != -1 ) {
-					whenDirectiveMatched();
-					continue;
-				}
-											
+				
 				whenNotMatched();
 				matchedLine = null;
 			}

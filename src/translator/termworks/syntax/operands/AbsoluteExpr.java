@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import translator.exc.*;
 import translator.lexer.Lexer;
 import translator.table.OperandKind;
+import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 
 public class AbsoluteExpr extends Operand {
@@ -18,8 +19,8 @@ public class AbsoluteExpr extends Operand {
 	
 	static {
 		unaryFixTab = new TreeMap < String , Atom >();
-		unaryFixTab.put("+",new Constant(0,10));
-		unaryFixTab.put("-",new Constant(0,10));
+		unaryFixTab.put("+",SymbolTable.getReserved("u+") );
+		unaryFixTab.put("-",SymbolTable.getReserved("u-") );
 	}
 	
 	public static boolean isAbsoluteExpr(ArrayList < Atom > operandAtoms) {
@@ -43,7 +44,14 @@ public class AbsoluteExpr extends Operand {
 			
 	private static ArrayList < Atom > unaryFix(ArrayList < Atom > absoluteExpr ) {
 		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > () ;
-		
+		Atom prevAtom = null;
+		for ( Atom atom : absoluteExpr ) {
+			if ( atom instanceof Operator && unaryFixTab.get(atom.getName()) != null 
+					&& !(prevAtom instanceof Constant) )
+				fixedAbsExpr.add(unaryFixTab.get( atom.getName() ) );
+			else 
+				fixedAbsExpr.add(atom);
+		} 
 		return fixedAbsExpr;
 	}
 	
@@ -100,13 +108,14 @@ public class AbsoluteExpr extends Operand {
 	}
 	
 	public Constant evalAbsoluteExpr (){
-		if ( isAbsoluteTerm() ) 
-			return (Constant) operandAtoms.get(0);
-
-		int lowestPrOpPos = posLowPriority();
-		Operand leftOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(0,lowestPrOpPos)));
-		Operand rightOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(lowestPrOpPos + 1,operandAtoms.size())) );
-		return (( AbsoluteExpr) ((Operator) operandAtoms.get(lowestPrOpPos)).eval(leftOp,rightOp)).evalAbsoluteExpr();
+		return new Constant(0,10);
+//		if ( isAbsoluteTerm() ) 
+//			return (Constant) operandAtoms.get(0);
+//
+//		int lowestPrOpPos = posLowPriority();
+//		Operand leftOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(0,lowestPrOpPos)));
+//		Operand rightOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(lowestPrOpPos + 1,operandAtoms.size())) );
+//		return (( AbsoluteExpr) ((Operator) operandAtoms.get(lowestPrOpPos)).eval(leftOp,rightOp)).evalAbsoluteExpr();
 	}
 	
 	private boolean isAbsoluteTerm() {

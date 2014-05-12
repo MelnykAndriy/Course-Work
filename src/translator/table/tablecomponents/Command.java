@@ -57,5 +57,12 @@ public class Command extends Mnemocode {
 	public String getOpCodeForOperands(ArrayList< Operand > operands) {
 		return suit.getOptionForOperands(operands).getOpcode();
 	}
+
+	public boolean isOperandsCombinationAllowed(ArrayList<Atom> atomOperands) {
+		ArrayList < Operand > operands = new ArrayList < Operand > ();
+		for ( Atom atom : atomOperands )
+			operands.add((Operand) atom);
+		return suit.isOperandsComninationAllowed(operands);
+	}
 	
 }

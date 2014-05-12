@@ -79,7 +79,10 @@ public class ErrorsTable {
 					 		MissedAbsExprOperator,
 					 		MissedAbsExprOperand,
 					 		MissedAbsExprOParenthesis,
-					 		MissedAbsExprCParenthesis
+					 		MissedAbsExprCParenthesis,
+					 		NameConflictsWithReserved,
+					 		UndefOperand,
+					 		UnsupportedOperands
 					 		
 						 };
 	
@@ -144,7 +147,10 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.MissedAbsExprOperand, new Error("Constant was missed in absolute expression"));
 		Errors.put(ErrIdent.MissedAbsExprOParenthesis, new Error("Missed close parenthesis in absolute expression."));
 		Errors.put(ErrIdent.MissedAbsExprCParenthesis, new Error("Missed open parenthesis in absolute expression."));
-//		Errors.put(ErrIdent.AlreadyDefNotVariable, new Error(""));
+		Errors.put(ErrIdent.NameConflictsWithReserved, new Error("Name conflicts with reserved name."));
+		Errors.put(ErrIdent.UndefOperand, new Error("Operand type is not defined or not supported."));
+		Errors.put(ErrIdent.UnsupportedOperands , new Error("Unsupported combination of operands."));
+		//		Errors.put(ErrIdent.AlreadyDefNotVariable, new Error(""));
 	}
 	
 }

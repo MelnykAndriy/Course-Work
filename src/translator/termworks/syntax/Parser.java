@@ -99,14 +99,14 @@ public class Parser extends TermIterator {
 		return retLst;
 	}
 	
-	private ParsedLine defDirectiveProcessing(ParsedLine lexerLine) {		 
-		Variable defVariable = new Variable( (Identifier)lexerLine.getAtomAt(0),
+	private ParsedLine defDirectiveProcessing(ParsedLine lexerLine) {
+		Variable defVariable = new Variable( lexerLine.getAtomAt(0).getName(),
 											 Variable.whatType((Directive) lexerLine.getAtomAt(1)));
 		ArrayList < Atom > processed = new ArrayList < Atom > ();
 		processed.add(defVariable);
 		processed.add(lexerLine.getAtomAt(1));
 		processed.addAll(convertToOperands(lexerLine.subArray(2)));
-		return new ParsedLine(lexerLine,processed); 
+		return new ParsedLine(lexerLine,processed);
 	}
 	
 	private ParsedLine segmentProcessing(ParsedLine lexerLine) {
