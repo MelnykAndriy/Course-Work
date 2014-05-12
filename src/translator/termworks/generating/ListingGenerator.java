@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import translator.lexer.ParsedLine;
 import translator.table.SymbolTable;
-import translator.table.tablecomponents.Variable;
+import translator.table.tablecomponents.userdefined.Variable;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;

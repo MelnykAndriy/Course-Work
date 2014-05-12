@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import translator.Printable;
 import translator.lexer.ParsedLine;
 import translator.table.tablecomponents.AtomType;
-import translator.table.tablecomponents.Identifier;
+import translator.table.tablecomponents.userdefined.Identifier;
 
 public abstract class TermIterator extends Printable {
 	public ParsedLine matchedLine;

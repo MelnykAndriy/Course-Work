@@ -1,10 +1,12 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.reserved;
 
 import java.util.ArrayList;
 
 import translator.table.CommandSuit;
 import translator.table.OperandOption;
+import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 import translator.termworks.syntax.operands.Operand;
 
 public class Command extends Mnemocode {

@@ -15,6 +15,10 @@ import translator.termworks.syntax.operands.Operand;
 import translator.termworks.syntax.operands.UndefinedOperand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
+import translator.table.tablecomponents.reserved.Command;
+import translator.table.tablecomponents.userdefined.Label;
+import translator.table.tablecomponents.userdefined.Segment;
+import translator.table.tablecomponents.userdefined.Variable;
 
 public class GrammarChecker extends TermIterator {
 	public enum AvailableChecks  { FirsViewChecks,SecondViewChecks };

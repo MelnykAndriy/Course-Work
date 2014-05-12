@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import translator.table.initializers.*;
 import translator.table.tablecomponents.*;
+import translator.table.tablecomponents.userdefined.Segment;
 
 public class SymbolTable {
    // new variant

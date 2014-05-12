@@ -1,6 +1,8 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.reserved;
 import translator.exc.*;
+import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 
 public class Register extends Atom {
     public enum RegUsage { CommonReg, DataReg , StachPtr, SegReg };

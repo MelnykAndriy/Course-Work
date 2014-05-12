@@ -1,9 +1,11 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.userdefined;
 
 import java.util.regex.Pattern;
 
 import translator.exc.BadConstant;
+import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 
 public class Constant extends Atom {
     private long value;

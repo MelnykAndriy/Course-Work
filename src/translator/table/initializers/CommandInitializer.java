@@ -5,7 +5,7 @@ import java.util.TreeMap;
 import translator.table.CommandSuit;
 import translator.table.OperandOption;
 import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.Command;
+import translator.table.tablecomponents.reserved.Command;
 import translator.table.OperandKind;
 
 public class CommandInitializer  {

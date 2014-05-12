@@ -1,7 +1,9 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.userdefined;
 
 import java.util.ArrayList;
+
+import translator.table.tablecomponents.AtomType;
 
 public class Segment extends Identifier {
 	public enum SegmentType { bit16 , bit32 }; 

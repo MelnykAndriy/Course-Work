@@ -4,7 +4,7 @@ import java.util.TreeMap;
 
 import translator.exc.IncorrectBitSize;
 import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.Register;
+import translator.table.tablecomponents.reserved.Register;
 
 public class RegisterInitializer {
 	public static void initialize(TreeMap<String, Atom> table) {

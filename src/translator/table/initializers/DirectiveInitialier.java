@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.Directive;
+import translator.table.tablecomponents.reserved.Directive;
 
 public class DirectiveInitialier {
 

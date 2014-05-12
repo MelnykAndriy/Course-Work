@@ -1,7 +1,9 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.userdefined;
 
 import java.util.regex.Pattern;
+
+import translator.table.tablecomponents.AtomType;
 
 public class Label extends Identifier {
 	public enum LabelType { NEAR,FAR };

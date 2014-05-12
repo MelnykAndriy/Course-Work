@@ -9,6 +9,10 @@ import translator.termworks.generating.ListingGenerator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
+import translator.table.tablecomponents.userdefined.Identifier;
+import translator.table.tablecomponents.userdefined.Label;
+import translator.table.tablecomponents.userdefined.Segment;
+import translator.table.tablecomponents.userdefined.Variable;
 
 public class FirstViewer extends TermIterator {
 	private SymbolTable symTab;

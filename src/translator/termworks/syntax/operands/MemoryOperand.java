@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
-import translator.table.tablecomponents.Register;
+import translator.table.tablecomponents.reserved.Register;
 
 public class MemoryOperand extends Operand {
 	

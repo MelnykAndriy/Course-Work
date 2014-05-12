@@ -1,5 +1,8 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.reserved;
+
+import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 
 public class Directive extends Mnemocode {
     

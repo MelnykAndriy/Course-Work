@@ -16,7 +16,10 @@ import translator.exc.BadConstant;
 import translator.exc.NoSuchAtomException;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
-import translator.table.tablecomponents.Label.LabelType;
+import translator.table.tablecomponents.userdefined.Constant;
+import translator.table.tablecomponents.userdefined.Identifier;
+import translator.table.tablecomponents.userdefined.Label;
+import translator.table.tablecomponents.userdefined.Label.LabelType;
 
 public class Lexer extends Printable {
 	private SymbolTable tableRef;

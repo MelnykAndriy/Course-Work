@@ -1,4 +1,7 @@
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.userdefined;
+
+import translator.table.tablecomponents.AtomType;
+import translator.table.tablecomponents.reserved.Directive;
 
 public class Variable extends Identifier {
     public enum DataType { BYTE,WORD,DWORD }

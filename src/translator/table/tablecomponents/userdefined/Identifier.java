@@ -1,7 +1,10 @@
 
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.userdefined;
 
 import java.util.regex.Pattern;
+
+import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 
 public class Identifier extends Atom {
     private int offset;	

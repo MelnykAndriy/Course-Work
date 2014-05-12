@@ -1,4 +1,6 @@
-package translator.table.tablecomponents;
+package translator.table.tablecomponents.reserved;
+
+import translator.table.tablecomponents.Atom;
 
 public abstract class Mnemocode extends Atom {
 

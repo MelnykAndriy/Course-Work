@@ -5,8 +5,8 @@ import java.util.TreeMap;
 
 import translator.exc.PriorityException;
 import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.Constant;
-import translator.table.tablecomponents.Operator;
+import translator.table.tablecomponents.reserved.operators.Operator;
+import translator.table.tablecomponents.userdefined.Constant;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
 

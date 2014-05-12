@@ -8,6 +8,8 @@ import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
+import translator.table.tablecomponents.reserved.operators.Operator;
+import translator.table.tablecomponents.userdefined.Constant;
 
 public class AbsoluteExpr extends Operand {
 	
