@@ -273,8 +273,10 @@ public class OperatorsInitializer  {
 
 				@Override
 				public Operand eval(Operand op1, Operand op2) {
-					// TODO Auto-generated method stub
-					return null;
+					ArrayList < Atom > retOpAtoms = new ArrayList < Atom > ();
+					retOpAtoms.add(new Constant (
+					(((AbsoluteExpr)op1).evalAbsoluteExpr().GetVaue() % ((AbsoluteExpr)op2).evalAbsoluteExpr().GetVaue()),10));
+					return new AbsoluteExpr(retOpAtoms);
 				}
 				public Atom searchedPosAtom() { return this; }
 			});

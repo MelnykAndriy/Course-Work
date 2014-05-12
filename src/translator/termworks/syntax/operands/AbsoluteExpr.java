@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import translator.exc.*;
+import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.tablecomponents.*;
 
@@ -32,6 +33,7 @@ public class AbsoluteExpr extends Operand {
 	
 	public AbsoluteExpr(ArrayList<Atom> atoms) {
 		super(unaryFix(atoms));
+		System.out.println(Lexer.buildStringFromAtoms(operandAtoms));
 		unfixedTokenNumb = atoms.size();
 	}
 	
@@ -44,8 +46,8 @@ public class AbsoluteExpr extends Operand {
 		Atom prevAtom = null;
 		
 		for (Atom atom : absoluteExpr ) {
-			if ( atom instanceof Operator && !(prevAtom instanceof Constant)  
-					&& unaryFixTab.get(atom.getName()) != null )
+			if ( atom instanceof Operator && !(prevAtom instanceof Constant) 
+					&& unaryFixTab.get(atom.getName()) != null && (prevAtom == null || prevAtom.getName() != CParenthesis ))
 				fixedAbsExpr.add(unaryFixTab.get(atom.getName()));
 			fixedAbsExpr.add(atom);
 			prevAtom = atom;
@@ -68,8 +70,7 @@ public class AbsoluteExpr extends Operand {
 	public Constant evalAbsoluteExpr (){
 		if ( isAbsoluteTerm() ) 
 			return (Constant) operandAtoms.get(0);
-		if ( isParenthesisRemoveNeeded() ) 
-			removeParenthesis();
+
 		int lowestPrOpPos = posLowPriority();
 		Operand leftOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(0,lowestPrOpPos)));
 		Operand rightOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(lowestPrOpPos + 1,operandAtoms.size())) );
@@ -116,9 +117,12 @@ public class AbsoluteExpr extends Operand {
 			} finally {
 				i++;				
 			}
-
 		}
-				
+		if ( posLowestPr == -1) {
+			if ( isParenthesisRemoveNeeded() ) 
+				removeParenthesis();
+			return posLowPriority();
+		}
 		return posLowestPr;
 	}
 	

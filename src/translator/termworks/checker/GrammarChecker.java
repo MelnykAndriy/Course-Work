@@ -57,25 +57,25 @@ public class GrammarChecker extends TermIterator {
 
 	@Override
 	protected void whenLabelMatched() {
-		checker.labelErrorsCheck(matchedLine);
+		checker.labelErrorsCheck();
 	}
 
 	@Override
 	protected void whenDirectiveMatched() {
-		checker.directiveErrorsCheck(matchedLine);
+		checker.directiveErrorsCheck();
 		
 	}
 
 	@Override
 	protected void whenCommandMatched() {
-		checker.commandErrorsCheck(matchedLine);		
+		checker.commandErrorsCheck();		
 	}
 	
 	private interface Checkable {
-		void labelErrorsCheck(ParsedLine line);
+		void labelErrorsCheck();
 		void finalChecks(ArrayList<ParsedLine> term);
-		void directiveErrorsCheck(ParsedLine line);
-		void commandErrorsCheck(ParsedLine line);
+		void directiveErrorsCheck();
+		void commandErrorsCheck();
 	}
 	
 	private class BeforeFirstViewChecker implements Checkable {
@@ -90,69 +90,69 @@ public class GrammarChecker extends TermIterator {
 		}
 
 		@Override
-		public void labelErrorsCheck(ParsedLine line) {
-			Label curLabel = (Label) line.getAtomAt(0);
+		public void labelErrorsCheck() {
+			Label curLabel = (Label) matchedLine.getAtomAt(0);
 			if (  checkIfDef(curLabel) )
 				if ( userDefinedNames.get(curLabel.getName().toLowerCase()) == AtomType.Label  ) 
-					reporter.reportAlreadyDefLabel(line);
+					reporter.reportAlreadyDefLabel(matchedLine);
 				else 
-					reporter.reportNotLabelAlreadyDef(line);
+					reporter.reportNotLabelAlreadyDef(matchedLine);
 			else 
 				userDefinedNames.put( curLabel.getName().toLowerCase(),AtomType.Label );
 		}
 
 		@Override
-		public void commandErrorsCheck(ParsedLine line) {
-			int cmdIndex = line.firstIndexOf(AtomType.Command);
-			Command cmd = (Command) symTab.Search(line.getIndexName(cmdIndex) ); 
-			ArrayList < Atom > operands = line.subArray(cmdIndex + 1);
+		public void commandErrorsCheck() {
+			int cmdIndex = matchedLine.firstIndexOf(AtomType.Command);
+			Command cmd = (Command) symTab.Search(matchedLine.getIndexName(cmdIndex) ); 
+			ArrayList < Atom > operands = matchedLine.subArray(cmdIndex + 1);
 			
 			if ( curCheckSeg == null) 
-				reporter.reportCodeNotInsideSeg(line);
+				reporter.reportCodeNotInsideSeg(matchedLine);
 			
 			if ( operands.size() != cmd.getOperandNumb() ) 
-				reporter.reportWrongOperandNumbInCommands(line);
+				reporter.reportWrongOperandNumbInCommands(matchedLine);
 			
 			for (int i = 0; i < operands.size(); i++ )
 				if ( ( (Operand) operands.get(i)).isMissing() )
-					reporter.reportMissingOperand(line,i + 1);
+					reporter.reportMissingOperand(matchedLine,i + 1);
 		}
 		
 		@Override
-		public void directiveErrorsCheck(ParsedLine line) {
-			if ( line.matches(defSegEndsPattern) ) {
-				if ( line.getAtomAt(1).getName().equals("segment") ) {
-					segmentErrorsCheck( line );
+		public void directiveErrorsCheck() {
+			if ( matchedLine.matches(defSegEndsPattern) ) {
+				if ( matchedLine.getAtomAt(1).getName().equals("segment") ) {
+					segmentErrorsCheck();
 					return;
 				}
 				
-				if ( line.getAtomAt(1).getName().equals("ends") ) {
-					endSegmentErrorsCheck ( line ) ;
+				if ( matchedLine.getAtomAt(1).getName().equals("ends") ) {
+					endSegmentErrorsCheck () ;
 					return;
 				}
 			}
 			
-			if ( line.strMatches(defRegex) ) {
-				defDirectiveErrorsCheck(line);
+			if ( matchedLine.strMatches(defRegex) ) {
+				defDirectiveErrorsCheck();
 				return;
 			}
 
-			if ( line.strMatches("^\\s*end.*$") ) {
-				 endDirectiveErrorsCheck(line);
+			if ( matchedLine.strMatches("^\\s*end.*$") ) {
+				 endDirectiveErrorsCheck();
 				 return;
 			}
 
-			reporter.reportDirectiveUsage(line);
+			reporter.reportDirectiveUsage(matchedLine);
 		}
 		
-		private void segmentErrorsCheck(ParsedLine line) {
+		private void segmentErrorsCheck() {
 			if ( curCheckSeg != null ) 
-				reporter.reportSegmentNotClosed(line);
+				reporter.reportSegmentNotClosed(matchedLine);
 			
-			Segment seg = (Segment) line.getAtomAt(0);
+			Segment seg = (Segment) matchedLine.getAtomAt(0);
 			if ( checkIfDef(seg) && userDefinedNames.get(seg.getName().toLowerCase()) != AtomType.Segment ) {
 				
-				reporter.reportNotSegmentAlreadyDef(line);
+				reporter.reportNotSegmentAlreadyDef(matchedLine);
 			} else {
 				userDefinedNames.put(seg.getName().toLowerCase(),AtomType.Segment );
 			}
@@ -160,33 +160,33 @@ public class GrammarChecker extends TermIterator {
 			
 		}
 
-		private void endSegmentErrorsCheck(ParsedLine line) {
+		private void endSegmentErrorsCheck() {
 			if ( curCheckSeg == null || 
-					 !curCheckSeg.getName().equals(line.getAtomAt(0).getName() )) 
-					reporter.reportSegmentNotOpened( line );
+					 !curCheckSeg.getName().equals(matchedLine.getAtomAt(0).getName() )) 
+					reporter.reportSegmentNotOpened( matchedLine );
 			else 
 				curCheckSeg = null;
 		}
 
-		private void defDirectiveErrorsCheck(ParsedLine line) {
-			Variable defVariable = (Variable) line.getAtomAt(0);
-			ArrayList < Atom > initVals = line.subArray(2);
+		private void defDirectiveErrorsCheck() {
+			Variable defVariable = (Variable) matchedLine.getAtomAt(0);
+			ArrayList < Atom > initVals = matchedLine.subArray(2);
 			Operand initVal;
 
 			if ( curCheckSeg == null) {
-				reporter.reportNotInsideSegmentDef(line);
+				reporter.reportNotInsideSegmentDef(matchedLine);
 				return;
 			}
 			
 			if ( initVals.size() != 1) {
-				reporter.reportWrongOperandNumbInDirective(line);
+				reporter.reportWrongOperandNumbInDirective(matchedLine);
 				return;
 			}
 			
 			initVal = (Operand) initVals.get(0);
 			
 			if (  !(initVal instanceof AbsoluteExpr) )  {
-				reporter.reportOnlyAbsExprAllowed(line);
+				reporter.reportOnlyAbsExprAllowed(matchedLine);
 				return;
 			}
 			
@@ -195,15 +195,15 @@ public class GrammarChecker extends TermIterator {
 			}
 			
 			if ( defVariable.Size() < initVal.calcSizeInBytes() ) {
-				reporter.reportInitConstantTooBig(line);
+				reporter.reportInitConstantTooBig(matchedLine);
 				return;
 			}
 			
 			if ( checkIfDef(defVariable) ) {
 				if (userDefinedNames.get(defVariable.getName().toLowerCase()) == AtomType.Variable )
-					reporter.reportVariableAlreadyDef(line);
+					reporter.reportVariableAlreadyDef(matchedLine);
 				else
-					reporter.reportNotVaraibleAlreadyDef(line);
+					reporter.reportNotVaraibleAlreadyDef(matchedLine);
 			}
 			
 			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);
@@ -234,15 +234,15 @@ public class GrammarChecker extends TermIterator {
 		}
 		
 
-		private void endDirectiveErrorsCheck(ParsedLine line) {
+		private void endDirectiveErrorsCheck() {
 			isEndProcessed = true;
-			ArrayList < Atom > operands = line.subArray(1);
+			ArrayList < Atom > operands = matchedLine.subArray(1);
 			
 			if ( operands.size() == 0) 
-				reporter.reportMissingOperand(line ,-1);
+				reporter.reportMissingOperand(matchedLine ,-1);
 			else {
 				if ( operands.size() != 1)
-					reporter.reportWrongOperandNumbInDirective(line);
+					reporter.reportWrongOperandNumbInDirective(matchedLine);
 			}
 			
 			// TODO
@@ -264,19 +264,19 @@ public class GrammarChecker extends TermIterator {
 	private class BeforeSecondViewChecker implements Checkable {
 
 		@Override
-		public void labelErrorsCheck(ParsedLine line) {
+		public void labelErrorsCheck() {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void directiveErrorsCheck(ParsedLine line) {
+		public void directiveErrorsCheck() {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void commandErrorsCheck(ParsedLine line) {
+		public void commandErrorsCheck() {
 			// TODO Auto-generated method stub
 			
 		}
