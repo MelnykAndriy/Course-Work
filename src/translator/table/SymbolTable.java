@@ -3,7 +3,6 @@ package translator.table;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import translator.table.initializers.*;
 import translator.table.tablecomponents.*;
@@ -12,11 +11,15 @@ import translator.table.tablecomponents.*;
 public class SymbolTable {
    // new variant
     private TreeMap<String,Atom> table;
-    private static TreeSet < String > reserved = new TreeSet < String >();
+    public static TreeMap < String , Atom > predefined; 
+    
     
     static {
-    	reserved.add("mov");
-    	// etc
+    	predefined = new TreeMap< String, Atom > ();
+        CommandInitializer.initialize(predefined);
+        OperatorsInitializer.initialize(predefined);
+        RegisterInitializer.initialize(predefined);
+        DirectiveInitialier.initialize(predefined);
     }
         
     public Atom Search(String name) {
@@ -32,6 +35,14 @@ public class SymbolTable {
     		exc.printStackTrace();
     		System.exit(1);
     	}
+    }
+    
+    public boolean isReserved(String name) {
+    	return predefined.containsKey(name);
+    }
+    
+    public static Atom getReserved(String name) {
+    	return predefined.get(name);
     }
     
     public boolean isInTable(String name) {
@@ -72,7 +83,6 @@ public class SymbolTable {
 		return table.get(name).getType() == AtomType.Variable;
 	}
         
-
 	public ArrayList<Segment> findAll(AtomType segment) {
 		ArrayList < Segment > segments = new ArrayList < Segment >();
 		for ( Atom atom : table.values() ) 
@@ -84,10 +94,7 @@ public class SymbolTable {
     
     public SymbolTable() {
         table = new TreeMap<String,Atom>();
-        CommandInitializer.initialize(table);
-        OperatorsInitializer.initialize(table);
-        RegisterInitializer.initialize(table);
-        DirectiveInitialier.initialize(table);
+        table.putAll(predefined);
     }
 
 }

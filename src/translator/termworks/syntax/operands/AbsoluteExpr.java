@@ -32,34 +32,66 @@ public class AbsoluteExpr extends Operand {
 	}
 	
 	public AbsoluteExpr(ArrayList<Atom> atoms) {
-		super(unaryFix(atoms));
+		super(atoms);
 		System.out.println(Lexer.buildStringFromAtoms(operandAtoms));
 		unfixedTokenNumb = atoms.size();
 	}
 	
 	public int calcSizeInBytes() {
-		return evalAbsoluteExpr().getSizeInBytes();
+		return new AbsoluteExpr(unaryFix(operandAtoms)).evalAbsoluteExpr().getSizeInBytes();
 	}
 			
 	private static ArrayList < Atom > unaryFix(ArrayList < Atom > absoluteExpr ) {
-		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > ();
-		Atom prevAtom = null;
+		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > () ;
 		
-		for (Atom atom : absoluteExpr ) {
-			if ( atom instanceof Operator && !(prevAtom instanceof Constant) 
-					&& unaryFixTab.get(atom.getName()) != null && (prevAtom == null || prevAtom.getName() != CParenthesis ))
-				fixedAbsExpr.add(unaryFixTab.get(atom.getName()));
-			fixedAbsExpr.add(atom);
-			prevAtom = atom;
-		}
 		return fixedAbsExpr;
 	}
+	
+//	private static ArrayList < Atom > unaryFix(ArrayList < Atom > absoluteExpr ) {
+//		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > ();
+//		Atom prevAtom = null;
+//		Atom postAddedCP = null;
+//		Stack< Integer > openClsStack = new Stack< Integer > ();
+//		int OPadded = 0;
+//		
+//		for (Atom atom : absoluteExpr ) {
+//			try {
+//				if ( atom instanceof Operator && !(prevAtom instanceof Constant) 
+//						&& unaryFixTab.get(atom.getName()) != null && (prevAtom == null || prevAtom.getName() != CParenthesis )) {
+//					fixedAbsExpr.add(Translator.mainTab.Search("("));		// TODO
+//					fixedAbsExpr.add(unaryFixTab.get(atom.getName()));
+//					OPadded++;
+//					openClsStack.push(0);
+//					continue;
+//				}
+//				if (atom.getName() == OParenthesis && OPadded != 0 ) {
+//					openClsCounter++;
+//					continue;
+//				}
+//				if ( atom.getName() == CParenthesis )
+//					openClsCounter--;
+//				if ((atom instanceof Constant || atom.getName() == CParenthesis) && OPadded && openClsCounter == 0 ) {
+//					postAddedCP = Translator.mainTab.Search(")"); 	//TODO
+//					OPadded = false;
+//				}
+//			} finally {
+//				fixedAbsExpr.add(atom);
+//				prevAtom = atom;
+//				if ( postAddedCP != null ) {
+//					fixedAbsExpr.add(postAddedCP);
+//					postAddedCP = null;
+//				}
+//			}
+//		}
+//		return fixedAbsExpr;
+//	}
 	
 	public int tokenNumb() {
 		return unfixedTokenNumb;
 	}
 	
 	public void calc() {
+		operandAtoms = unaryFix(operandAtoms);
 		Constant evaluetedConstant = evalAbsoluteExpr();
 		operandAtoms.clear();
 		operandAtoms.add(evaluetedConstant);
