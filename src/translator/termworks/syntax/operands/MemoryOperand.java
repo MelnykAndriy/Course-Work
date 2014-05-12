@@ -2,6 +2,7 @@ package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 
+import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.Register;
 
@@ -13,12 +14,17 @@ public class MemoryOperand extends Operand {
 	}
 
 	public static boolean isMemoryOperand(ArrayList < Atom > operandAtoms) {
-		
+		// TODO
 		return false;
 	}
 		
 	public int getOffset() {
-		
+		// TODO
+		return 0;
+	}
+	
+	public int getOffsetInBytes() {
+		// TODO
 		return 0;
 	}
 	
@@ -51,6 +57,17 @@ public class MemoryOperand extends Operand {
 	public int calcSizeInBytes() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public Object getSegReplacement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OperandKind getOperandKind() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

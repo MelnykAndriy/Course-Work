@@ -3,10 +3,10 @@ package translator.termworks.syntax.operands;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.AtomType;
-import translator.table.tablecomponents.Constant;
-import translator.table.tablecomponents.Operator;
+import translator.exc.*;
+
+import translator.table.OperandKind;
+import translator.table.tablecomponents.*;
 
 public class AbsoluteExpr extends Operand {
 	
@@ -62,6 +62,8 @@ public class AbsoluteExpr extends Operand {
 		Constant evaluetedConstant = evalAbsoluteExpr();
 		operandAtoms.clear();
 		operandAtoms.add(evaluetedConstant);
+		operKind = (evaluetedConstant.GetVaue() == 1)?(OperandKind.imm8):( 
+						(evaluetedConstant.GetVaue() == 2)?(OperandKind.imm16):(OperandKind.imm32) );
 	}
 	
 	public Constant evalAbsoluteExpr (){
@@ -121,9 +123,51 @@ public class AbsoluteExpr extends Operand {
 		return posLowestPr;
 	}
 	
-	public boolean isValidAbsExpr() {
-		// TODO 
+	public boolean isValidAbsExpr() throws Exception {
+		int openClsCounter = 0;
+		Atom prevAtom = null;
+		
+		for (Atom atom : operandAtoms) {
+			try {
+				if ( atom.getName() == OParenthesis ) {
+					if (prevAtom != null &&  prevAtom.getType() != AtomType.Operator) 
+						throw new MissedOperator();
+					openClsCounter++;
+					continue;
+				}
+				if ( atom.getName() == CParenthesis ) {
+					if ( openClsCounter == 0) {
+						throw new UnmatchedOpenParenthesis() ;
+					} else 
+						openClsCounter--;
+					if (prevAtom != null && prevAtom.getType() != AtomType.Constant)
+						throw new MissedConstant();
+					continue;
+				}
+			
+				if ( atom.getType() == AtomType.Operator)
+					if (!(prevAtom == null || prevAtom.getType() == AtomType.Constant || prevAtom.getName() ==  CParenthesis) && 
+						 unaryFixTab.get(atom.getName()) == null ) {
+							throw new MissedConstant();
+					}
+				
+				if ( atom.getType() == AtomType.Constant ) {
+					if (prevAtom != null && !(prevAtom.getType() == AtomType.Operator || prevAtom.getName() == OParenthesis) ) { 
+						throw new MissedOperator();
+					}
+				}
+			} finally {
+				prevAtom = null;
+			}
+		}
+		
+		if ( openClsCounter != 0) throw new UnmatchedCloseParenthesis();
 		return true;
+	}
+
+	@Override
+	public OperandKind getOperandKind() {
+		return operKind;
 	}
 	
 }

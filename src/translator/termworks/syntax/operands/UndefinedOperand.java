@@ -2,6 +2,7 @@ package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 
+import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 
 public class UndefinedOperand extends Operand {
@@ -13,6 +14,11 @@ public class UndefinedOperand extends Operand {
 	@Override
 	public int calcSizeInBytes() {
 		return -1;
+	}
+
+	@Override
+	public OperandKind getOperandKind() {
+		return null;
 	}
 
 

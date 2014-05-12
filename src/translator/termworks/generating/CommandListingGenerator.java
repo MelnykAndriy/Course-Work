@@ -3,21 +3,29 @@ package translator.termworks.generating;
 import java.util.ArrayList;
 
 import translator.lexer.ParsedLine;
+import translator.table.OperandOption;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
+import translator.table.tablecomponents.Command;
 import translator.table.tablecomponents.Register;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.MemoryOperand;
 import translator.termworks.syntax.operands.Operand;
+import translator.termworks.syntax.operands.RegisterOperand;
 
 public class CommandListingGenerator {
-	private ArrayList < Atom > lineAtoms;
+	private Command cmd;
+	private ArrayList< Operand > operands;
 	private SymbolTable symTab;
 	private int operandsSize;
+	private OperandOption curOption; 
+	
+	private MemoryOperand mem = null;
 	
 	public CommandListingGenerator(SymbolTable symTab) {
 		this.symTab = symTab;
-		operandsSize = calcOperandsSize();
+		operands = new ArrayList < Operand > ();
 	}
 
 	private int calcOperandsSize() {
@@ -26,72 +34,125 @@ public class CommandListingGenerator {
 	}
 	
 	public String generate(ParsedLine line) {
-		lineAtoms = line.getAtoms();
+		preprocessing(line);
 		StringBuffer genCommand = new StringBuffer("");
 		genCommand.append( genPrefix() );
 		genCommand.append( genOpCode() );
-		genCommand.append(genModRM() );
-		genCommand.append(genSib());
+		genCommand.append( genModRM() );
+		genCommand.append( genSib());
 		genCommand.append( genOffset() );
-		genCommand.append(genAbsoluteOper() );
+		genCommand.append( genAbsoluteOper() );
+		operands.clear();
 		return genCommand.toString();
+	}
+	
+	private void preprocessing(ParsedLine line) {
+		int cmdIndx = line.firstIndexOf(AtomType.Command);
+		cmd = (Command) line.getAtomAt( cmdIndx );
+		for ( Atom atom : line.subArray(cmdIndx + 1)) {
+			operands.add((Operand) atom);
+		}
+		
+		curOption = cmd.getOptionForOperands(operands);		
+		operandsSize = calcOperandsSize();
+		mem = null;
+		
+		for ( Operand operand : operands ) 	
+			if ( operand instanceof MemoryOperand ) {
+				mem = (MemoryOperand) operand;
+				break;
+			}
 	}
 
 	private String genPrefix( ) {
-	
-		return null;
+		StringBuffer retPrefixes = new StringBuffer("");
+		if ( mem != null ) 
+			retPrefixes.append(mem.getSegReplacement() );
+		if ( isOperandSizeOverridePrefixNeeded() ) 
+			retPrefixes.append("66| ");
+		if ( isAddressSizeOverridePrefixNeeded() )
+			retPrefixes.append("66| ");
+		return retPrefixes.toString();
 	}
 	
-	private String genOpCode() {
+	private boolean isAddressSizeOverridePrefixNeeded() {
 		// TODO Auto-generated method stub
-		return "op code here";
+		return false;
+	}
+
+	private boolean isOperandSizeOverridePrefixNeeded() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private String genOpCode() {
+		return curOption.getOpcode();
 	}
 
 	private String genModRM() {
-		byte modRmByte = 0;
-		
-		// TODO Auto-generated method stub
+		if ( operands.size() != 0) 
+			return genByte(getModFromOperands(),getRegFromOperands(),getRmFromOperands()) + " ";
+		return "";
+	}
 
-		return ListingGenerator.buildDefaultHexRep(modRmByte, 1);
+	private int getModFromOperands() {
+		if ( mem != null ) {
+			if ( mem.isOffsetPresent() ) {
+				if (mem.getOffsetInBytes() == 1)
+					return 1;	// mod 01 8 bytes offset
+				else 
+					return 2;	// mod 10 16 | 32 bytes offset
+			} else return 0; // mod 00 \ offset is absent
+		}
+		return 3; // mod = 11 \ only register operands
+	}
+
+	private int getRmFromOperands() {
+		if ( getModFromOperands() == 3) {
+			return ((RegisterOperand) operands.get(0)).getRegNumb();
+		}
+//		Register base = mem.getBase();
+//		Register index = mem.getIndex();
+//		if ( base.getName() == "BX")
+		
+		return 0;
+	}
+
+	private int getRegFromOperands() {
+		if ( curOption.isAdditionalOpcodeInReg() ) 
+			return curOption.getAdditionalOpcodeInReg();
+		return ((RegisterOperand) operands.get(1)).getRegNumb();
 	}
 
 	private String genSib() {
-		for ( Atom atom : lineAtoms ) {
-			if ( atom instanceof MemoryOperand && 
-					((MemoryOperand) atom).isSibNeeded() ) {
-				MemoryOperand mem = (MemoryOperand) atom;
-				return genSib(mem.getScale(),mem.getBase(),mem.getIndex());
-			}
+		if ( mem != null ) {
+				int scale = mem.getScale();
+				return genByte((scale == 1)?(0):( (scale == 2)?(1):( (scale == 4)?(2):(3) )), 
+								mem.getBase().getRegNumb() , mem.getIndex().getRegNumb() ) + " ";
 		}
 		return "";
-
 	}
-	
-	private String genSib(int scale, Register base, Register index) {
-		byte sibByte = 0;
-		sibByte |= (scale == 1)?(0):( (scale == 2)?(1):( (scale == 4)?(2):(3) ));
-		sibByte |= index.getRegNumb();
-		sibByte <<= 3;
-		sibByte |= base.getRegNumb();
-		sibByte <<= 3;
-		return ListingGenerator.buildDefaultHexRep(sibByte,1);
+		
+	private String genByte(int highest2Bits,int middle3Bits, int lowest3Bits ) {
+		byte genByte = 0;
+		genByte |= highest2Bits;
+		genByte <<= 3;
+		genByte |= middle3Bits;
+		genByte <<= 3;
+		genByte |= lowest3Bits;
+		return ListingGenerator.buildDefaultHexRep(genByte,1);
 	}
 
-	private String genOffset() {
-		for ( Atom atom : lineAtoms ) {
-			if ( atom instanceof MemoryOperand && 
-				 ((MemoryOperand) atom).isOffsetPresent() )
-				return ListingGenerator.buildDefaultHexRep(
-						((MemoryOperand)atom).getOffset(),
-						operandsSize);
-		}
+	private String genOffset() {		
+		if ( mem != null && mem.isOffsetPresent() ) 
+			return ListingGenerator.buildDefaultHexRep(mem.getOffset(),	operandsSize) + " R ";
 		return "";
 	}
 
 	private String genAbsoluteOper() {
-		for ( Atom atom : lineAtoms ) {
+		for ( Operand atom : operands ) {
 			if ( atom instanceof AbsoluteExpr ) {
-				return ListingGenerator.genHexFromOperand((Operand)atom,operandsSize);
+				return ListingGenerator.genHexFromOperand(atom,operandsSize) + " ";
 			}
 		}
 		return "";

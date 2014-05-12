@@ -3,12 +3,15 @@ package translator.termworks.syntax.operands;
 import java.util.ArrayList;
 
 import translator.lexer.Lexer;
+import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 
 public abstract class Operand extends Atom {
 	protected ArrayList < Atom > operandAtoms;
-
+	protected OperandKind operKind;
+	
+	public abstract OperandKind getOperandKind() ;
 	public abstract int calcSizeInBytes() ;
 
 	public Operand(ArrayList < Atom > atoms) {
@@ -40,12 +43,11 @@ public abstract class Operand extends Atom {
 		return null;
 	}
 	
-
     @Override
 	public Atom searchedPosAtom() {
 		if ( operandAtoms.size() != 0 )
 			return  operandAtoms.get(0);
 		return null;
     }
-
+    
 }

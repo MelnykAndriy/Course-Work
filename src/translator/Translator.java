@@ -44,7 +44,7 @@ public class Translator {
     	FirstViewer firstViewer = new FirstViewer(mainTab);
     	firstViewer.view(syn.getTerm());
     	firstViewer.genOutput(System.out);
-     	
+    	
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.SecondViewChecks );
     	if ( errTab.isCritical() ) stopBuild();
 

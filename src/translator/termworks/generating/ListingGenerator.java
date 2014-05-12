@@ -24,8 +24,8 @@ public class ListingGenerator extends TermIterator {
 	@Override
 	public void genOutput(PrintWriter writer) {
 		dest = writer;
-		iterateOverTerm(term);
 		localCmdGen = new CommandListingGenerator(symTab);
+		iterateOverTerm(term);
 	}
 
 	
@@ -37,6 +37,7 @@ public class ListingGenerator extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
+		System.out.println(matchedLine);
 		dest.printf("%-50s %s", localCmdGen.generate(matchedLine),matchedLine);
 	}
 	

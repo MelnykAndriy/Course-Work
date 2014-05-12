@@ -70,5 +70,9 @@ public class Register extends Atom {
 	public Atom searchedPosAtom() {
 		return this;
 	}
+
+	public String getReplacmentByte() {
+		return pre;
+	}
     
 }
