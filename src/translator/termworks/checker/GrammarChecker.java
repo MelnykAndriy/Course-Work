@@ -7,9 +7,9 @@ import java.util.TreeMap;
 
 import translator.errorhandling.ErrorReporter;
 import translator.errorhandling.ErrorsTable;
+import translator.exc.*;
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
-import translator.termworks.syntax.*;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
 import translator.table.SymbolTable;
@@ -173,35 +173,62 @@ public class GrammarChecker extends TermIterator {
 			ArrayList < Atom > initVals = line.subArray(2);
 			Operand initVal;
 
-			if ( curCheckSeg == null) 
+			if ( curCheckSeg == null) {
 				reporter.reportNotInsideSegmentDef(line);
-			else {
-				if ( initVals.size() != 1) 
-					reporter.reportWrongOperandNumbInDirective(line);
-				else {
-					initVal = (Operand) initVals.get(0);
-					
-					if (  !(initVal instanceof AbsoluteExpr) ) 
-						reporter.reportOnlyAbsExprAllowed(line);
-					else {
-						if ( defVariable.Size() <  initVal.calcSizeInBytes() )
-							reporter.reportInitConstantTooBig(line);
-						else {
-							if ( checkIfDef( defVariable ) ) {
-								if (userDefinedNames.get(defVariable.getName().toLowerCase()) == AtomType.Variable )
-									reporter.reportVariableAlreadyDef(line);
-								else
-									reporter.reportNotVaraibleAlreadyDef(line);
-							}
-							else {					
-								userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);
-							}
-						}
-					}
-				}
+				return;
 			}
+			
+			if ( initVals.size() != 1) {
+				reporter.reportWrongOperandNumbInDirective(line);
+				return;
+			}
+			
+			initVal = (Operand) initVals.get(0);
+			
+			if (  !(initVal instanceof AbsoluteExpr) )  {
+				reporter.reportOnlyAbsExprAllowed(line);
+				return;
+			}
+			
+			if ( !AbsoluteExprCheck((AbsoluteExpr) initVal) ) {
+				return;
+			}
+			
+			if ( defVariable.Size() < initVal.calcSizeInBytes() ) {
+				reporter.reportInitConstantTooBig(line);
+				return;
+			}
+			
+			if ( checkIfDef(defVariable) ) {
+				if (userDefinedNames.get(defVariable.getName().toLowerCase()) == AtomType.Variable )
+					reporter.reportVariableAlreadyDef(line);
+				else
+					reporter.reportNotVaraibleAlreadyDef(line);
+			}
+			
+			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);
+			
 		}
 		
+		private boolean AbsoluteExprCheck(AbsoluteExpr initVal) {
+			try {
+				initVal.isValidAbsExpr();
+			} catch (MissedOperator e) {
+				reporter.reportMissedOperator(matchedLine);
+				return false;
+			} catch (MissedConstant e) {
+				reporter.reportMissedConstant(matchedLine);
+				return false;
+			} catch (UnmatchedCloseParenthesis e) {
+				reporter.reportMissedCParenthesis(matchedLine);
+				return false;
+			} catch (UnmatchedOpenParenthesis e) {
+				reporter.reportMissedOParenthesis(matchedLine);
+				return false;
+			} 
+			return true;
+		}
+
 		private boolean checkIfDef(Atom atom) {
 			return userDefinedNames.get(atom.getName().toLowerCase()) != null;
 		}

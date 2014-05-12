@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.Register;
 
 public class RegisterOperand extends Operand {
@@ -32,5 +33,10 @@ public class RegisterOperand extends Operand {
 	public int getRegNumb() {
 		return ((Register) operandAtoms.get(0)).getRegNumb();
 	}
-	
+
+	@Override
+	public AtomType getType() {
+		return AtomType.RegOperand;
+	}
+		
 }

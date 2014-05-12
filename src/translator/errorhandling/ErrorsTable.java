@@ -75,7 +75,11 @@ public class ErrorsTable {
 					 		LabelExpected,
 					 		UndefinedIdentifier,
 					 		UndeclaredSegCodeEmission,
-					 		AbsExprAllowedOnly
+					 		AbsExprAllowedOnly,
+					 		MissedAbsExprOperator,
+					 		MissedAbsExprOperand,
+					 		MissedAbsExprOParenthesis,
+					 		MissedAbsExprCParenthesis
 					 		
 						 };
 	
@@ -136,6 +140,10 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.LabelExpected, new Error("Wrong operand type. Label expected."));
 		Errors.put(ErrIdent.UndeclaredSegCodeEmission, new Error("Code emission to undeclared segment."));
 		Errors.put(ErrIdent.AbsExprAllowedOnly, new Error("Absolute expression or constant expected."));
+		Errors.put(ErrIdent.MissedAbsExprOperator, new Error("Operator was missed in absolute expression."));
+		Errors.put(ErrIdent.MissedAbsExprOperand, new Error("Constant was missed in absolute expression"));
+		Errors.put(ErrIdent.MissedAbsExprOParenthesis, new Error("Missed close parenthesis in absolute expression."));
+		Errors.put(ErrIdent.MissedAbsExprCParenthesis, new Error("Missed open parenthesis in absolute expression."));
 //		Errors.put(ErrIdent.AlreadyDefNotVariable, new Error(""));
 	}
 	

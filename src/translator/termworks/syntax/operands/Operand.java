@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
-import translator.table.tablecomponents.AtomType;
 
 public abstract class Operand extends Atom {
 	protected ArrayList < Atom > operandAtoms;
@@ -36,11 +35,6 @@ public abstract class Operand extends Atom {
 
 	public boolean isMissing() {
 		return operandAtoms.size() == 0;
-	}
-		
-	@Override
-	public AtomType getType() {
-		return null;
 	}
 	
     @Override

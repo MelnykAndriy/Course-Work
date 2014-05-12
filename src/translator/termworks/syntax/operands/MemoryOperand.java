@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.Register;
 
 public class MemoryOperand extends Operand {
@@ -68,6 +69,15 @@ public class MemoryOperand extends Operand {
 	public OperandKind getOperandKind() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void isValidMemory() throws Exception {
+		
+	}
+
+	@Override
+	public AtomType getType() {
+		return AtomType.Memory;
 	}
 
 }

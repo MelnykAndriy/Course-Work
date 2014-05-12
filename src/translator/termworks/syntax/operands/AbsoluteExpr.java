@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import translator.exc.*;
-
 import translator.table.OperandKind;
 import translator.table.tablecomponents.*;
 
@@ -123,7 +122,7 @@ public class AbsoluteExpr extends Operand {
 		return posLowestPr;
 	}
 	
-	public boolean isValidAbsExpr() throws Exception {
+	public void isValidAbsExpr () throws MissedOperator, UnmatchedOpenParenthesis, MissedConstant, UnmatchedCloseParenthesis  {
 		int openClsCounter = 0;
 		Atom prevAtom = null;
 		
@@ -162,12 +161,16 @@ public class AbsoluteExpr extends Operand {
 		}
 		
 		if ( openClsCounter != 0) throw new UnmatchedCloseParenthesis();
-		return true;
 	}
 
 	@Override
 	public OperandKind getOperandKind() {
 		return operKind;
+	}
+
+	@Override
+	public AtomType getType() {
+		return AtomType.AbsExpr;
 	}
 	
 }

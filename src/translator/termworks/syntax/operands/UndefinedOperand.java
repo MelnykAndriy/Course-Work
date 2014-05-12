@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
+import translator.table.tablecomponents.AtomType;
 
 public class UndefinedOperand extends Operand {
 
@@ -21,6 +22,9 @@ public class UndefinedOperand extends Operand {
 		return null;
 	}
 
-
+	@Override
+	public AtomType getType() {
+		return null;
+	}
 
 }

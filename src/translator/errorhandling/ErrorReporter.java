@@ -141,5 +141,33 @@ public class ErrorReporter {
 					  line.getLineNumb(),
 					  line.findPos(line.getAtomAt(2)));
 	}
+
+	public void reportMissedOperator(ParsedLine line) {
+		errReported++;
+		errTab.report(ErrIdent.MissedAbsExprOperator,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.AbsExpr))));
+	}
+	
+	public void reportMissedConstant(ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.MissedAbsExprOperand,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.AbsExpr))));
+	}
+	
+	public void reportMissedOParenthesis( ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.MissedAbsExprOParenthesis,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.AbsExpr))));
+	}
+	
+	public void reportMissedCParenthesis( ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.MissedAbsExprCParenthesis,
+					  line.getLineNumb(),
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.AbsExpr))));
+	}
 	
 }

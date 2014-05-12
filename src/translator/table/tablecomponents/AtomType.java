@@ -12,6 +12,6 @@ public enum AtomType {
     Label,
     Operator,
     Separator,
-    
-    Undefined
+    Undefined,
+    AbsExpr, Memory, RegOperand
 }
