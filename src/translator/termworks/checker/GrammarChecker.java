@@ -147,12 +147,12 @@ public class GrammarChecker extends TermIterator {
 					errorsFound = true;
 					continue;
 				}
-				if ( operand instanceof AbsoluteExpr && AbsoluteExprCheck((AbsoluteExpr) operand) ) {
+				if ( operand instanceof AbsoluteExpr && !AbsoluteExprCheck((AbsoluteExpr) operand) ) {
 					errorsFound = true;
 					continue;
 				}
 				
-				if ( operand instanceof MemoryOperand && MemoryOperandCheck((MemoryOperand) operand )) {
+				if ( operand instanceof MemoryOperand && !MemoryOperandCheck((MemoryOperand) operand )) {
 					errorsFound = true;
 					continue;
 				}
