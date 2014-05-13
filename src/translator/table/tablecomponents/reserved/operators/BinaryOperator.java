@@ -26,7 +26,7 @@ public abstract class BinaryOperator extends Operator {
 		return this;
 	}
 
-	public Operand eval(Operand op1) {
+	final public Operand eval(Operand op1) {
 		System.err.println("Unary eval have been called for binary operator.");
 		System.exit(1);
 		return null;

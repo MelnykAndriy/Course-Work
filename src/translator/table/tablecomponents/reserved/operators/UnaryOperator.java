@@ -29,7 +29,7 @@ public abstract class UnaryOperator extends Operator {
 	public abstract Operand eval(Operand op1);
 
 	@Override
-	public Operand eval(Operand op1, Operand op2) {
+	final public Operand eval(Operand op1, Operand op2) {
 		System.err.println("Binary eval have been called for unary operator.");
 		System.exit(1);
 		return null;

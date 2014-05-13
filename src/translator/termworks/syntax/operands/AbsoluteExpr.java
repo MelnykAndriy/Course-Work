@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import translator.exc.*;
-import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
@@ -36,7 +35,6 @@ public class AbsoluteExpr extends Operand {
 	
 	public AbsoluteExpr(ArrayList<Atom> atoms) {
 		super(atoms);
-//		System.out.println(Lexer.buildStringFromAtoms(operandAtoms));
 		unfixedTokenNumb = atoms.size();
 	}
 	
@@ -137,7 +135,7 @@ public class AbsoluteExpr extends Operand {
 	public void isValidAbsExpr () throws MissedOperator, UnmatchedOpenParenthesis, MissedConstant, UnmatchedCloseParenthesis  {
 		int openClsCounter = 0;
 		Atom prevAtom = null;
-		
+
 		for (Atom atom : operandAtoms) {
 			try {
 				if ( atom.getName() == OParenthesis ) {
@@ -157,7 +155,7 @@ public class AbsoluteExpr extends Operand {
 				}
 			
 				if ( atom.getType() == AtomType.Operator)
-					if (!(prevAtom == null || prevAtom.getType() == AtomType.Constant || prevAtom.getName() ==  CParenthesis) && 
+					if ( (prevAtom == null || !(prevAtom.getType() == AtomType.Constant || prevAtom.getName() ==  CParenthesis)) && 
 						 unaryFixTab.get(atom.getName()) == null ) {
 							throw new MissedConstant();
 					}
@@ -168,11 +166,12 @@ public class AbsoluteExpr extends Operand {
 					}
 				}
 			} finally {
-				prevAtom = null;
+				prevAtom = atom;
 			}
 		}
 		
 		if ( openClsCounter != 0) throw new UnmatchedCloseParenthesis();
+		if ( prevAtom instanceof Operator ) throw new MissedConstant();
 	}
 
 	@Override

@@ -5,15 +5,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import translator.errorhandling.ErrorReporter;
-import translator.errorhandling.ErrorsTable;
+import translator.errorhandling.*;
 import translator.exc.*;
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
-import translator.termworks.syntax.operands.AbsoluteExpr;
-import translator.termworks.syntax.operands.Operand;
-import translator.termworks.syntax.operands.RegisterOperand;
-import translator.termworks.syntax.operands.UndefinedOperand;
+import translator.termworks.syntax.operands.*;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 import translator.table.tablecomponents.reserved.Command;
@@ -143,26 +139,43 @@ public class GrammarChecker extends TermIterator {
 		
 		private boolean operandsCheckReport(ArrayList < Atom > operands,int cmdIndex) {
 			boolean errorsFound = false;
-			for (int i = 0; i < operands.size(); i++ ) {
-				if ( ( (Operand) operands.get(i)).isMissing() ) {
+			int i = 0;
+		
+			for (Atom operand : operands) {
+				if ( ( (Operand) operand).isMissing() ) {
 					reporter.reportMissingOperand(matchedLine,i + 1);
 					errorsFound = true;
 					continue;
 				}
-				if ( operands.get(i) instanceof AbsoluteExpr ) {
-					AbsoluteExprCheck((AbsoluteExpr) operands.get(i));
+				if ( operand instanceof AbsoluteExpr && AbsoluteExprCheck((AbsoluteExpr) operand) ) {
 					errorsFound = true;
 					continue;
 				}
-					
-				if ( operands.get(i) instanceof UndefinedOperand) {
+				
+				if ( operand instanceof MemoryOperand && MemoryOperandCheck((MemoryOperand) operand )) {
+					errorsFound = true;
+					continue;
+				}
+									
+				if ( operand instanceof UndefinedOperand) {
 					reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
 					errorsFound = true;
 				}
+				i++;
 			}
 			return errorsFound;
 		}
 		
+		private boolean MemoryOperandCheck(MemoryOperand operand) {
+			try {
+				operand.isValidMemory();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+		}
+
 		@Override
 		public void directiveErrorsCheck() {
 			if ( matchedLine.matches(defSegEndsPattern) ) {
@@ -258,9 +271,9 @@ public class GrammarChecker extends TermIterator {
 			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);	
 		}
 		
-		private boolean AbsoluteExprCheck(AbsoluteExpr initVal) {
+		private boolean AbsoluteExprCheck(AbsoluteExpr operand) {
 			try {
-				initVal.isValidAbsExpr();
+				operand.isValidAbsExpr();
 			} catch (MissedOperator e) {
 				reporter.reportMissedOperator(matchedLine);
 				return false;

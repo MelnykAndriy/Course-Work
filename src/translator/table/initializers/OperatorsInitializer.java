@@ -43,11 +43,6 @@ public class OperatorsInitializer  {
 			});
 						
 			table.put("(" , new UnaryOperator("(","",1) {
-				@Override
-				public Operand eval(Operand op1, Operand op2) {
-					// TODO Auto-generated method stub
-					return null;
-				}
 				public Atom searchedPosAtom() { return this; }
 				@Override
 				public Operand eval(Operand op1) {
