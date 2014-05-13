@@ -2,11 +2,13 @@ package translator.termworks.views;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.generating.ListingGenerator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
+import translator.termworks.syntax.operands.UndefinedOperand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 import translator.table.tablecomponents.userdefined.Identifier;
@@ -18,7 +20,7 @@ public class FirstViewer extends TermIterator {
 	private SymbolTable symTab;
 	private ArrayList < ParsedLine > term;
 	private Segment curProcessSeg;
-	
+	private Stack < UndefinedOperand >  FixNeededUndefinedOperands;
 	
 	public FirstViewer(SymbolTable mainTab) {
 		this.term = new ArrayList < ParsedLine > ();
@@ -84,9 +86,16 @@ public class FirstViewer extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
+		findFixNeeded();
 		term.add(calcAbsExprInLine(matchedLine));		
 	}
-
+	
+	private void findFixNeeded() {
+		for ( Atom atom : matchedLine.getAtoms() )
+			if ( atom instanceof UndefinedOperand ) 
+				FixNeededUndefinedOperands.push((UndefinedOperand) atom);
+	}
+	
 	private ParsedLine calcAbsExprInLine(ParsedLine line) {
 		for (Atom  atom : line.getAtoms() ) {
 			if ( atom instanceof AbsoluteExpr ) {

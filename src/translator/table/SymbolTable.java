@@ -19,6 +19,7 @@ public class SymbolTable {
         OperatorsInitializer.initialize(predefined);
         RegisterInitializer.initialize(predefined);
         DirectiveInitialier.initialize(predefined);
+        TypenameInitializer.initialize(predefined);
     }
         
     public Atom Search(String name) {

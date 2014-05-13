@@ -80,7 +80,28 @@ public class GrammarChecker extends TermIterator {
 		void commandErrorsCheck();
 	}
 	
-	private class BeforeFirstViewChecker implements Checker {
+	private class CommonChecker {
+		protected boolean AbsoluteExprCheck(AbsoluteExpr operand) {
+			try {
+				operand.isValidAbsExpr();
+			} catch (MissedOperator e) {
+				reporter.reportMissedOperator(matchedLine);
+				return false;
+			} catch (MissedConstant e) {
+				reporter.reportMissedConstant(matchedLine);
+				return false;
+			} catch (UnmatchedCloseParenthesis e) {
+				reporter.reportMissedCParenthesis(matchedLine);
+				return false;
+			} catch (UnmatchedOpenParenthesis e) {
+				reporter.reportMissedOParenthesis(matchedLine);
+				return false;
+			} 
+			return true;
+		}
+	}
+	
+	private class BeforeFirstViewChecker extends CommonChecker implements Checker {
 		private TreeMap <String,AtomType > userDefinedNames;
 		private Segment curCheckSeg;
 		private boolean isEndProcessed;
@@ -121,61 +142,9 @@ public class GrammarChecker extends TermIterator {
 				reporter.reportWrongOperandNumbInCommands(matchedLine);
 				return;
 			}
-				
-			if ( operandsCheckReport(operands,cmdIndex) ) 
-				return;
-
-//			System.out.println("for command " + cmd.getName());
-//			int j = 0;
-//			for ( Atom atom : operands) {
-//				if (atom instanceof RegisterOperand)
-//					System.out.println("RegSize : " + ((RegisterOperand) atom).getRegSize());
-//				System.out.println(1 + " " + atom.getName() );
-//				j++;
-//			}
-			if ( !cmd.isOperandsCombinationAllowed(operands) ) 
-				reporter.reportUnsupportedOperands(matchedLine);
+	
 		}
 		
-		private boolean operandsCheckReport(ArrayList < Atom > operands,int cmdIndex) {
-			boolean errorsFound = false;
-			int i = 0;
-		
-			for (Atom operand : operands) {
-				if ( ( (Operand) operand).isMissing() ) {
-					reporter.reportMissingOperand(matchedLine,i + 1);
-					errorsFound = true;
-					continue;
-				}
-				if ( operand instanceof AbsoluteExpr && !AbsoluteExprCheck((AbsoluteExpr) operand) ) {
-					errorsFound = true;
-					continue;
-				}
-				
-				if ( operand instanceof MemoryOperand && !MemoryOperandCheck((MemoryOperand) operand )) {
-					errorsFound = true;
-					continue;
-				}
-									
-				if ( operand instanceof UndefinedOperand) {
-					reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
-					errorsFound = true;
-				}
-				i++;
-			}
-			return errorsFound;
-		}
-		
-		private boolean MemoryOperandCheck(MemoryOperand operand) {
-			try {
-				operand.isValidMemory();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return true;
-		}
-
 		@Override
 		public void directiveErrorsCheck() {
 			if ( matchedLine.matches(defSegEndsPattern) ) {
@@ -271,25 +240,6 @@ public class GrammarChecker extends TermIterator {
 			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);	
 		}
 		
-		private boolean AbsoluteExprCheck(AbsoluteExpr operand) {
-			try {
-				operand.isValidAbsExpr();
-			} catch (MissedOperator e) {
-				reporter.reportMissedOperator(matchedLine);
-				return false;
-			} catch (MissedConstant e) {
-				reporter.reportMissedConstant(matchedLine);
-				return false;
-			} catch (UnmatchedCloseParenthesis e) {
-				reporter.reportMissedCParenthesis(matchedLine);
-				return false;
-			} catch (UnmatchedOpenParenthesis e) {
-				reporter.reportMissedOParenthesis(matchedLine);
-				return false;
-			} 
-			return true;
-		}
-
 		private boolean checkIfDef(Atom atom) {
 			return userDefinedNames.get(atom.getName().toLowerCase()) != null;
 		}
@@ -322,7 +272,7 @@ public class GrammarChecker extends TermIterator {
 		}
 	}
 	
-	private class BeforeSecondViewChecker implements Checker {
+	private class BeforeSecondViewChecker extends CommonChecker implements Checker {
 
 		@Override
 		public void labelErrorsCheck() {
@@ -338,10 +288,57 @@ public class GrammarChecker extends TermIterator {
 
 		@Override
 		public void commandErrorsCheck() {
-			// TODO Auto-generated method stub
+			int cmdIndex = matchedLine.firstIndexOf(AtomType.Command);
+			Command cmd = (Command) symTab.Search(matchedLine.getIndexName(cmdIndex) ); 
+			ArrayList < Atom > operands = matchedLine.subArray(cmdIndex + 1);
+			
+			if ( operandsCheckReport(operands,cmdIndex) ) 
+				return;
+
+			if ( !cmd.isOperandsCombinationAllowed(operands) ) 
+				reporter.reportUnsupportedOperands(matchedLine);
 			
 		}
 
+		private boolean operandsCheckReport(ArrayList < Atom > operands,int cmdIndex) {
+			boolean errorsFound = false;
+			int i = 0;
+		
+			for (Atom operand : operands) {
+				if ( ( (Operand) operand).isMissing() ) {
+					reporter.reportMissingOperand(matchedLine,i + 1);
+					errorsFound = true;
+					continue;
+				}
+				if ( operand instanceof AbsoluteExpr && !AbsoluteExprCheck((AbsoluteExpr) operand) ) {
+					errorsFound = true;
+					continue;
+				}
+				
+				if ( operand instanceof MemoryOperand && !MemoryOperandCheck((MemoryOperand) operand )) {
+					errorsFound = true;
+					continue;
+				}
+									
+				if ( operand instanceof UndefinedOperand) {
+					reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
+					errorsFound = true;
+				}
+				i++;
+			}
+			return errorsFound;
+		}
+		
+		private boolean MemoryOperandCheck(MemoryOperand operand) {
+			try {
+				operand.isValidMemory();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+		}
+		
 		@Override
 		public void finalChecks(ArrayList<ParsedLine> term) {
 			// TODO Auto-generated method stub

@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.reserved.Directive;
 
-public class DirectiveInitialier {
+public abstract class DirectiveInitialier {
 
 	public static void initialize(TreeMap<String, Atom> table) {
         StringTokenizer directives = new StringTokenizer("end;segment;ends;db;dw;dd",";");

@@ -82,7 +82,7 @@ public class ErrorsTable {
 					 		MissedAbsExprCParenthesis,
 					 		NameConflictsWithReserved,
 					 		UndefOperand,
-					 		UnsupportedOperands
+					 		UnsupportedOperands,
 					 		
 						 };
 	
@@ -150,8 +150,7 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.NameConflictsWithReserved, new Error("Name conflict with reserved name."));
 		Errors.put(ErrIdent.UndefOperand, new Error("Operand type is not defined or not supported."));
 		Errors.put(ErrIdent.UnsupportedOperands , new Error("Unsupported combination of operands."));
-		
-		//		Errors.put(ErrIdent.AlreadyDefNotVariable, new Error(""));
+		Errors.put(ErrIdent.UndefinedIdentifier, new Error("Identifier was not declared."));
 	}
 	
 }

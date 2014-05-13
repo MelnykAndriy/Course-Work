@@ -6,7 +6,8 @@ import translator.exc.IncorrectBitSize;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.reserved.Register;
 
-public class RegisterInitializer {
+public abstract class RegisterInitializer {
+
 	public static void initialize(TreeMap<String, Atom> table) {
         try {        	
 	// registers 8

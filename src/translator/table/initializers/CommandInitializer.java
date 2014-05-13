@@ -8,7 +8,7 @@ import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.reserved.Command;
 import translator.table.OperandKind;
 
-public class CommandInitializer  {
+public abstract class CommandInitializer  {
 
 	public static void initialize(TreeMap<String, Atom> table ) {
         CommandSuit addedCommandSuit = new CommandSuit();
@@ -74,7 +74,8 @@ public class CommandInitializer  {
         table.put("or",new Command("or",2,addedCommandSuit));
         
 //    // JMP
-//        addedCommandSuit = new CommandSuit();
+//        addedCommandSuit = new CommandSuit();		 // TODO what does mean cb ???
+//        addedCommandSuit.addOption(new OperandOption("EB","/r",OperandKind.rel8 ));
 //        table.put("jmp",new Command("jmp",1,addedCommandSuit));
 //        
 //    // JAE

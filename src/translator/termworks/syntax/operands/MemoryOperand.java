@@ -6,8 +6,16 @@ import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.reserved.Register;
+import translator.table.tablecomponents.userdefined.Variable;
 
 public class MemoryOperand extends Operand {
+	private Register segChanger;
+	private Register base;
+	private Register index;
+	private int scale;
+	
+	private Variable direct;
+	
 	
 	public MemoryOperand(ArrayList<Atom> atoms) {
 		super(atoms);
@@ -15,8 +23,13 @@ public class MemoryOperand extends Operand {
 	}
 
 	public static boolean isMemoryOperand(ArrayList < Atom > operandAtoms) { 
-		// TODO ATTENTION NOT IMPLEMENTED RETURNS always true 
-		return true;
+		
+			// TODO ATTENTION NOT IMPLEMENTED RETURNS always true 
+		
+		
+		
+		
+		return false;
 	}
 		
 	public int getOffset() {
@@ -30,7 +43,6 @@ public class MemoryOperand extends Operand {
 	}
 	
 	public boolean isOffsetPresent() {
-		// TODO
 		return false;
 	}
 	
@@ -40,18 +52,15 @@ public class MemoryOperand extends Operand {
 	}
 	
 	public int getScale() {
-		// TODO
-		return 0;
+		return scale;
 	}
 	
 	public Register getBase() {
-		// TODO
-		return null;
+		return base;
 	}
 	
 	public Register getIndex() {
-		// TODO
-		return null;
+		return index;
 	}
 		
 	@Override
@@ -60,15 +69,13 @@ public class MemoryOperand extends Operand {
 		return 0;
 	}
 
-	public Object getSegReplacement() {
-		// TODO Auto-generated method stub
-		return null;
+	public Register getSegReplacement() {
+		return segChanger;
 	}
 
 	@Override
 	public OperandKind getOperandKind() {
-		// TODO Auto-generated method stub
-		return OperandKind.m8;
+		return operKind;
 	}
 	
 	public void isValidMemory() throws Exception {

@@ -11,7 +11,6 @@ import translator.table.tablecomponents.reserved.Mnemocode;
 import translator.table.tablecomponents.userdefined.Identifier;
 import translator.table.tablecomponents.userdefined.Segment;
 import translator.table.tablecomponents.userdefined.Variable;
-import translator.termworks.StopIterate;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.operands.Operand;
 
@@ -115,7 +114,7 @@ public class Parser extends TermIterator {
 	}
 	
 	private ParsedLine segmentProcessing(ParsedLine lexerLine) {
-		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit32);	
+		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit16);	
 		ArrayList < Atom > atoms = new ArrayList < Atom > ();
 		atoms.add(seg);
 		atoms.add(lexerLine.getAtomAt(1));
@@ -123,7 +122,7 @@ public class Parser extends TermIterator {
 	}
 	
 	private ParsedLine endSegmentProcessing(ParsedLine lexerLine) {
-		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit32);
+		Segment seg = new Segment(lexerLine.getAtomAt(0).getName(),Segment.SegmentType.bit16);
 		ArrayList < Atom > atoms = new ArrayList < Atom > ();
 		atoms.add(seg);
 		atoms.add(lexerLine.getAtomAt(1));

@@ -191,4 +191,10 @@ public class ErrorReporter {
 					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Command)) ) );
 	}
  	
+	public void reportUndefIdent( ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.UndefinedIdentifier, line.getLineNumb() ,
+						line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Identifier))));
+	}
+	
 }

@@ -11,7 +11,7 @@ import translator.table.tablecomponents.userdefined.Constant;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
 
-public class OperatorsInitializer  {
+public abstract class OperatorsInitializer  {
 
 
 	public static void initialize(TreeMap<String, Atom> table) {
@@ -134,7 +134,7 @@ public class OperatorsInitializer  {
 	//
 	// begin of definition of operators with priority 7
         	
-			table.put("*" , new BinaryOperator("*","",7) {
+			table.put("*" , new BinaryOperator("*","Multiply operator.",7) {
 				@Override
 				public Operand eval(Operand op1, Operand op2) {
 					ArrayList < Atom > retOpAtoms = new ArrayList < Atom > ();
@@ -145,7 +145,7 @@ public class OperatorsInitializer  {
 				public Atom searchedPosAtom() { return this; }
 			});
 					
-			table.put("/" , new BinaryOperator("/","",7) {
+			table.put("/" , new BinaryOperator("/","Integer division operator.",7) {
 				@Override
 				public Operand eval(Operand op1, Operand op2) {
 					ArrayList < Atom > retOpAtoms = new ArrayList < Atom > ();
@@ -156,7 +156,7 @@ public class OperatorsInitializer  {
 				public Atom searchedPosAtom() { return this; }
 			});
 					
-			table.put("mod" , new BinaryOperator("mod","",7) {
+			table.put("mod" , new BinaryOperator("mod","Modulo operator.",7) {
 
 				@Override
 				public Operand eval(Operand op1, Operand op2) {
@@ -167,25 +167,7 @@ public class OperatorsInitializer  {
 				}
 				public Atom searchedPosAtom() { return this; }
 			});
-					
-//			table.put("shl" , new Operator("shl","",7) {
-//				@Override
-//				public Operand eval(Operand op1, Operand op2) {
-//					// TODO Auto-generated method stub
-//					return null;
-//				}
-//				public Atom searchedPosAtom() { return this; }
-//			});
-//							consider implementing
-//			table.put("shr" , new Operator("shr","",7) {
-//				@Override
-//				public Operand eval(Operand op1, Operand op2) {
-//					// TODO Auto-generated method stub
-//					return null;
-//				}
-//				public Atom searchedPosAtom() { return this; }
-//			});
-			
+								
 	//
 	// end of definition of operators with priority 7
 	
@@ -203,7 +185,7 @@ public class OperatorsInitializer  {
 				public Atom searchedPosAtom() { return this; }
 			});
 					
-			table.put("-" , new BinaryOperator("-","",8) {
+			table.put("-" , new BinaryOperator("-","Subtraction operator.",8) {
 				@Override
 				public Operand eval(Operand op1, Operand op2) {
 					ArrayList < Atom > retOpAtoms = new ArrayList < Atom > ();
