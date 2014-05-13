@@ -14,9 +14,9 @@ public class MemoryOperand extends Operand {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static boolean isMemoryOperand(ArrayList < Atom > operandAtoms) {
-		// TODO
-		return false;
+	public static boolean isMemoryOperand(ArrayList < Atom > operandAtoms) { 
+		// TODO ATTENTION NOT IMPLEMENTED RETURNS always true 
+		return true;
 	}
 		
 	public int getOffset() {
@@ -68,7 +68,7 @@ public class MemoryOperand extends Operand {
 	@Override
 	public OperandKind getOperandKind() {
 		// TODO Auto-generated method stub
-		return null;
+		return OperandKind.m8;
 	}
 	
 	public void isValidMemory() throws Exception {

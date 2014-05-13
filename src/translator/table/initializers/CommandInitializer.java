@@ -34,9 +34,9 @@ public class CommandInitializer  {
         
     // MUL
         addedCommandSuit = new CommandSuit();
-        addedCommandSuit.addOption(new OperandOption("F6","/4",OperandKind.m8));
-        addedCommandSuit.addOption(new OperandOption("F7","/4",OperandKind.m16));
-        addedCommandSuit.addOption(new OperandOption("F7","/4",OperandKind.m32));
+        addedCommandSuit.addOption(new OperandOption("F6","/4",OperandKind.r8));
+        addedCommandSuit.addOption(new OperandOption("F7","/4",OperandKind.r16));
+        addedCommandSuit.addOption(new OperandOption("F7","/4",OperandKind.r32));
         table.put("mul",new Command("mul",1,addedCommandSuit));
         
     // ADC

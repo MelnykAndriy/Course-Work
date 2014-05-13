@@ -33,7 +33,11 @@ public class RegisterOperand extends Operand {
 	public int getRegNumb() {
 		return ((Register) operandAtoms.get(0)).getRegNumb();
 	}
-
+	
+	public int getRegSize() {
+		return ((Register) operandAtoms.get(0)).GetByteSize();
+	}
+		
 	@Override
 	public AtomType getType() {
 		return AtomType.RegOperand;

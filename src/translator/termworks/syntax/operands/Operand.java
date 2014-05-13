@@ -27,7 +27,7 @@ public abstract class Operand extends Atom {
 			return new AbsoluteExpr(operandAtoms);
 		if ( RegisterOperand.isRegisterOperand(operandAtoms))
 			return new RegisterOperand(operandAtoms);
-		if ( MemoryOperand.isMemoryOperand(operandAtoms) )
+		if ( MemoryOperand.isMemoryOperand(operandAtoms) ) // ATTENTION NOT IMPLEMENTED RETURNS always true 
 			return new MemoryOperand(operandAtoms);
 		
 		return new UndefinedOperand(operandAtoms);

@@ -12,6 +12,7 @@ import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
+import translator.termworks.syntax.operands.RegisterOperand;
 import translator.termworks.syntax.operands.UndefinedOperand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
@@ -25,7 +26,7 @@ public class GrammarChecker extends TermIterator {
 	
 	private SymbolTable symTab;
 	private ErrorReporter reporter;
-	private Checkable checker;
+	private Checker checker;
 	
 	public GrammarChecker(ErrorsTable errTab,SymbolTable symTab) {
 		super();
@@ -76,14 +77,14 @@ public class GrammarChecker extends TermIterator {
 		checker.commandErrorsCheck();		
 	}
 	
-	private interface Checkable {
+	private interface Checker {
 		void labelErrorsCheck();
 		void finalChecks(ArrayList<ParsedLine> term);
 		void directiveErrorsCheck();
 		void commandErrorsCheck();
 	}
 	
-	private class BeforeFirstViewChecker implements Checkable {
+	private class BeforeFirstViewChecker implements Checker {
 		private TreeMap <String,AtomType > userDefinedNames;
 		private Segment curCheckSeg;
 		private boolean isEndProcessed;
@@ -120,22 +121,46 @@ public class GrammarChecker extends TermIterator {
 			if ( curCheckSeg == null) 
 				reporter.reportCodeNotInsideSeg(matchedLine);
 			
-			if ( operands.size() != cmd.getOperandNumb() ) 
+			if ( operands.size() != cmd.getOperandNumb() ) {
 				reporter.reportWrongOperandNumbInCommands(matchedLine);
-			
+				return;
+			}
+				
+			if ( operandsCheckReport(operands,cmdIndex) ) 
+				return;
+
+//			System.out.println("for command " + cmd.getName());
+//			int j = 0;
+//			for ( Atom atom : operands) {
+//				if (atom instanceof RegisterOperand)
+//					System.out.println("RegSize : " + ((RegisterOperand) atom).getRegSize());
+//				System.out.println(1 + " " + atom.getName() );
+//				j++;
+//			}
+			if ( !cmd.isOperandsCombinationAllowed(operands) ) 
+				reporter.reportUnsupportedOperands(matchedLine);
+		}
+		
+		private boolean operandsCheckReport(ArrayList < Atom > operands,int cmdIndex) {
+			boolean errorsFound = false;
 			for (int i = 0; i < operands.size(); i++ ) {
 				if ( ( (Operand) operands.get(i)).isMissing() ) {
 					reporter.reportMissingOperand(matchedLine,i + 1);
+					errorsFound = true;
 					continue;
 				}
-				if ( operands.get(i + 1) instanceof UndefinedOperand) {
-					reporter.reportUndefinedOperand(matchedLine,i);
+				if ( operands.get(i) instanceof AbsoluteExpr ) {
+					AbsoluteExprCheck((AbsoluteExpr) operands.get(i));
+					errorsFound = true;
+					continue;
+				}
+					
+				if ( operands.get(i) instanceof UndefinedOperand) {
+					reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
+					errorsFound = true;
 				}
 			}
-			if ( !cmd.isOperandsCombinationAllowed(operands) ) {
-				reporter.reportUnsupportedOperands(matchedLine);
-			}
-			
+			return errorsFound;
 		}
 		
 		@Override
@@ -230,7 +255,6 @@ public class GrammarChecker extends TermIterator {
 				reporter.reportReservedNameConflicts(matchedLine);
 				return;
 			}
-			System.out.println("Defined : " +  defVariable.getName());
 			userDefinedNames.put(defVariable.getName().toLowerCase(),AtomType.Variable);	
 		}
 		
@@ -285,7 +309,7 @@ public class GrammarChecker extends TermIterator {
 		}
 	}
 	
-	private class BeforeSecondViewChecker implements Checkable {
+	private class BeforeSecondViewChecker implements Checker {
 
 		@Override
 		public void labelErrorsCheck() {

@@ -36,7 +36,7 @@ public class AbsoluteExpr extends Operand {
 	
 	public AbsoluteExpr(ArrayList<Atom> atoms) {
 		super(atoms);
-		System.out.println(Lexer.buildStringFromAtoms(operandAtoms));
+//		System.out.println(Lexer.buildStringFromAtoms(operandAtoms));
 		unfixedTokenNumb = atoms.size();
 	}
 	
@@ -49,52 +49,14 @@ public class AbsoluteExpr extends Operand {
 		Atom prevAtom = null;
 		for ( Atom atom : absoluteExpr ) {
 			if ( atom instanceof Operator && unaryFixTab.get(atom.getName()) != null 
-					&& !(prevAtom instanceof Constant) )
+					&& !(prevAtom instanceof Constant || prevAtom != null && prevAtom.getName() == CParenthesis) )
 				fixedAbsExpr.add(unaryFixTab.get( atom.getName() ) );
 			else 
 				fixedAbsExpr.add(atom);
+			prevAtom = atom;
 		} 
 		return fixedAbsExpr;
 	}
-	
-//	private static ArrayList < Atom > unaryFix(ArrayList < Atom > absoluteExpr ) {
-//		ArrayList < Atom > fixedAbsExpr = new ArrayList < Atom > ();
-//		Atom prevAtom = null;
-//		Atom postAddedCP = null;
-//		Stack< Integer > openClsStack = new Stack< Integer > ();
-//		int OPadded = 0;
-//		
-//		for (Atom atom : absoluteExpr ) {
-//			try {
-//				if ( atom instanceof Operator && !(prevAtom instanceof Constant) 
-//						&& unaryFixTab.get(atom.getName()) != null && (prevAtom == null || prevAtom.getName() != CParenthesis )) {
-//					fixedAbsExpr.add(Translator.mainTab.Search("("));		// TODO
-//					fixedAbsExpr.add(unaryFixTab.get(atom.getName()));
-//					OPadded++;
-//					openClsStack.push(0);
-//					continue;
-//				}
-//				if (atom.getName() == OParenthesis && OPadded != 0 ) {
-//					openClsCounter++;
-//					continue;
-//				}
-//				if ( atom.getName() == CParenthesis )
-//					openClsCounter--;
-//				if ((atom instanceof Constant || atom.getName() == CParenthesis) && OPadded && openClsCounter == 0 ) {
-//					postAddedCP = Translator.mainTab.Search(")"); 	//TODO
-//					OPadded = false;
-//				}
-//			} finally {
-//				fixedAbsExpr.add(atom);
-//				prevAtom = atom;
-//				if ( postAddedCP != null ) {
-//					fixedAbsExpr.add(postAddedCP);
-//					postAddedCP = null;
-//				}
-//			}
-//		}
-//		return fixedAbsExpr;
-//	}
 	
 	public int tokenNumb() {
 		return unfixedTokenNumb;
@@ -110,14 +72,17 @@ public class AbsoluteExpr extends Operand {
 	}
 	
 	public Constant evalAbsoluteExpr (){
-		return new Constant(0,10);
-//		if ( isAbsoluteTerm() ) 
-//			return (Constant) operandAtoms.get(0);
-//
-//		int lowestPrOpPos = posLowPriority();
-//		Operand leftOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(0,lowestPrOpPos)));
-//		Operand rightOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(lowestPrOpPos + 1,operandAtoms.size())) );
-//		return (( AbsoluteExpr) ((Operator) operandAtoms.get(lowestPrOpPos)).eval(leftOp,rightOp)).evalAbsoluteExpr();
+		if ( isAbsoluteTerm() ) 
+			return (Constant) operandAtoms.get(0);
+		int lowestPrOpPos = posLowPriority();
+		Operator foundOperator = (Operator) operandAtoms.get(lowestPrOpPos);
+		Operand rightOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(lowestPrOpPos + 1,operandAtoms.size())) );
+		if ( foundOperator.isUnary() ) {
+			return ((AbsoluteExpr) foundOperator.eval(rightOp)).evalAbsoluteExpr();
+		} else {
+			Operand leftOp = new AbsoluteExpr(new ArrayList < Atom >(operandAtoms.subList(0,lowestPrOpPos)));
+			return (( AbsoluteExpr) foundOperator.eval(leftOp,rightOp)).evalAbsoluteExpr();
+		}
 	}
 	
 	private boolean isAbsoluteTerm() {

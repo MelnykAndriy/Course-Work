@@ -40,7 +40,7 @@ public class Register extends Atom {
     }
     
     public int GetByteSize() {
-        return bitSize*8;
+        return bitSize/8;
     }
     
     public int getRegNumb() {
