@@ -1,6 +1,7 @@
 package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import translator.table.OperandKind;
 import translator.table.SymbolTable;
@@ -31,6 +32,15 @@ public class UndefinedOperand extends Operand {
 		return ident;
 	}
 
+	public Stack < Identifier > findIdentifiers() {
+		Stack < Identifier > idents = new Stack < Identifier > () ;
+		for (Atom atom : operandAtoms ) 
+			if ( atom.getType() == AtomType.Identifier ) 
+				idents.push((Identifier) atom);
+				
+		return idents;
+	}
+	
 	@Override
 	public int calcSizeInBytes() {
 		return -1;

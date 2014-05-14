@@ -3,6 +3,7 @@ package translator.errorhandling;
 import translator.errorhandling.ErrorsTable.ErrIdent;
 import translator.lexer.ParsedLine;
 import translator.table.tablecomponents.AtomType;
+import translator.table.tablecomponents.userdefined.Identifier;
 
 public class ErrorReporter {
 	private ErrorsTable errTab;
@@ -191,10 +192,20 @@ public class ErrorReporter {
 					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Command)) ) );
 	}
  	
-	public void reportUndefIdent( ParsedLine line ) {
+	public void reportUndefIdent( ParsedLine line, Identifier ident ) {
 		errReported++;
 		errTab.report(ErrIdent.UndefinedIdentifier, line.getLineNumb() ,
-						line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Identifier))));
+						line.findPos(ident));
+	}
+	
+	public void reportDefButUnusedVar( ParsedLine line ) {
+		errTab.report(ErrIdent.DefinedButUnused , line.getLineNumb(), 
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Variable))));
+	}
+		
+	public void reportDefButUnusedLabel( ParsedLine line ) {
+		errTab.report(ErrIdent.DefinedButUnused , line.getLineNumb(), 
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Label))));
 	}
 	
 }

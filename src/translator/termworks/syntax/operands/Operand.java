@@ -35,8 +35,7 @@ public abstract class Operand extends Atom {
 			return new Relative(operandAtoms);
 		if ( MemoryOperand.isMemoryOperand(operandAtoms) )  
 			return new MemoryOperand(operandAtoms);
-		
-		
+				
 		return new UndefinedOperand(operandAtoms);
 	}
 

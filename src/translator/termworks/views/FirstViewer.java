@@ -37,6 +37,7 @@ public class FirstViewer extends TermIterator {
 	
 	public FirstViewer(SymbolTable mainTab) {
 		this.term = new ArrayList < ParsedLine > ();
+		FixNeededUndefinedOperands = new Stack < UndefinedOperandUpdater >();
 		symTab = mainTab;
 	}
 
@@ -45,6 +46,7 @@ public class FirstViewer extends TermIterator {
 	}
 		
 	public void view(ArrayList < ParsedLine > term) {
+		FixNeededUndefinedOperands.clear();
 		iterateOverTerm(term);
 		termUpdate();
 	}

@@ -83,7 +83,7 @@ public class ErrorsTable {
 					 		NameConflictsWithReserved,
 					 		UndefOperand,
 					 		UnsupportedOperands,
-					 		
+					 		DefinedButUnused
 						 };
 	
 	private ArrayList<Reportable> FoundErrors;
@@ -120,9 +120,9 @@ public class ErrorsTable {
 	static {
 		Errors = new TreeMap<ErrIdent,ErrorMessage>();
 	// warnings initialization
-
 		Errors.put(ErrIdent.ExtraCharacters , new Warning("Extra Characters" ) );
-	
+		Errors.put(ErrIdent.DefinedButUnused,new Warning("Symbol was defined but never used. "));
+		
 	// errors initialization
 		Errors.put(ErrIdent.UnexpectedSymbolInToken , new Error("Unexpected symbol was found in token.") );
 		Errors.put(ErrIdent.MissingOperand , new Error("Operand is missing."));

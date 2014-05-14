@@ -3,6 +3,7 @@ package translator.termworks.checker;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TreeMap;
 
 import translator.errorhandling.*;
@@ -13,6 +14,7 @@ import translator.termworks.syntax.operands.*;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
 import translator.table.tablecomponents.reserved.Command;
+import translator.table.tablecomponents.userdefined.Identifier;
 import translator.table.tablecomponents.userdefined.Label;
 import translator.table.tablecomponents.userdefined.Segment;
 import translator.table.tablecomponents.userdefined.Variable;
@@ -141,6 +143,17 @@ public class GrammarChecker extends TermIterator {
 			if ( operands.size() != cmd.getOperandNumb() ) {
 				reporter.reportWrongOperandNumbInCommands(matchedLine);
 				return;
+			}
+			
+			int i = 0;
+			for ( Atom operand : operands ) {
+				if ( ( (Operand) operand).isMissing() ) {
+					reporter.reportMissingOperand(matchedLine,i + 1);
+					continue;
+				}
+				if ( operand instanceof AbsoluteExpr && !AbsoluteExprCheck((AbsoluteExpr) operand) ) {
+					continue;
+				}
 			}
 	
 		}
@@ -275,16 +288,10 @@ public class GrammarChecker extends TermIterator {
 	private class BeforeSecondViewChecker extends CommonChecker implements Checker {
 
 		@Override
-		public void labelErrorsCheck() {
-			// TODO Auto-generated method stub
-			
-		}
+		public void labelErrorsCheck() {	}
 
 		@Override
-		public void directiveErrorsCheck() {
-			// TODO Auto-generated method stub
-			
-		}
+		public void directiveErrorsCheck() {	}
 
 		@Override
 		public void commandErrorsCheck() {
@@ -305,23 +312,20 @@ public class GrammarChecker extends TermIterator {
 			int i = 0;
 		
 			for (Atom operand : operands) {
-				if ( ( (Operand) operand).isMissing() ) {
-					reporter.reportMissingOperand(matchedLine,i + 1);
-					errorsFound = true;
-					continue;
-				}
-				if ( operand instanceof AbsoluteExpr && !AbsoluteExprCheck((AbsoluteExpr) operand) ) {
-					errorsFound = true;
-					continue;
-				}
-				
+			
 				if ( operand instanceof MemoryOperand && !MemoryOperandCheck((MemoryOperand) operand )) {
 					errorsFound = true;
 					continue;
 				}
 									
 				if ( operand instanceof UndefinedOperand) {
-					reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
+					Collection < Identifier > undefIdents = ((UndefinedOperand) operand).findIdentifiers();
+					if ( undefIdents.isEmpty() ) 
+						reporter.reportUndefinedOperand(matchedLine,cmdIndex + i + 1);
+					else 
+						for (Identifier ident : undefIdents) {
+							reporter.reportUndefIdent(matchedLine,ident);
+						}
 					errorsFound = true;
 				}
 				i++;
@@ -340,10 +344,7 @@ public class GrammarChecker extends TermIterator {
 		}
 		
 		@Override
-		public void finalChecks(ArrayList<ParsedLine> term) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void finalChecks(ArrayList<ParsedLine> term) { 	}
 		
 	}
 

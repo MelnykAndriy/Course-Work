@@ -135,7 +135,6 @@ public class AbsoluteExpr extends Operand {
 	public void isValidAbsExpr () throws MissedOperator, UnmatchedOpenParenthesis, MissedConstant, UnmatchedCloseParenthesis  {
 		int openClsCounter = 0;
 		Atom prevAtom = null;
-
 		for (Atom atom : operandAtoms) {
 			try {
 				if ( atom.getName() == OParenthesis ) {
@@ -149,13 +148,14 @@ public class AbsoluteExpr extends Operand {
 						throw new UnmatchedOpenParenthesis() ;
 					} else 
 						openClsCounter--;
-					if (prevAtom != null && prevAtom.getType() != AtomType.Constant)
+					if (prevAtom != null && prevAtom.getType() != AtomType.Constant && prevAtom.getName() != CParenthesis )
 						throw new MissedConstant();
 					continue;
 				}
 			
 				if ( atom.getType() == AtomType.Operator)
-					if ( (prevAtom == null || !(prevAtom.getType() == AtomType.Constant || prevAtom.getName() ==  CParenthesis)) && 
+					if ( (prevAtom == null || !(prevAtom.getType() == AtomType.Constant || 
+					      prevAtom.getName() ==  CParenthesis )) && 
 						 unaryFixTab.get(atom.getName()) == null ) {
 							throw new MissedConstant();
 					}
@@ -171,7 +171,9 @@ public class AbsoluteExpr extends Operand {
 		}
 		
 		if ( openClsCounter != 0) throw new UnmatchedCloseParenthesis();
-		if ( prevAtom instanceof Operator ) throw new MissedConstant();
+		if ( prevAtom instanceof Operator && prevAtom.getName() != CParenthesis ) {
+			throw new MissedConstant();
+		}
 	}
 
 	@Override
