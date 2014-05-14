@@ -22,6 +22,10 @@ public abstract class Operand extends Atom {
 		return operandAtoms.size();
 	}
 	
+	public static Operand makeOperand(UndefinedOperand oper) {
+		return makeOperand(oper.operandAtoms);
+	}
+		
 	public static Operand makeOperand(ArrayList < Atom > operandAtoms) {
 		if ( AbsoluteExpr.isAbsoluteExpr(operandAtoms) )
 			return new AbsoluteExpr(operandAtoms);

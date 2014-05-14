@@ -8,19 +8,32 @@ import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
 import translator.termworks.generating.ListingGenerator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
+import translator.termworks.syntax.operands.Operand;
 import translator.termworks.syntax.operands.UndefinedOperand;
 import translator.table.SymbolTable;
 import translator.table.tablecomponents.*;
-import translator.table.tablecomponents.userdefined.Identifier;
-import translator.table.tablecomponents.userdefined.Label;
-import translator.table.tablecomponents.userdefined.Segment;
-import translator.table.tablecomponents.userdefined.Variable;
+import translator.table.tablecomponents.userdefined.*;
 
 public class FirstViewer extends TermIterator {
 	private SymbolTable symTab;
 	private ArrayList < ParsedLine > term;
 	private Segment curProcessSeg;
-	private Stack < UndefinedOperand >  FixNeededUndefinedOperands;
+	private Stack < UndefinedOperandUpdater >  FixNeededUndefinedOperands;
+	
+	private class UndefinedOperandUpdater {
+		private ArrayList < Atom > lineAtoms;
+		private int pos;
+		
+		public UndefinedOperandUpdater(ArrayList<Atom> lineAtoms, int pos) {
+			this.lineAtoms = lineAtoms;
+			this.pos = pos;
+		}
+
+		public void update() {
+			lineAtoms.set(pos, Operand.makeOperand( ((UndefinedOperand) lineAtoms.get(pos)).updateSymbolsFromTab(symTab) ));
+		}
+		
+	}
 	
 	public FirstViewer(SymbolTable mainTab) {
 		this.term = new ArrayList < ParsedLine > ();
@@ -33,6 +46,7 @@ public class FirstViewer extends TermIterator {
 		
 	public void view(ArrayList < ParsedLine > term) {
 		iterateOverTerm(term);
+		termUpdate();
 	}
 
 	@Override
@@ -86,14 +100,17 @@ public class FirstViewer extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
-		findFixNeeded();
+		findFixNeededUndefinedOperands();
 		term.add(calcAbsExprInLine(matchedLine));		
 	}
 	
-	private void findFixNeeded() {
-		for ( Atom atom : matchedLine.getAtoms() )
+	private void findFixNeededUndefinedOperands() {
+		int i = 0;
+		for ( Atom atom : matchedLine.getAtoms() ) {
 			if ( atom instanceof UndefinedOperand ) 
-				FixNeededUndefinedOperands.push((UndefinedOperand) atom);
+				FixNeededUndefinedOperands.push(new UndefinedOperandUpdater(matchedLine.getAtoms(),i));
+			i++;
+		}
 	}
 	
 	private ParsedLine calcAbsExprInLine(ParsedLine line) {
@@ -103,6 +120,12 @@ public class FirstViewer extends TermIterator {
 			}
 		}
 		return line;
+	}
+	
+	private void termUpdate() {
+		for ( UndefinedOperandUpdater updater : FixNeededUndefinedOperands  ) {
+			updater.update();
+		}
 	}
 	
 	@Override

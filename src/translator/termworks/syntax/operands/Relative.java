@@ -30,7 +30,9 @@ public class Relative extends Operand {
 	}
 
 	public static boolean isRelative(ArrayList<Atom> operandAtoms) {
-		// TODO Auto-generated method stub
+		if ( operandAtoms.size() == 1 &&
+			 operandAtoms.get(0).getType() == AtomType.Label )
+			return true;
 		return false;
 	}
 
