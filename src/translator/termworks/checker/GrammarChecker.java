@@ -349,13 +349,13 @@ public class GrammarChecker extends TermIterator {
 		public void finalChecks(ArrayList<ParsedLine> term) {
 			ArrayList < Identifier > idents = new ArrayList < Identifier >();
 			Atom.castCopy(idents,symTab.findAll(AtomType.Variable));
+			Atom.castAppend(idents, symTab.findAll(AtomType.Label));
 			
-			for ( Identifier ident : idents) 			
+			for ( Identifier ident : idents) 		{	
 				if ( !ident.isIdentUsed() ) 
-					reporter.reportDefButUnusedSymbol(ident);
-			
+					reporter.reportDefButUnusedSymbol(ident);	
+			}
 		}
-		
 	}
 
 	@Override

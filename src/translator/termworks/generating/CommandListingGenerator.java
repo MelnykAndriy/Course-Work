@@ -8,11 +8,7 @@ import translator.table.SymbolTable;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.reserved.Command;
-import translator.table.tablecomponents.reserved.Register;
-import translator.termworks.syntax.operands.AbsoluteExpr;
-import translator.termworks.syntax.operands.MemoryOperand;
-import translator.termworks.syntax.operands.Operand;
-import translator.termworks.syntax.operands.RegisterOperand;
+import translator.termworks.syntax.operands.*;
 
 public class CommandListingGenerator {
 	private Command cmd;

@@ -15,7 +15,7 @@ public abstract class Atom {
     }
     
     public Atom(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
     
     @SuppressWarnings("unchecked")

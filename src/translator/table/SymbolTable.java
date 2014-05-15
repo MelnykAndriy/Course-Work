@@ -6,7 +6,6 @@ import java.util.TreeMap;
 
 import translator.table.initializers.*;
 import translator.table.tablecomponents.*;
-import translator.table.tablecomponents.userdefined.Segment;
 
 public class SymbolTable {
    // new variant
@@ -24,7 +23,7 @@ public class SymbolTable {
         
     public Atom Search(String name) {
         if ( name == null ) return null;
-    	return table.get(name);
+    	return table.get(name.toLowerCase());
     }
     
     public void AddSymbol( Atom sym ) {
