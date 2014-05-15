@@ -27,6 +27,7 @@ public class UndefinedOperand extends Operand {
 	
 	private Atom tryUpdate(Identifier ident,SymbolTable symTab) {
 		if ( symTab.Search(ident.getName()) != null)  {
+			((Identifier) symTab.Search(ident.getName())).usageFound();
 			return symTab.Search(ident.getName());
 		}
 		return ident;

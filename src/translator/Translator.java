@@ -11,7 +11,6 @@ package translator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import translator.termworks.views.*;
 import translator.errorhandling.*;
@@ -44,7 +43,7 @@ public class Translator {
     	    	
     	FirstViewer firstViewer = new FirstViewer(mainTab);
     	firstViewer.view(syn.getTerm());
-//    	firstViewer.genOutput(new PrintWriter(System.out));
+    	prnProduct(firstViewer, "fist-viewer");
     	
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.SecondViewChecks );
     	if ( errTab.isCritical() ) stopBuild();
@@ -52,7 +51,6 @@ public class Translator {
  //   	SecondViewer secondViewer = new SecondViewer(mainTab);
   //  	secondViewer.view(firstViewer.getTerm());
 
-    
     	try {
     		ListingGenerator listingGenerator = new ListingGenerator(mainTab,firstViewer.getTerm());
     		errTab.PrintFoundErrors();

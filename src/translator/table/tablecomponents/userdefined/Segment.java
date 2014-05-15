@@ -18,6 +18,7 @@ public class Segment extends Identifier {
 		byteSize= 0;
 		vars = new ArrayList < Variable > ();
 		labels = new ArrayList < Label > ();
+		usageFound();
 	}
 
 	@Override
@@ -63,6 +64,5 @@ public class Segment extends Identifier {
 	public String identTypeToString() {
 		return (segType == SegmentType.bit32)?("32 bit"):("16 bit");
 	}
-    
-    
+   
 }

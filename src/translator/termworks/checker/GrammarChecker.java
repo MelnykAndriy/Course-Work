@@ -135,7 +135,8 @@ public class GrammarChecker extends TermIterator {
 		public void commandErrorsCheck() {
 			int cmdIndex = matchedLine.firstIndexOf(AtomType.Command);
 			Command cmd = (Command) symTab.Search(matchedLine.getIndexName(cmdIndex) ); 
-			ArrayList < Atom > operands = matchedLine.subArray(cmdIndex + 1);
+			ArrayList < Operand > operands = new ArrayList < Operand >();
+			Atom.castCopy(operands,matchedLine.subArray(cmdIndex + 1) );
 			
 			if ( curCheckSeg == null) 
 				reporter.reportCodeNotInsideSeg(matchedLine);
@@ -146,8 +147,8 @@ public class GrammarChecker extends TermIterator {
 			}
 			
 			int i = 0;
-			for ( Atom operand : operands ) {
-				if ( ( (Operand) operand).isMissing() ) {
+			for ( Operand operand : operands ) {
+				if ( operand.isMissing() ) {
 					reporter.reportMissingOperand(matchedLine,i + 1);
 					continue;
 				}
@@ -297,7 +298,8 @@ public class GrammarChecker extends TermIterator {
 		public void commandErrorsCheck() {
 			int cmdIndex = matchedLine.firstIndexOf(AtomType.Command);
 			Command cmd = (Command) symTab.Search(matchedLine.getIndexName(cmdIndex) ); 
-			ArrayList < Atom > operands = matchedLine.subArray(cmdIndex + 1);
+			ArrayList < Operand > operands = new ArrayList < Operand >();
+			Atom.castCopy(operands,matchedLine.subArray(cmdIndex + 1) );
 			
 			if ( operandsCheckReport(operands,cmdIndex) ) 
 				return;
@@ -307,11 +309,11 @@ public class GrammarChecker extends TermIterator {
 			
 		}
 
-		private boolean operandsCheckReport(ArrayList < Atom > operands,int cmdIndex) {
+		private boolean operandsCheckReport(ArrayList < Operand > operands,int cmdIndex) {
 			boolean errorsFound = false;
 			int i = 0;
 		
-			for (Atom operand : operands) {
+			for (Operand operand : operands) {
 			
 				if ( operand instanceof MemoryOperand && !MemoryOperandCheck((MemoryOperand) operand )) {
 					errorsFound = true;
@@ -344,7 +346,15 @@ public class GrammarChecker extends TermIterator {
 		}
 		
 		@Override
-		public void finalChecks(ArrayList<ParsedLine> term) { 	}
+		public void finalChecks(ArrayList<ParsedLine> term) {
+			ArrayList < Identifier > idents = new ArrayList < Identifier >();
+			Atom.castCopy(idents,symTab.findAll(AtomType.Variable));
+			
+			for ( Identifier ident : idents) 			
+				if ( !ident.isIdentUsed() ) 
+					reporter.reportDefButUnusedSymbol(ident);
+			
+		}
 		
 	}
 

@@ -3,6 +3,7 @@ package translator.table.tablecomponents.userdefined;
 
 import java.util.regex.Pattern;
 
+import translator.lexer.ParsedLine;
 import translator.table.tablecomponents.AtomType;
 
 public class Label extends Identifier {
@@ -17,10 +18,14 @@ public class Label extends Identifier {
         super(_name);
         this.setLabelType(type);
     }
-    
-    
-    
-    @Override
+	
+    public Label(String _name,LabelType type, ParsedLine lineWhereDef) {
+        super(_name);
+        whereDef = lineWhereDef;
+        this.setLabelType(type);
+    }
+        
+	@Override
     public AtomType getType() {
         return AtomType.Label;
     }

@@ -54,6 +54,7 @@ public class FirstViewer extends TermIterator {
 	@Override
 	protected void whenLabelMatched() {
 		Label curLabel = (Label) matchedLine.getAtomAt(0);
+		curLabel.setLineWhereDefined(matchedLine);
 		curProcessSeg.defLabel(curLabel);
 		symTab.AddSymbol( curLabel );
 		term.add(matchedLine);
@@ -95,8 +96,10 @@ public class FirstViewer extends TermIterator {
 	}
 
 	private void varDef() {
-		curProcessSeg.defVariable( (Variable) matchedLine.getAtomAt(0) );
-		symTab.AddSymbol( matchedLine.getAtomAt(0) );
+		Variable var = (Variable) matchedLine.getAtomAt(0);
+		var.setLineWhereDefined(matchedLine);
+		curProcessSeg.defVariable( var );
+		symTab.AddSymbol( var );
 		term.add( calcAbsExprInLine(matchedLine) );
 	}
 
@@ -132,14 +135,14 @@ public class FirstViewer extends TermIterator {
 	
 	@Override
 	public void genOutput(PrintWriter writer) {
-		ArrayList < Segment > allSegments = symTab.findAll(AtomType.Segment);
+		ArrayList < Segment > allSegments = (ArrayList<Segment>) Atom.castCopy(new ArrayList< Segment >(),symTab.findAll(AtomType.Segment)); 
 		printSegments(writer,allSegments);
 		printSegmentsSymbols(writer,allSegments);
 	}
 	
 	private void printSegments(PrintWriter writer, ArrayList< Segment > segments) {
 		writer.println("Segments : ");
-		writer.println("                N a m e         	Size	Length");
+		writer.println("                N a m e         		Size	Length");
 		for (Segment seg : segments ) 
 			writer.printf("%-40s%-8s%-8s\n",
 									seg.getName().toUpperCase(),
@@ -150,7 +153,7 @@ public class FirstViewer extends TermIterator {
 	
 	private void printSegmentsSymbols(PrintWriter writer,ArrayList < Segment > segments) {
 		writer.println("Symbols : ");
-		writer.println("                N a m e         	Type	 Value	 Attr");
+		writer.println("                N a m e         		Type	 Value	 Attr");
 		for (Segment seg : segments ) {
 			for (Identifier sym : seg.getDefSymbols() ) {
 				writer.printf("%-40s%-9s%-8s%s\n",

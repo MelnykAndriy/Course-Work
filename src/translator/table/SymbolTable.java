@@ -83,15 +83,17 @@ public class SymbolTable {
 		return table.get(name).getType() == AtomType.Variable;
 	}
         
-	public ArrayList<Segment> findAll(AtomType segment) {
-		ArrayList < Segment > segments = new ArrayList < Segment >();
+	public ArrayList< Atom > findAll(AtomType founded) {
+		ArrayList < Atom > segments = new ArrayList < Atom >();
 		for ( Atom atom : table.values() ) 
-			if ( atom.getType() == AtomType.Segment )
-				segments.add((Segment) atom);
+			if ( atom.getType() == founded)
+				segments.add( atom);
 		
 		return segments;
 	}    
-    
+
+	
+	
     public SymbolTable() {
         table = new TreeMap<String,Atom>();
         table.putAll(predefined);

@@ -198,6 +198,14 @@ public class ErrorReporter {
 						line.findPos(ident));
 	}
 	
+	public void reportDefButUnusedSymbol( Identifier ident ) {
+		if ( ident.getType() == AtomType.Variable ) 
+			reportDefButUnusedVar(ident.getLineWhereDefined());
+		
+		if ( ident.getType() == AtomType.Label )
+			reportDefButUnusedLabel(ident.getLineWhereDefined());
+	}
+	
 	public void reportDefButUnusedVar( ParsedLine line ) {
 		errTab.report(ErrIdent.DefinedButUnused , line.getLineNumb(), 
 					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Variable))));
