@@ -20,7 +20,12 @@ public class SymbolTable {
         DirectiveInitialier.initialize(predefined);
         TypenameInitializer.initialize(predefined);
     }
-        
+       
+    public SymbolTable() {
+        table = new TreeMap<String,Atom>();
+        table.putAll(predefined);
+    }    
+    
     public Atom Search(String name) {
         if ( name == null ) return null;
     	return table.get(name.toLowerCase());
@@ -82,20 +87,20 @@ public class SymbolTable {
 		return table.get(name).getType() == AtomType.Variable;
 	}
         
-	public ArrayList< Atom > findAll(AtomType founded) {
+	public ArrayList< Atom > findAll(AtomType what) {
+		return findInMap(table,what);
+	}    
+
+	public static ArrayList< Atom > findAllThroughPregefined(AtomType what) {
+		return findInMap(predefined, what);
+	}
+	
+	private static ArrayList < Atom > findInMap(TreeMap < String, Atom > tab, AtomType what) {
 		ArrayList < Atom > segments = new ArrayList < Atom >();
-		for ( Atom atom : table.values() ) 
-			if ( atom.getType() == founded)
+		for ( Atom atom : tab.values() ) 
+			if ( atom.getType() == what)
 				segments.add( atom);
 		
 		return segments;
-	}    
-
-	
-	
-    public SymbolTable() {
-        table = new TreeMap<String,Atom>();
-        table.putAll(predefined);
-    }
-
+	}
 }

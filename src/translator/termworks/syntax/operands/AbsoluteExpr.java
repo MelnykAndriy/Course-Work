@@ -65,8 +65,7 @@ public class AbsoluteExpr extends Operand {
 		Constant evaluetedConstant = evalAbsoluteExpr();
 		operandAtoms.clear();
 		operandAtoms.add(evaluetedConstant);
-		operKind = (evaluetedConstant.GetVaue() == 1)?(OperandKind.imm8):( 
-						(evaluetedConstant.GetVaue() == 2)?(OperandKind.imm16):(OperandKind.imm32) );
+		operKind = OperandKind.whatKind(OperandKind.ABSOLUTE,evaluetedConstant.getSizeInBytes());
 	}
 	
 	public Constant evalAbsoluteExpr (){

@@ -12,8 +12,7 @@ public class RegisterOperand extends Operand {
 	
 	public RegisterOperand(ArrayList<Atom> atoms) {
 		super(atoms);
-		int byteSize = ((Register) atoms.get(0)).GetByteSize();
-		operKind = (byteSize == 1)?(OperandKind.r8):((byteSize == 2)?(OperandKind.r16):(OperandKind.r32));
+		operKind = OperandKind.whatKind(OperandKind.REGISTER, ((Register) atoms.get(0)).GetByteSize() );
 	}
 
 	public static boolean isRegisterOperand(ArrayList < Atom > atoms) {

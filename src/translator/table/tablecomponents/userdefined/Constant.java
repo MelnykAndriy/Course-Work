@@ -50,7 +50,7 @@ public class Constant extends Atom {
     	return token.matches(constantPattern.pattern());
     }
     
-    public static long ConstantValue(String constant) throws BadConstant {
+    final public static long ConstantValue(String constant) throws BadConstant {
 		return Long.valueOf((Character.isDigit( constant.charAt(constant.length() - 1 ) ))
 								?(constant):(constant.substring(0, constant.length() - 1 )) , getConstantRadix(constant) );
     }

@@ -1,6 +1,6 @@
 /* 
  * File : Translator.java
- * Autor : Andriy Melnyk
+ * Author : Andriy Melnyk
  * Purpose : Assembler Compiler main class definition
  * created : 20.02.14
  *

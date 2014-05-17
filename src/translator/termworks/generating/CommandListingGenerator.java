@@ -67,7 +67,7 @@ public class CommandListingGenerator {
 		if ( isOperandSizeOverridePrefixNeeded() ) 
 			retPrefixes.append("66| ");
 		if ( isAddressSizeOverridePrefixNeeded() )
-			retPrefixes.append("66| ");
+			retPrefixes.append("67| ");
 		return retPrefixes.toString();
 	}
 	

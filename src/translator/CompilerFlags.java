@@ -1,6 +1,6 @@
 /* 
  * File : CompilerFlags.java
- * Autor : Andriy Melnyk
+ * Author : Andriy Melnyk
  * Purpose : definition of class that contain compiler flags 
  * created : 10.03.14
  */

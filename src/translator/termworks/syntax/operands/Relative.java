@@ -10,7 +10,7 @@ public class Relative extends Operand {
 
 	public Relative(ArrayList<Atom> atoms) {
 		super(atoms);
-		operKind = OperandKind.rel8;
+		operKind = OperandKind.whatKind(OperandKind.RELATIVE,1);
 	}
 
 	@Override
