@@ -36,9 +36,9 @@ public abstract class Atom {
     
 	public static String buildStringFromAtoms(ArrayList< Atom > atoms) {
 		StringBuffer retStr = new StringBuffer();	
-		int i = 0;
+		boolean space = atoms.size() != 1;
 		for (Atom atom : atoms) {
-			retStr.append(atom.getName() + ((i++ > 0 )?(" "):("")));
+			retStr.append(atom.getName() + (( space )?(" "):("")));
 		}
 		return retStr.toString();
 	}

@@ -1,7 +1,7 @@
 
 ; .386
 
-data segment ; use16
+data segment ;; use16
     var$1 db  - 11000000b + 10000000b
     varDiv dw 0f3h + 011b * 10  
     var?2 dd 12551 + 0 + 2*1    
@@ -17,7 +17,7 @@ data segment ; use16
     ident9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
 data ends 
 
-code segment  ;use16
+code segment ;; use16
    ; assume cs : code , ds : data
     
 begin:
@@ -25,8 +25,8 @@ begin:
     ; mov ds,ax
                 
     sti 
-@someLbl:
-    ; and al,es:[bx + si]
+; @someLbl:
+    ; and al,es:[bx + si]   ;; additional operand size detection
     or al,01101110b
     
     div ds:varDiv
@@ -39,19 +39,19 @@ begin:
     mul dx
     
     
-    test fs:var?2 ,edx   ;; debug
-    jae @someLbl    ;; debug
+    test fs:var?2 ,edx   
+    ; jae @someLbl    
     
     mov ds:VAR@3,bx 
     or cx,0AB91h
     mov ds:var?2,ecx
     and eax,dword ptr ds:[bx + di]
     
-@testLable:  
+; @testLable:  
     test ds:var_4,al
-    jae @endLbl     ;; debug
+    ; jae @endLbl     
    
-    jmp @testLable  ;; debug
+    ; jmp @testLable  
     
     adc al,gs:var_4 
    
@@ -61,14 +61,14 @@ begin:
     or ax,256
     or eax,0fffffh   
     or ecx,086af10c6h  
-    jmp @endLbl 
+    ; jmp @endLbl 
     
          
     or cl,-20
     or cx,0fffh
     or ecx,0ac000h  
      
-@endLbl:    
+; @endLbl:    
    
     or bx,22
     or ebx,-3

@@ -13,7 +13,7 @@ public class MemoryOperand extends Operand {
 	private Register base;
 	private Register index;
 	private Typename type;
-	private int scale;
+	private int scale = 1;
 	
 	private Variable direct;
 	
@@ -50,7 +50,6 @@ public class MemoryOperand extends Operand {
 			directWithPtrInit(atoms);
 		if ( directWithout.matches() ) 
 			directWithoutPtrInit(atoms,0);
-		// throw SomethingWrong();
 	}
 	
 	private void directWithPtrInit(ArrayList<Atom> atoms) {
@@ -60,6 +59,7 @@ public class MemoryOperand extends Operand {
 	}
 
 	private  void directWithoutPtrInit(ArrayList<Atom> atoms, int start) {
+		segChanger = (Register) atoms.get(start);
 		direct = (Variable) atoms.get(start + 2);
 		if ( type == null ) {
 			type = Typename.makeTypename(direct.Size());
@@ -120,8 +120,7 @@ public class MemoryOperand extends Operand {
 	public Register getIndex() {
 		return index;
 	}
-		
-	
+			
 	public boolean canDetermineType() {
 		if ( type != null )
 			return true;
@@ -138,10 +137,14 @@ public class MemoryOperand extends Operand {
 		return type.getSize();
 	}
 
-	public Register getSegReplacement() {
-		return segChanger;
+	public String getReplacementByte() {
+		return segChanger.getReplacementByte();
 	}
 
+	public Register getReplacementReg() {
+		return segChanger;
+	}
+	
 	@Override
 	public OperandKind getOperandKind() {
 		return operKind;

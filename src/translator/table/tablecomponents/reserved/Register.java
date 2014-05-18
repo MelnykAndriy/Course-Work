@@ -12,12 +12,10 @@ public class Register extends Atom {
     private String pre;
     private RegUsage regType;
     
-    //TODO implement enum that will be encapsulate register appointment
-    // like (segmentRegister,base, ... )
     public Register(String _name,int bitSize,int regNumb)
     			throws IncorrectBitSize {
         this(_name,bitSize,regNumb,"");
-    }    
+    }
     
     public Register(String _name,int bitSize,int regNumb, String pre )
     			throws IncorrectBitSize {
@@ -73,7 +71,7 @@ public class Register extends Atom {
 		return this;
 	}
 
-	public String getReplacmentByte() {
+	public String getReplacementByte() {
 		return pre;
 	}
     

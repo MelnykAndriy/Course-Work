@@ -45,12 +45,12 @@ public abstract class RegisterInitializer {
         	
 	// segment register 
         	
-        	table.put("es", new Register("es",80,0,"26h"));
-        	table.put("cs", new Register("cs",80,1,"2Eh"));
-        	table.put("ss", new Register("ss",80,2,"36h"));
-        	table.put("ds", new Register("ds",80,3,"3Eh"));
-        	table.put("fs", new Register("fs",80,4,"64h"));
-        	table.put("gs", new Register("gs",80,5,"65h"));        
+        	table.put("es", new Register("es",80,0,"26"));
+        	table.put("cs", new Register("cs",80,1,"2E"));
+        	table.put("ss", new Register("ss",80,2,"36"));
+        	table.put("ds", new Register("ds",80,3,"3E"));
+        	table.put("fs", new Register("fs",80,4,"64"));
+        	table.put("gs", new Register("gs",80,5,"65"));        
 	         
         } catch ( IncorrectBitSize exc ) {
         	System.err.println("Error : Attempt to provide incorrect bit size in the Register constructor.");

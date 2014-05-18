@@ -58,7 +58,7 @@ public class Translator {
 		} catch (FileNotFoundException exc) {
 			System.err.println("Error while creating output file : " + exc.getMessage());
 		}
-  	
+    	
     }
     
     public static void stopBuild() {

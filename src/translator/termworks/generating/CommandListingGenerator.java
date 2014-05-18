@@ -8,13 +8,18 @@ import translator.table.SymbolTable;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.reserved.Command;
+import translator.termworks.generating.ListingGenerator.SegmentInfo;
 import translator.termworks.syntax.operands.*;
 
 public class CommandListingGenerator {
+	private static final String STANDARD_SEGMENT_REG = "ds";
 	private Command cmd;
 	private ArrayList< Operand > operands;
+	private int maxOperandSize = 0;
 	private SymbolTable symTab;
-	private int operandsSize;
+	private ListingGenerator.SegmentInfo curSeg;
+
+	
 	private OperandOption curOption; 
 	
 	private MemoryOperand mem = null;
@@ -23,48 +28,44 @@ public class CommandListingGenerator {
 		this.symTab = symTab;
 		operands = new ArrayList < Operand > ();
 	}
-
-	private int calcOperandsSize() {
-		// TODO Auto-generated method stub
-		return 4;
-	}
 	
-	public String generate(ParsedLine line) {
-		preprocessing(line);
+	public String generate(ParsedLine line,ListingGenerator.SegmentInfo segInf ) {
+		preprocessing(line,segInf);
 		StringBuffer genCommand = new StringBuffer("");
+		genCommand.append( segInf.offsetToString() + " " );
 		genCommand.append( genPrefix() );
 		genCommand.append( genOpCode() );
-		genCommand.append( genModRM() );
-		genCommand.append( genSib());
+//		genCommand.append( genModRM() );
+//		genCommand.append( genSib());
 		genCommand.append( genOffset() );
 		genCommand.append( genAbsoluteOper() );
-		operands.clear();
 		return genCommand.toString();
 	}
-	
-	private void preprocessing(ParsedLine line) {
+
+	private void preprocessing(ParsedLine line, SegmentInfo segInf) {
+		curSeg = segInf;
 		int cmdIndx = line.firstIndexOf(AtomType.Command);
 		cmd = (Command) line.getAtomAt( cmdIndx );
-		for ( Atom atom : line.subArray(cmdIndx + 1)) {
-			operands.add((Operand) atom);
-		}
-		
+		Atom.castCopy(operands, line.subArray(cmdIndx + 1));
 		curOption = cmd.getOptionForOperands(operands);		
-		operandsSize = calcOperandsSize();
 		mem = null;
 		
-		for ( Operand operand : operands ) 	
+		for ( Operand operand : operands ) 	{
+			if ( operand.calcSizeInBytes() > maxOperandSize ) maxOperandSize = operand.calcSizeInBytes();
 			if ( operand instanceof MemoryOperand ) {
 				mem = (MemoryOperand) operand;
 				break;
 			}
+		}
 	}
 
 	private String genPrefix( ) {
 		StringBuffer retPrefixes = new StringBuffer("");
-		if ( mem != null ) 
-			retPrefixes.append(mem.getSegReplacement() );
-		if ( isOperandSizeOverridePrefixNeeded() ) 
+		if ( mem != null ) {
+			if ( !mem.getReplacementReg().getName().toLowerCase().equals(STANDARD_SEGMENT_REG) )
+				retPrefixes.append(mem.getReplacementByte() + ": " );
+		}
+		if ( iDataSizeOverridePrefixNeeded() ) 
 			retPrefixes.append("66| ");
 		if ( isAddressSizeOverridePrefixNeeded() )
 			retPrefixes.append("67| ");
@@ -76,13 +77,13 @@ public class CommandListingGenerator {
 		return false;
 	}
 
-	private boolean isOperandSizeOverridePrefixNeeded() {
-		// TODO Auto-generated method stub
+	private boolean iDataSizeOverridePrefixNeeded() {
+		if ( maxOperandSize != 1 && maxOperandSize != curSeg.size() )  return true;
 		return false;
 	}
 
 	private String genOpCode() {
-		return curOption.getOpcode();
+		return curOption.getOpcode() + " ";
 	}
 
 	private String genModRM() {
@@ -141,14 +142,14 @@ public class CommandListingGenerator {
 
 	private String genOffset() {		
 		if ( mem != null && mem.isOffsetPresent() ) 
-			return ListingGenerator.buildDefaultHexRep(mem.getOffset(),	operandsSize) + " R ";
+			return ListingGenerator.buildDefaultHexRep(mem.getOffset(), curSeg.size()) + " R ";
 		return "";
 	}
 
 	private String genAbsoluteOper() {
 		for ( Operand atom : operands ) {
 			if ( atom instanceof AbsoluteExpr ) {
-				return ListingGenerator.genHexFromOperand(atom,operandsSize) + " ";
+				return ListingGenerator.genHexFromOperand(atom, ((AbsoluteExpr) atom).calcSizeInBytes() ) + " ";
 			}
 		}
 		return "";
