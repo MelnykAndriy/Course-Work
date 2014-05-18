@@ -18,12 +18,12 @@ segmentConcurent segment
 segmentConcurent ends
    
 code segment
-    
+   assume cs : code , ds : data
 begin:
     
 code:   ;;error
     
-    test edx,ds:var?2
+    test al,ds:var?2
 
     mov     ,al     ;error
     
