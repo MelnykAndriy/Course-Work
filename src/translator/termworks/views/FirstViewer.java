@@ -79,10 +79,15 @@ public class FirstViewer extends TermIterator {
 			return;
 		}
 
-//		if ( matchedLine.strMatches("^\\s*end.*$") ) {
-//
-//		}
+		if ( matchedLine.strMatches("^\\s*end.*$") ) {
+			endDirectiveProcessing();
+		}	
 
+	}
+
+	private void endDirectiveProcessing() {
+		if ( matchedLine.getAtomAt(1) instanceof UndefinedOperand ) 
+			FixNeededUndefinedOperands.push(new UndefinedOperandUpdater(matchedLine.getAtoms(), 1));
 	}
 
 	private void segmentDef() {
@@ -91,8 +96,9 @@ public class FirstViewer extends TermIterator {
 	}
 
 	private void endSegmentProcessing() {
-		curProcessSeg = null;
+		matchedLine.getAtoms().set(0,curProcessSeg);
 		term.add(matchedLine);
+		curProcessSeg = null;
 	}
 
 	private void varDef() {

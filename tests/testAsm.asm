@@ -2,17 +2,17 @@
 ; .386
 
 data segment ; use16
-    ; var$1 db  - 11000000b + 10000000b
+    var$1 db  - 11000000b + 10000000b
     varDiv dw 0f3h + 011b * 10  
     var?2 dd 12551 + 0 + 2*1    
-    ; ident dd 125*2 - 10 + 25/5 + 89 
+    ident dd 125*2 - 10 + 25/5 + 89 
     var@3 dw 765o   
     var_4 db -15    
-    ; someVar1 db 5 +++ -6    
-    ; someVar2 db 5 * 6 - 2   ;; 0Ah 
-    ; someVar3 dw ((4 + 2)*5 - 101b + 064h)/31q  ;; should be 05h
+    someVar1 db 5 +++ -6    
+    someVar2 db 5 * 6 - 2   ;; 0Ah 
+    someVar3 dw ((4 + 2)*5 - 101b + 064h)/31q  ;; should be 05h
     ident6 db 0 + (-1)*14*(-1) + 0  ;; should be 0Eh
-    ; ident7 db -1 * 64 * -1  ;; should be 40h
+    ident7 db -1 * 64 * -1  ;; should be 40h
     ident8 dw 8 mod 2   ;; should be 0000h
     ident9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
 data ends 
@@ -39,7 +39,7 @@ begin:
     mul dx
     
     
-    test edx,fs:var?2   ;; debug
+    test fs:var?2 ,edx   ;; debug
     jae @someLbl    ;; debug
     
     mov ds:VAR@3,bx 
@@ -59,14 +59,14 @@ begin:
     
     or al,1
     or ax,256
-    or eax,0fffffh   ;; debug 
-    or ecx,086af10c6h   ;; debug
-    jmp @endLbl ;; debug
-    ;; 
+    or eax,0fffffh   
+    or ecx,086af10c6h  
+    jmp @endLbl 
+    
          
     or cl,-20
     or cx,0fffh
-    or ecx,0ac000h  ;; debug
+    or ecx,0ac000h  
      
 @endLbl:    
    

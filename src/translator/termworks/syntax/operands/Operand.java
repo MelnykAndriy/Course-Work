@@ -2,7 +2,6 @@ package translator.termworks.syntax.operands;
 
 import java.util.ArrayList;
 
-import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.tablecomponents.Atom;
 
@@ -14,7 +13,7 @@ public abstract class Operand extends Atom {
 	public abstract int calcSizeInBytes() ;
 
 	public Operand(ArrayList < Atom > atoms) {
-		super(Lexer.buildStringFromAtoms(atoms));
+		super(buildStringFromAtoms(atoms));
 		operandAtoms = atoms;
 	}
 	

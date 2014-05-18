@@ -118,14 +118,5 @@ public class Lexer extends Printable {
 		
 		throw new NoSuchAtomException(token);		
 	}
-	
-	public static String buildStringFromAtoms(ArrayList< Atom > atoms) {
-		StringBuffer retStr = new StringBuffer();	
-		for (Atom atom : atoms) {
-			retStr.append(atom.getName() + " ");
-		}
-		return retStr.toString();
-	}
-	
 
 }

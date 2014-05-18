@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import translator.lexer.ParsedLine;
 import translator.table.SymbolTable;
+import translator.table.tablecomponents.userdefined.Segment;
 import translator.table.tablecomponents.userdefined.Variable;
 import translator.termworks.TermIterator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
@@ -37,20 +38,19 @@ public class ListingGenerator extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
-		System.out.println(matchedLine);
-		dest.printf("%-50s %s", localCmdGen.generate(matchedLine),matchedLine);
+//		dest.printf("%-50s %s", localCmdGen.generate(matchedLine),matchedLine);
 	}
 	
 	@Override
 	protected void whenDirectiveMatched() {
 		if ( matchedLine.matches(defSegEndsPattern) ) {
 			if ( matchedLine.getAtomAt(1).getName().equals("segment") ) {
-				
+				dest.printf("%-46s %s\n",buildDefaultHexRep(0,2),matchedLine);
 				return;
 			}
 			
 			if ( matchedLine.getAtomAt(1).getName().equals("ends") ) {
-		
+				dest.printf("%-46s %s\n",buildDefaultHexRep(((Segment) matchedLine.getAtomAt(0)).byteSize(),2),matchedLine);
 				return;
 			}
 		}
@@ -69,10 +69,10 @@ public class ListingGenerator extends TermIterator {
 	private void generateVarDef() {
 		Variable var = (Variable) matchedLine.getAtomAt(0);
 		Operand oper = (Operand) matchedLine.getAtomAt(2);
-		
-		dest.printf("%s %s\n",
-						buildDefaultHexRep(var.getOffset(),2),
-						genHexFromOperand(oper,var.Size()));
+		String bytes = String.format("%s %s", 
+				buildDefaultHexRep(var.getOffset(),2),
+				genHexFromOperand(oper,var.Size()));
+		dest.printf("%-50s %s\n",bytes,matchedLine);
 	}
 	
 	public static String buildDefaultHexRep(int value,int byteSize) {

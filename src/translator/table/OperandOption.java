@@ -44,11 +44,9 @@ public final class OperandOption {
 	public boolean operandsMatches(ArrayList < Operand > operands) {
 		if ( operands.size() != operandsSuit.size() ) return false;
 		for (int i = 0; i < operands.size() ; i++ ) {
-//			System.out.println("from suit : " + operandsSuit.get(i).getKey());
-//			System.out.println("from operand : " + operands.get(i).getOperandKind());
 			if ( operands.get(i).getOperandKind() != operandsSuit.get(i).getKey() || 
 					operandsSuit.get(i).getValue() != null && 
-					!operandsSuit.get(i).getValue().equals(operands.get(i).getName()) )
+					!operandsSuit.get(i).getValue().toLowerCase().equals(operands.get(i).getName().toLowerCase()) )
 				return false;
 		}
 		return true;

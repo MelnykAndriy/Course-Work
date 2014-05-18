@@ -3,7 +3,6 @@ package translator.termworks.syntax.operands;
 import java.util.ArrayList;
 import java.util.regex.*; 
 
-import translator.lexer.Lexer;
 import translator.table.OperandKind;
 import translator.table.tablecomponents.*;
 import translator.table.tablecomponents.reserved.*;
@@ -37,7 +36,7 @@ public class MemoryOperand extends Operand {
 	
 	public MemoryOperand(ArrayList<Atom> atoms) {
 		super(atoms);
-		String checkOperand = Lexer.buildStringFromAtoms(operandAtoms);
+		String checkOperand = buildStringFromAtoms(operandAtoms);
 		Matcher baseIndexWith = baseIndexAddrWithPtrRegex.matcher(checkOperand);
 		Matcher baseIndexWithout = baseIndexAddrWithOutPtrRegex.matcher(checkOperand);
 		Matcher directWith = directAddrWithPtrRegex.matcher(checkOperand);
@@ -81,7 +80,7 @@ public class MemoryOperand extends Operand {
 	}
 
 	public static boolean isMemoryOperand(ArrayList < Atom > operandAtoms) {
-		String checkOperand = Lexer.buildStringFromAtoms(operandAtoms);
+		String checkOperand = buildStringFromAtoms(operandAtoms);
 		Matcher baseIndexWith = baseIndexAddrWithPtrRegex.matcher(checkOperand);
 		Matcher baseIndexWithout = baseIndexAddrWithOutPtrRegex.matcher(checkOperand);
 		Matcher directWith = directAddrWithPtrRegex.matcher(checkOperand);

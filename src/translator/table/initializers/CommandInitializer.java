@@ -62,9 +62,9 @@ public abstract class CommandInitializer  {
         
     // OR
         addedCommandSuit = new CommandSuit();
-        addedCommandSuit.addOption(new OperandOption("0C","/r",OperandKind.r8,"AL",OperandKind.imm8 ) );
-        addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r16,"AX",OperandKind.imm16 ) );
-        addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r32,"EAX",OperandKind.imm32 ) );
+        addedCommandSuit.addOption(new OperandOption("0C","/r",OperandKind.r8,"al",OperandKind.imm8 ) );
+        addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r16,"ax",OperandKind.imm16 ) );
+        addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r32,"eax",OperandKind.imm32 ) );
         addedCommandSuit.addOption(new OperandOption("80","/1",OperandKind.r8,OperandKind.imm8 ) );
         addedCommandSuit.addOption(new OperandOption("81","/1",OperandKind.r16,OperandKind.imm16 ) );
         addedCommandSuit.addOption(new OperandOption("81","/1",OperandKind.r32,OperandKind.imm32 ) );

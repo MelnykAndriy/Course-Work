@@ -1,6 +1,7 @@
 
 package translator.table.tablecomponents;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class Atom {
@@ -32,4 +33,13 @@ public abstract class Atom {
     		dest.add((T1) sourceComponent);
     	return dest;
     }
+    
+	public static String buildStringFromAtoms(ArrayList< Atom > atoms) {
+		StringBuffer retStr = new StringBuffer();	
+		int i = 0;
+		for (Atom atom : atoms) {
+			retStr.append(atom.getName() + ((i++ > 0 )?(" "):("")));
+		}
+		return retStr.toString();
+	}
 }

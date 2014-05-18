@@ -15,8 +15,7 @@ public class Relative extends Operand {
 
 	@Override
 	public OperandKind getOperandKind() {
-		// TODO Auto-generated method stub
-		return null;
+		return operKind;
 	}
 
 	@Override

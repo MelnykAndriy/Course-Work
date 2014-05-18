@@ -56,9 +56,9 @@ public class Constant extends Atom {
     }
     
     public int getSizeInBytes() {
-    	if ( value >= -128 & value <= 255 ) return 1;
-    	if ( value >= -32768 & value <= 65535 ) return 2;
-    	if ( value >= -2147483648 & value <=  2*2147483647) return 4;
+    	if ( value >= -128 && value <= 255 ) return 1;
+    	if ( value >= -32768 && value <= 65535 ) return 2;
+    	if ( value >= (long) -2147483648 && value <= (long) 2*2147483647) return 4;
     	return 8;
     }
     

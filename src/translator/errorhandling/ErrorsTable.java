@@ -48,7 +48,7 @@ class ErrorInfo implements Reportable {
 	 public void report() {
 	 	System.err.println( ((msgContainer.isWarning() )?("WARNING"):("ERROR")) + 
 	 						" : " + msgContainer.getMessage() + "\n" +
-	 		     	        "\tline : " + line + ", " + "position : " + pos);
+	 		     	        "\tline : " + line + ", " + "position : " + pos + "\n");
 	 }
 
 }

@@ -32,7 +32,8 @@ public class SecondViewer extends TermIterator {
 
 	@Override
 	protected void whenDirectiveMatched() {
-		// TODO Auto-generated method stub
+		
+		
 		
 	}
 
