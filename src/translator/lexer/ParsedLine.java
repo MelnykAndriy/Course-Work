@@ -64,11 +64,11 @@ public class ParsedLine {
 	}
 	
 	public int findPos(Atom atom) {
-		return fullLineWithoutComments.indexOf( atom.searchedPosAtom().getName()) + 1;
+		return fullLineWithoutComments.toLowerCase().indexOf( atom.searchedPosAtom().getName().toLowerCase() ) + 1;
 	}
 	
 	public int findPos(String name) { 
-		return fullLineWithoutComments.indexOf( name ) + 1;
+		return fullLineWithoutComments.toLowerCase().indexOf( name.toLowerCase() ) + 1;
 	}
 	
 	public int findPos(String name,int numberInLine) {

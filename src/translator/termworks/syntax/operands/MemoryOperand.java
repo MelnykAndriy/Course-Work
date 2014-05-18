@@ -21,8 +21,8 @@ public class MemoryOperand extends Operand {
 	private static String segmentRegs = "((ds)|(ss)|(es)|(fs)|(gs)|(cs))";
 	private static String reg32 = "((eax)|(ebx)|(ecx)|(edx)|(esp)|(ebp)|(esi)|(edi))";
 	private static String reg16 = "((ax)|(bx)|(dx)|(cx)|(si)|(di)|(sp)|(bp))";
-	private static String regs32sum = "(" + reg32 + "\\s*+\\s*" + reg32 + ")";
-	private static String regs16sum = "(" + reg16 + "\\s*+\\s*" + reg16 + ")";
+	private static String regs32sum = "(" + reg32 + "\\s*[+]\\s*" + reg32 + ")";
+	private static String regs16sum = "(" + reg16 + "\\s*[+]\\s*" + reg16 + ")";
 	private static String allowedTypes = "((byte)|(word)|(dword))";
 	
 	public static String baseIndexAddressingWithOutPtr = "\\s*" + segmentRegs + "\\s*:\\s*\\[\\s*(" + regs32sum + "|" + regs16sum + ")\\s*\\]\\s*";
@@ -86,16 +86,7 @@ public class MemoryOperand extends Operand {
 		Matcher baseIndexWithout = baseIndexAddrWithOutPtrRegex.matcher(checkOperand);
 		Matcher directWith = directAddrWithPtrRegex.matcher(checkOperand);
 		Matcher directWithout = directAddrWithOutPtrRegex.matcher(checkOperand);
-		
-		if ( baseIndexWith.matches() )
-			System.out.println("baseIndexWith " + checkOperand);
-		if ( baseIndexWithout.matches() )
-			System.out.println("baseIndexWithout " + checkOperand);
-		if ( directWith.matches() )
-			System.out.println("directWith " + checkOperand);
-		if ( directWithout.matches() )
-			System.out.println("directWithout " + checkOperand);
-		
+				
 		return baseIndexWith.matches() || baseIndexWithout.matches() || 
 				(directWith.matches() && ((Identifier) operandAtoms.get(4)).getType() == AtomType.Variable ) || 
 				(directWithout.matches() && ((Identifier) operandAtoms.get(2)).getType() == AtomType.Variable ) ;

@@ -62,7 +62,6 @@ public abstract class CommandInitializer  {
         
     // OR
         addedCommandSuit = new CommandSuit();
-        // TODO
         addedCommandSuit.addOption(new OperandOption("0C","/r",OperandKind.r8,"AL",OperandKind.imm8 ) );
         addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r16,"AX",OperandKind.imm16 ) );
         addedCommandSuit.addOption(new OperandOption("0D","/r",OperandKind.r32,"EAX",OperandKind.imm32 ) );
@@ -73,14 +72,15 @@ public abstract class CommandInitializer  {
         addedCommandSuit.addOption(new OperandOption("83","/1",OperandKind.r32,OperandKind.imm8 ));
         table.put("or",new Command("or",2,addedCommandSuit));
         
-//    // JMP
-//        addedCommandSuit = new CommandSuit();		 // TODO what does mean cb ???
-//        addedCommandSuit.addOption(new OperandOption("EB","/r",OperandKind.rel8 ));
-//        table.put("jmp",new Command("jmp",1,addedCommandSuit));
-//        
-//    // JAE
-//        addedCommandSuit = new CommandSuit();
-//        table.put("jae",new Command("jae",1,addedCommandSuit));
+    // JMP
+        addedCommandSuit = new CommandSuit();		 // TODO what does mean cb ???
+        addedCommandSuit.addOption(new OperandOption("EB","/r",OperandKind.rel8 ));
+        table.put("jmp",new Command("jmp",1,addedCommandSuit));
+        
+    // JAE
+        addedCommandSuit = new CommandSuit();
+        addedCommandSuit.addOption(new OperandOption("73","/r",OperandKind.rel8));
+        table.put("jae",new Command("jae",1,addedCommandSuit));
 		
 	}
 
