@@ -94,6 +94,18 @@ begin:
     ; mov ax,4C00h
     ; int 21h   
     
+    ;Or reg,imm
+    or byte ptr gs:[edx + esi] , 12 * 01101b 
+    or word ptr es:[ebx + ecx] , (12 - 0A7h + (4 - 6/3)*11)*20
+    or dword ptr es:[ebx + esi] , -(12 + 5)
+    or word ptr fs:[bx + di] , (20 mod 0111b mod 5) - 13
+    
+    ;Mov mem, reg
+    div someVar1 , byte ptr gs:[edx + esi]
+    div someVar3 , word ptr es:[ebx + ecx]
+    div ident9 , dword ptr es:[ebx + esi]
+    div ident8 , word ptr fs:[bx + di]
+    
 code ends 
     end begin
           
