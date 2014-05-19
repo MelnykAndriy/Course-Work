@@ -52,7 +52,7 @@ public class Translator {
   //  	secondViewer.view(firstViewer.getTerm());
 
     	try {
-    		ListingGenerator listingGenerator = new ListingGenerator(mainTab,firstViewer.getTerm());
+    		ListingGenerator listingGenerator = new ListingGenerator(firstViewer.getTerm());
     		errTab.PrintFoundErrors();
     		listingGenerator.genOutput(flags.getOFile());	// generating of listing file
 		} catch (FileNotFoundException exc) {

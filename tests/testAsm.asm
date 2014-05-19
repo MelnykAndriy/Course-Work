@@ -1,14 +1,14 @@
 
 ; .386
 
-data segment ;; use16
+data segment  ; use16
     var$1 db  - 11000000b + 10000000b
     varDiv dw 0f3h + 011b * 10  
     var?2 dd 12551 + 0 + 2*1    
     ident dd 125*2 - 10 + 25/5 + 89 
     var@3 dw 765o   
     var_4 db -15    
-    someVar1 db 5 +++ -6    
+    someVar1 db 5 +++ -6 
     someVar2 db 5 * 6 - 2   ;; 0Ah 
     someVar3 dw ((4 + 2)*5 - 101b + 064h)/31q  ;; should be 05h
     ident6 db 0 + (-1)*14*(-1) + 0  ;; should be 0Eh
@@ -17,7 +17,7 @@ data segment ;; use16
     ident9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
 data ends 
 
-code segment ;; use16
+code segment ; use16
    ; assume cs : code , ds : data
     
 begin:
@@ -25,19 +25,37 @@ begin:
     ; mov ds,ax
                 
     sti 
-; @someLbl:
-    ; and al,es:[bx + si]   ;; additional operand size detection
+; ; @someLbl:
+    ; ; and al,es:[bx + si]   ;; additional operand size detection
     or al,01101110b
     
     div ds:varDiv
     div word ptr ds:ident9 
     div byte ptr gs:ident8
     div dword ptr es:ident6
+    
+    ; jmp @endCSdata
+    ; lol1 db 12
+    ; lol2 dw 1225
+    ; lol3 dd 1225112
+; @endCsdata:
+       
+    
     div byte ptr gs:[edx + esi]
     div word ptr es:[ebx + ecx]
-    div dword ptr es:[ebx + ecx]
-    mul dx
+    div dword ptr es:[ebx + esi]
+    div word ptr fs:[bx + di]
+
+    div dword ptr es:[ebx][ecx]
     
+    and ecx,dword ptr es:[esp][ecx]
+    adc bx,word ptr gs:[esi + edx]
+    
+    mov byte ptr fs:[ecx + edi],al
+
+    
+    
+    mul dx
     
     test fs:var?2 ,edx   
     ; jae @someLbl    
@@ -46,7 +64,7 @@ begin:
     or cx,0AB91h
     mov ds:var?2,ecx
     and eax,dword ptr ds:[bx + di]
-    
+
 ; @testLable:  
     test ds:var_4,al
     ; jae @endLbl     

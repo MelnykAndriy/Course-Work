@@ -83,7 +83,8 @@ public class ErrorsTable {
 					 		NameConflictsWithReserved,
 					 		UndefOperand,
 					 		UnsupportedOperands,
-					 		DefinedButUnused
+					 		DefinedButUnused, BaseIndexComb,
+					 		UndefMemType
 						 };
 	
 	private ArrayList<Reportable> FoundErrors;
@@ -151,6 +152,8 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.UndefOperand, new Error("Operand type is not defined or not supported."));
 		Errors.put(ErrIdent.UnsupportedOperands , new Error("Unsupported combination of operands."));
 		Errors.put(ErrIdent.UndefinedIdentifier, new Error("Identifier was not declared."));
+		Errors.put(ErrIdent.BaseIndexComb,new Error("Combination of base and index register isn't allowed.") );
+		Errors.put(ErrIdent.UndefMemType, new Error("Memory type is not defined."));
 	}
 	
 }

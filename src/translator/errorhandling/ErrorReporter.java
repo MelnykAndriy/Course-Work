@@ -215,5 +215,17 @@ public class ErrorReporter {
 		errTab.report(ErrIdent.DefinedButUnused , line.getLineNumb(), 
 					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Label))));
 	}
+
+	public void reportBaseIndexComb(ParsedLine line) {
+		errReported++;
+		errTab.report(ErrIdent.BaseIndexComb,line.getLineNumb(), 
+					  line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Memory))));
+	}
+	
+	public void reportUndefMemory(ParsedLine line ) {
+		errReported++;
+		errTab.report(ErrIdent.UndefMemType, line.getLineNumb(),
+						line.findPos(line.getAtomAt(line.firstIndexOf(AtomType.Memory))));
+	}
 	
 }

@@ -338,9 +338,8 @@ public class GrammarChecker extends TermIterator {
 		private boolean MemoryOperandCheck(MemoryOperand operand) {
 			try {
 				operand.isValidMemory();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (BaseIndexCombinationNotAllowed e) {
+				reporter.reportBaseIndexComb(matchedLine);
 			}
 			return true;
 		}
@@ -351,7 +350,7 @@ public class GrammarChecker extends TermIterator {
 			Atom.castCopy(idents,symTab.findAll(AtomType.Variable));
 			Atom.castAppend(idents, symTab.findAll(AtomType.Label));
 			
-			for ( Identifier ident : idents) 		{	
+			for ( Identifier ident : idents) {	
 				if ( !ident.isIdentUsed() ) 
 					reporter.reportDefButUnusedSymbol(ident);	
 			}
