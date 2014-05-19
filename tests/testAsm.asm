@@ -101,10 +101,10 @@ begin:
     or word ptr fs:[bx + di] , (20 mod 0111b mod 5) - 13
     
     ;Mov mem, reg
-    div someVar1 , byte ptr gs:[edx + esi]
-    div someVar3 , word ptr es:[ebx + ecx]
-    div ident9 , dword ptr es:[ebx + esi]
-    div ident8 , word ptr fs:[bx + di]
+    mov es:someVar1 , byte ptr gs:[edx + esi]
+    mov gs:ssomeVar3 , word ptr es:[ebx + ecx]
+    mov fs:ident9 , dword ptr es:[ebx + esi]
+    mov ss:ident8 , word ptr fs:[bx + di]
     
 code ends 
     end begin
