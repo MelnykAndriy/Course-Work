@@ -10,9 +10,8 @@ public abstract class Printable {
 	public abstract void genOutput(PrintWriter writer);
 	
 	public void genOutput(OutputStream stream) {
-		PrintWriter printer = new PrintWriter(stream);
+		PrintWriter printer = new PrintWriter(stream,true);
 		try {
-			
 			genOutput( printer );
 		} finally {
 			printer.close();

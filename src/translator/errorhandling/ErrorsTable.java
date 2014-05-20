@@ -1,5 +1,6 @@
 package translator.errorhandling;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -110,10 +111,18 @@ public class ErrorsTable {
 		for (Reportable err : FoundErrors ) {
 			err.report();
 		}
-		System.err.println("Summary : " + warningsCounter + " Warnings, " +
-						    + errorsCounter + " Errors were found.");
+		System.err.println( getSummary() );
 	}
 	
+	private String getSummary () {
+		return "Summary : " + warningsCounter + " Warnings, " +
+			    + errorsCounter + " Errors were found.";
+	}
+	
+	public void prnSummary(PrintWriter where) {
+		where.println( getSummary() );
+	}
+
 	public boolean isCritical() {
 		return errorsCounter > 0;
 	}

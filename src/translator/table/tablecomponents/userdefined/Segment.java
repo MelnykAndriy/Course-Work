@@ -32,12 +32,13 @@ public class Segment extends Identifier {
 		
 	public void defVariable(Variable var) {
 		vars.add(var);
-		var.setOffset(byteSize);
-		byteSize += var.Size();
 	}
 	
-	public void defLabel(Label lab) {
-		lab.setOffset(byteSize); 
+	public void incSize(int n) {
+		byteSize += n;
+	}
+	
+	public void defLabel(Label lab) { 
 		labels.add(lab);
 	}
 	
@@ -52,6 +53,10 @@ public class Segment extends Identifier {
 		return segType;
 	}
 
+	public int size() {
+		return (segType == SegmentType.bit16)?(2):(4);
+	}
+	
 	public synchronized int getByteSize() {
 		return byteSize;
 	}

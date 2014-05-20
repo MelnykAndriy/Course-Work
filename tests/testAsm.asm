@@ -1,7 +1,7 @@
 
 ; .386
 
-data segment  ; use16
+data segment ;; use16
     var$1 db  - 11000000b + 10000000b
     varDiv dw 0f3h + 011b * 10  
     var?2 dd 12551 + 0 + 2*1    
@@ -17,7 +17,7 @@ data segment  ; use16
     ident9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
 data ends 
 
-code segment ; use16
+code segment ;; use16
    ; assume cs : code , ds : data
     
 begin:
@@ -25,8 +25,12 @@ begin:
     ; mov ds,ax
                 
     sti 
-; ; @someLbl:
-    ; ; and al,es:[bx + si]   ;; additional operand size detection
+; @someLbl:
+
+    mov ds : var$1, al
+    and edx, gs : ident
+    adc dl, fs : ident7
+    and al,es:[bx + si]
     or al,01101110b
     
     div ds:varDiv
@@ -34,12 +38,15 @@ begin:
     div byte ptr gs:ident8
     div dword ptr es:ident6
     
-    ; jmp @endCSdata
-    ; lol1 db 12
-    ; lol2 dw 1225
-    ; lol3 dd 1225112
-; @endCsdata:
+    jmp @endCSdata
+    lol1 db 12
+    lol2 dw 1225
+    lol3 dd 1225112
+@endCsdata:
        
+    mov cs:lol1, dl
+    mov cs:lol2, cx
+    mov cs:lol3, ecx
     
     div byte ptr gs:[edx + esi]
     div word ptr es:[ebx + ecx]
@@ -56,6 +63,13 @@ begin:
     
     
     mul dx
+    mul cx 
+    mul ax
+    mul al
+    mul di
+    mul ecx
+    mul eax
+    mul ebx
     
     test fs:var?2 ,edx   
     ; jae @someLbl    
@@ -73,7 +87,17 @@ begin:
     
     adc al,gs:var_4 
    
+    adc eax, fs:[eax + edi]
+    adc al, ds : [edi + esi]
     
+    and bx , ds : [bx + di]
+    and eax , gs : [bx + si]
+    
+    mov  ss : [bx + si] , dl 
+    mov  cs : [edi + esi], bx
+    
+    test gs : [ecx + eax ] , al 
+    test es : [ bp + di ] , eax
     
     or al,1
     or ax,256
@@ -91,20 +115,26 @@ begin:
     or bx,22
     or ebx,-3
 
-    ; mov ax,4C00h
-    ; int 21h   
+   
     
     ;Or reg,imm
-    or byte ptr gs:[edx + esi] , 12 * 01101b 
-    or word ptr es:[ebx + ecx] , (12 - 0A7h + (4 - 6/3)*11)*20
-    or dword ptr es:[ebx + esi] , -(12 + 5)
-    or word ptr fs:[bx + di] , (20 mod 0111b mod 5) - 13
+    or dh , 12 * 01101b 
+    or cx , (12 - 0A7h + (4 - 6/3)*11)*20
+    or di , -(12 + 5)
+    or ebx , (20 mod 0111b mod 5) - 13
     
+    sti 
+   
     ;Mov mem, reg
-    mov es:someVar1 , byte ptr gs:[edx + esi]
-    mov gs:ssomeVar3 , word ptr es:[ebx + ecx]
-    mov fs:ident9 , dword ptr es:[ebx + esi]
-    mov ss:ident8 , word ptr fs:[bx + di]
+    mov es:someVar1 , ah
+    mov byte ptr gs:[edx + esi],cl
+    mov gs:someVar2 , dl
+    mov dword ptr ds:someVar3,esp
+    ; mov ds : 
+    
+    
+    ; mov ax,4C00h
+    ; int 21h   
     
 code ends 
     end begin

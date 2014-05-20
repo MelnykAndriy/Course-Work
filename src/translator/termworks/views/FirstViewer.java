@@ -6,7 +6,6 @@ import java.util.Stack;
 
 import translator.lexer.ParsedLine;
 import translator.termworks.TermIterator;
-import translator.termworks.generating.ListingGenerator;
 import translator.termworks.syntax.operands.AbsoluteExpr;
 import translator.termworks.syntax.operands.Operand;
 import translator.termworks.syntax.operands.UndefinedOperand;
@@ -88,6 +87,7 @@ public class FirstViewer extends TermIterator {
 	private void endDirectiveProcessing() {
 		if ( matchedLine.getAtomAt(1) instanceof UndefinedOperand ) 
 			FixNeededUndefinedOperands.push(new UndefinedOperandUpdater(matchedLine.getAtoms(), 1));
+		term.add(matchedLine);
 	}
 
 	private void segmentDef() {
@@ -148,24 +148,22 @@ public class FirstViewer extends TermIterator {
 	
 	private void printSegments(PrintWriter writer, ArrayList< Segment > segments) {
 		writer.println("Segments : ");
-		writer.println("                N a m e         		Size	Length");
+		writer.println("                N a m e         		Size");
 		for (Segment seg : segments ) 
-			writer.printf("%-40s%-8s%-8s\n",
+			writer.printf("%-40s%-8s\n",
 									seg.getName().toUpperCase(),
-									seg.identTypeToString(),
-									ListingGenerator.buildDefaultHexRep(seg.byteSize(),2));
+									seg.identTypeToString());
 		writer.println();
 	}
 	
 	private void printSegmentsSymbols(PrintWriter writer,ArrayList < Segment > segments) {
 		writer.println("Symbols : ");
-		writer.println("                N a m e         		Type	 Value	 Attr");
+		writer.println("                N a m e         		Type	Attr");
 		for (Segment seg : segments ) {
 			for (Identifier sym : seg.getDefSymbols() ) {
-				writer.printf("%-40s%-9s%-8s%s\n",
+				writer.printf("%-40s%-9s%s\n",
 											sym.getName().toUpperCase(),
 											sym.identTypeToString(),
-											ListingGenerator.buildDefaultHexRep(sym.getOffset(),2),
 										  	seg.getName().toUpperCase() );
 			}
 		}

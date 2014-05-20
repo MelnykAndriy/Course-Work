@@ -19,7 +19,7 @@ public abstract class CommandInitializer  {
         addedCommandSuit.addOption(new OperandOption("89","/r",OperandKind.m32,OperandKind.r32));
         table.put("mov",new Command("mov",2,addedCommandSuit));
 
-    // STI
+    // STI    
         addedCommandSuit = new CommandSuit();
         addedCommandSuit.addOption(new OperandOption("FB"));
         table.put("sti",new Command("sti",0,addedCommandSuit));

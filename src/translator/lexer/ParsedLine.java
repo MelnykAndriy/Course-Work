@@ -11,6 +11,7 @@ public class ParsedLine {
 	private int lineNumb;
 	private ArrayList<Atom> atoms;
 	private String fullLineWithoutComments;
+	private int lineByteSize;
 	
 	public ParsedLine(int lineNumb, ArrayList<Atom> atoms ,String fullLineWithoutComments) {
 		this.lineNumb = lineNumb;
@@ -122,4 +123,14 @@ public class ParsedLine {
 	public String toString() {
 		return fullLineWithoutComments;
 	}
+
+	public int getLineByteSize() {
+		return lineByteSize;
+	}
+
+	public void setLineByteSize(int lineByteSize) {
+		this.lineByteSize = lineByteSize;
+	}
+
+
 }

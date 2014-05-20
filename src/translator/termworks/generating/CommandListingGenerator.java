@@ -7,14 +7,14 @@ import translator.table.OperandOption;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.AtomType;
 import translator.table.tablecomponents.reserved.Command;
+import translator.table.tablecomponents.userdefined.Segment;
 import translator.termworks.syntax.operands.*;
-import translator.termworks.generating.ListingGenerator.SegmentInfo;
 
 public class CommandListingGenerator {
 	private Command cmd;
 	private ArrayList< Operand > operands;
 	private int maxOperandSize = 0;
-	private ListingGenerator.SegmentInfo curSeg;
+	private Segment curSeg;
 	
 	private OperandOption curOption; 
 	
@@ -24,20 +24,40 @@ public class CommandListingGenerator {
 		operands = new ArrayList < Operand > ();
 	}
 	
-	public String generate(ParsedLine line,ListingGenerator.SegmentInfo segInf ) {
+	public String generate(ParsedLine line,Segment segInf,int offset ) {
 		preprocessing(line,segInf);
+		return ( isRelativeCmd() )?( genRelativeCmd(offset) ):( genCommonCmd(offset) );
+	}
+	
+	private String genCommonCmd(int offset ) {
 		StringBuffer genCommand = new StringBuffer("");
-		genCommand.append( segInf.offsetToString() + " " );
+		genCommand.append( ListingGenerator.buildDefaultHexRep(offset, curSeg.size()) + " " );
 		genCommand.append( genPrefix() );
 		genCommand.append( genOpCode() );
 		genCommand.append( genModRM() );
-		genCommand.append( genSib());
+		genCommand.append( genSib() );
 		genCommand.append( genOffset() );
 		genCommand.append( genAbsoluteOper() );
 		return genCommand.toString();
 	}
+	
+	private String genRelativeCmd( int offset ) {
+		StringBuffer genCommand = new StringBuffer("");
+		genCommand.append( ListingGenerator.buildDefaultHexRep(offset, curSeg.size()) + " " );
+		genCommand.append( genOpCode() );
+		genCommand.append( genDistance(offset) );
+		return genCommand.toString();
+	}
+	
+	private String genDistance( int offset ) {
+		return ListingGenerator.buildDefaultHexRep( ((Relative)operands.get(0)).calcDistanceTo(offset) , 1);
+	}
 
-	private void preprocessing(ParsedLine line, SegmentInfo segInf) {
+	private boolean isRelativeCmd() {
+		return operands.size() == 1 && operands.get(0) instanceof Relative;
+	}
+
+	private void preprocessing(ParsedLine line, Segment segInf) {
 		curSeg = segInf;
 		int cmdIndx = line.firstIndexOf(AtomType.Command);
 		cmd = (Command) line.getAtomAt( cmdIndx );
@@ -142,7 +162,7 @@ public class CommandListingGenerator {
 
 	private String genOffset() {		
 		if ( mem != null && mem.isDirect() ) 
-			return ListingGenerator.buildDefaultHexRep(mem.getDirectOffset() , curSeg.size()) + " R ";
+			return ListingGenerator.buildDefaultHexRep(mem.getDirectOffset() , curSeg.size()) + " R";
 		return "";
 	}
 
@@ -153,6 +173,28 @@ public class CommandListingGenerator {
 			}
 		}
 		return "";
+	}
+	
+	public int calcLineOffset(ParsedLine line,Segment seg ) {
+		int retVal = 1;
+		preprocessing(line,seg);
+		if ( mem != null && mem.isRegReplacement() ) 
+			retVal++;
+		if ( isDataSizeOverridePrefixNeeded() ) 
+			retVal++;
+		if ( isAddressSizeOverridePrefixNeeded() )
+			retVal++;
+		if ( !curOption.isSpecialCase() && operands.size() != 0) 
+			retVal++;
+		if ( mem != null && mem.isSibNeeded() )
+			retVal++;
+		if ( mem != null && mem.isDirect() ) 
+			retVal += 2;
+		String displacement = genAbsoluteOper().trim();
+		if ( displacement.length() != 0 )
+			retVal += displacement.length() / 2;
+			
+		return retVal;
 	}
 	
 }

@@ -14,7 +14,8 @@ public class ListingGenerator extends TermIterator {
 	private PrintWriter dest;
 	private ArrayList < ParsedLine > term;
 	private CommandListingGenerator localCmdGen;
-	private SegmentInfo curSegInf;
+	private Segment curSeg;
+	private int curOffset;
 	private int lineIter;
 	
 	public ListingGenerator(ArrayList<ParsedLine> term) {
@@ -32,32 +33,34 @@ public class ListingGenerator extends TermIterator {
 	@Override
 	protected void beforeStartMatching() throws StopIterate {
 		for ( ; lineIter < matchedLine.getLineNumb() ; lineIter++ )
-			dest.printf("%-4s%-4d\n","",lineIter);
-		dest.printf("%-4s%-4d","",lineIter++);
+			dest.printf("%-4s%-8d\n","",lineIter);
+		dest.printf("%-4s%-8d","",lineIter++);
 	}
 
 	@Override
 	protected void whenLabelMatched() {
 		if ( matchedLine.getAtoms().size() == 1 ) 
-			dest.printf("%-26s %s\n",curSegInf.offsetToString(),matchedLine);
+			dest.printf("%-26s %s\n",buildDefaultHexRep(curOffset, curSeg.size()),matchedLine);
 	}
 
 	@Override
 	protected void whenCommandMatched() {
-		dest.printf("%-30s %s\n", localCmdGen.generate(matchedLine,curSegInf),matchedLine);
+		dest.printf("%-30s %s\n", localCmdGen.generate(matchedLine,curSeg,curOffset),matchedLine);
+		curOffset += matchedLine.getLineByteSize();
 	}
 	
 	@Override
 	protected void whenDirectiveMatched() {
 		if ( matchedLine.matches(defSegEndsPattern) ) {
 			if ( matchedLine.getAtomAt(1).getName().equals("segment") ) {
-				curSegInf = new SegmentInfo(0, (((Segment) matchedLine.getAtomAt(0)).getSegmentType() == Segment.SegmentType.bit16)?(2):(4) );
-				dest.printf("%-26s %s\n",curSegInf.offsetToString(),matchedLine);
+				curSeg = (Segment) matchedLine.getAtomAt(0);
+				curOffset = 0;
+				dest.printf("%-26s %s\n",buildDefaultHexRep(curOffset, curSeg.size()),matchedLine);
 				return;
 			}
 			
 			if ( matchedLine.getAtomAt(1).getName().equals("ends") ) {
-				dest.printf("%-26s %s\n",curSegInf.offsetToString(),matchedLine);
+				dest.printf("%-26s %s\n",buildDefaultHexRep(curOffset, curSeg.size()),matchedLine);
 				return;
 			}
 		}
@@ -67,9 +70,9 @@ public class ListingGenerator extends TermIterator {
 			return;
 		}
 		
-//		if ( matchedLine.strMatches("^\\s*end.*$") ) {
-//
-//		}
+		if ( matchedLine.strMatches("^\\s*end.*$") ) {
+			dest.printf("%-30s %s\n","",matchedLine);
+		}
 
 	}
 
@@ -77,10 +80,10 @@ public class ListingGenerator extends TermIterator {
 		Variable var = (Variable) matchedLine.getAtomAt(0);
 		Operand oper = (Operand) matchedLine.getAtomAt(2);
 		String bytes = String.format("%s %s", 
-				buildDefaultHexRep(curSegInf.offset(),curSegInf.size()),
+				buildDefaultHexRep(curOffset, curSeg.size()),
 				genHexFromOperand(oper,var.Size()));
 		dest.printf("%-30s %s\n",bytes,matchedLine);
-		curSegInf.inc(var.Size());
+		curOffset += matchedLine.getLineByteSize();
 	}
 	
 	public static String buildDefaultHexRep(int value,int byteSize) {
@@ -105,31 +108,5 @@ public class ListingGenerator extends TermIterator {
 		}
 		return " ERROR ";
 	}
-	
-	public class SegmentInfo { 
-		private int curSegmentOffset;
-		private int segmentSize;
 		
-		public SegmentInfo(int offset,int size) {
-			curSegmentOffset = offset;
-			segmentSize = size;
-		}
-		
-		public void inc(int n) {
-			curSegmentOffset += n;
-		}
-		
-		public int offset() {
-			return curSegmentOffset;
-		}
-		
-		public int size() {
-			return segmentSize;
-		}
-		
-		public String offsetToString() {
-			return buildDefaultHexRep(curSegInf.offset(),curSegInf.size());
-		}
-	}
-	
 }

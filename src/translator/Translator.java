@@ -10,7 +10,9 @@ package translator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import translator.termworks.views.*;
 import translator.errorhandling.*;
@@ -21,13 +23,14 @@ import translator.table.SymbolTable;
 import translator.termworks.checker.GrammarChecker;
     
 public class Translator {
-	public static SymbolTable mainTab = new SymbolTable(); 
-	public static CompilerFlags flags = new CompilerFlags();
 	public static ErrorsTable errTab = new ErrorsTable();
 	
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
+    	CompilerFlags flags = new CompilerFlags();
     	flags.ParseArgs(args);
-		
+    	SymbolTable mainTab = new SymbolTable();
+    	
+    	
     	// lexical analyzer entry point
     	Lexer lex = new Lexer(mainTab,new File(flags.getIFile()));
     	if ( flags.isPrnLexer() ) prnProduct(lex,"lexer");
@@ -48,16 +51,21 @@ public class Translator {
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.SecondViewChecks );
     	if ( errTab.isCritical() ) stopBuild();
 
- //   	SecondViewer secondViewer = new SecondViewer(mainTab);
-  //  	secondViewer.view(firstViewer.getTerm());
+    	SecondViewer secondViewer = new SecondViewer(mainTab);
+    	secondViewer.view(firstViewer.getTerm());
 
     	try {
     		ListingGenerator listingGenerator = new ListingGenerator(firstViewer.getTerm());
     		errTab.PrintFoundErrors();
     		listingGenerator.genOutput(flags.getOFile());	// generating of listing file
-		} catch (FileNotFoundException exc) {
+    		PrintWriter toAppend = new PrintWriter(new FileOutputStream(flags.getOFile(), true));
+    		toAppend.println();
+    		errTab.prnSummary(toAppend);
+    		secondViewer.genOutput(toAppend);
+    		toAppend.close();
+    	} catch (FileNotFoundException exc) {
 			System.err.println("Error while creating output file : " + exc.getMessage());
-		}
+		} 
     	
     }
     

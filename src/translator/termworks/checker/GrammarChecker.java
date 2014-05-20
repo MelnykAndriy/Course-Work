@@ -269,11 +269,7 @@ public class GrammarChecker extends TermIterator {
 				if ( operands.size() != 1)
 					reporter.reportWrongOperandNumbInDirective(matchedLine);
 			}
-			
-			// TODO
-//			if ( !tabRef.isLabel(lexerLine.getAtomAt(1).getName()) ) 
-//				reporter.reportLabelExpected(lexerLine);
-			
+						
 		}
 		
 		@Override
@@ -303,7 +299,10 @@ public class GrammarChecker extends TermIterator {
 			
 			if ( operandsCheckReport(operands,cmdIndex) ) 
 				return;
-
+			
+			if (unresolvedMemoryTypeCheck(operands)) 
+				return;
+			
 			if ( !cmd.isOperandsCombinationAllowed(operands) ) 
 				reporter.reportUnsupportedOperands(matchedLine);
 			
@@ -332,9 +331,39 @@ public class GrammarChecker extends TermIterator {
 				}
 				i++;
 			}
+
 			return errorsFound;
 		}
 		
+		private boolean unresolvedMemoryTypeCheck(ArrayList < Operand > operands) {
+			if ( operands.size() == 1 && operands.get(0) instanceof MemoryOperand && 
+					!((MemoryOperand) operands.get(0)).canDetermineType()  ) {
+				reporter.reportUndefMemory(matchedLine);
+				return true;
+			}
+			
+			if ( operands.size() == 2 )  
+				return twoOperandCheck(operands.get(0),operands.get(1));
+			return false;
+		}
+		
+		private boolean twoOperandCheck(Operand op1,Operand op2) {
+			if ( relativeOpCheck(op1, op2) || relativeOpCheck(op2, op1) )
+				return false;
+			return false;
+		}
+		
+		private boolean relativeOpCheck(Operand op1,Operand op2) {
+			if (op1 instanceof MemoryOperand && !((MemoryOperand) op1).canDetermineType() ) 
+				if ( op2 instanceof RegisterOperand ) {
+					((MemoryOperand) op1).determineType(op2.calcSizeInBytes());
+				} else {
+					reporter.reportUndefMemory(matchedLine);
+					return true;
+				}
+			return false;
+		}
+
 		private boolean MemoryOperandCheck(MemoryOperand operand) {
 			try {
 				operand.isValidMemory();
