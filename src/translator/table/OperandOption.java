@@ -79,5 +79,9 @@ public final class OperandOption {
 	public boolean isSpecialCase() {
 		return specialCase;
 	}
+
+	public int opcodeByteSize() {
+		return opcode.replaceAll("\\s*", "").length()/2;
+	}
 	
 }

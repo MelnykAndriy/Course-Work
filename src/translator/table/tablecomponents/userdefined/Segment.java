@@ -57,9 +57,6 @@ public class Segment extends Identifier {
 		return (segType == SegmentType.bit16)?(2):(4);
 	}
 	
-	public synchronized int getByteSize() {
-		return byteSize;
-	}
 	
     public String toString() {
     	return "Segment";

@@ -1,6 +1,7 @@
 package translator.table;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import translator.termworks.syntax.operands.Operand;
 
@@ -31,6 +32,10 @@ public class CommandSuit {
 	
 	public boolean isOperandsComninationAllowed(ArrayList < Operand > operands) {
 		return getOptionForOperands(operands) != null; 
+	}
+	
+	public Collection < OperandOption > getOptions() {
+		return options;
 	}
 	
 }

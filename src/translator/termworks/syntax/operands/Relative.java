@@ -21,7 +21,7 @@ public class Relative extends Operand {
 
 	@Override
 	public int calcSizeInBytes() {
-		return 0;
+		return OperandKind.sizeForOperandKind(operKind);
 	}
 
 	@Override
@@ -29,8 +29,8 @@ public class Relative extends Operand {
 		return AtomType.RelativeOperand;
 	}
 	
-	public int calcDistanceTo(int callOffset) {
-		return ( (Label) operandAtoms.get(0)).getOffset() - callOffset ;
+	public int calcDistanceTo(int callOffset,int opcodeSize) {
+		return ( (Label) operandAtoms.get(0)).getOffset() - (callOffset + opcodeSize + 1);
 	}
 	
 	public static boolean isRelative(ArrayList<Atom> operandAtoms) {

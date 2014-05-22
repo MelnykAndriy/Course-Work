@@ -26,6 +26,8 @@ public class Translator {
 	public static ErrorsTable errTab = new ErrorsTable();
 	
     public static void main(String[] args) { 
+    	long start = System.currentTimeMillis();
+    	
     	CompilerFlags flags = new CompilerFlags();
     	flags.ParseArgs(args);
     	SymbolTable mainTab = new SymbolTable();
@@ -61,6 +63,7 @@ public class Translator {
 			System.err.println("Error while creating output file : " + exc.getMessage());
 		}
     	
+    	System.out.println("spent time " + (System.currentTimeMillis() - start));
     }
     
     public static void stopBuild() {

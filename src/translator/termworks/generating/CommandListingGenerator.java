@@ -50,8 +50,9 @@ public class CommandListingGenerator {
 	}
 	
 	private String genDistance( int offset ) {
-		int distance =  ((Relative)operands.get(0)).calcDistanceTo(offset);
-		return ListingGenerator.buildDefaultHexRep( (0 > distance)?(distance - 2):(distance + 1), 1);
+//		int distance =  ((Relative)operands.get(0)).calcDistanceTo(offset);
+//		return ListingGenerator.buildDefaultHexRep( (0 > distance)?(distance - 2):(distance + 1), 1);
+		return "00";
 	}
 
 	private boolean isRelativeCmd() {

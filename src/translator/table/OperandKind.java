@@ -25,6 +25,27 @@ public enum OperandKind {
 		return null;
 	}
 	
+	public static int sizeForOperandKind(OperandKind kind) {
+		switch (kind) {
+		case rel8:
+		case r8:
+		case imm8:
+		case m8:
+			return 1;
+		case rel16:
+		case r16:
+		case imm16:
+		case m16:
+			return 2;
+		case rel32:
+		case r32:
+		case imm32:
+		case m32:
+			return 4;
+		}
+		return 0;
+	}
+	
 	private static OperandKind whatKindOfMemory(int byteSize) {
 		switch (byteSize) {
 			case 1:	return m8;
@@ -58,4 +79,5 @@ public enum OperandKind {
 		}
 		return null;
 	}
+	
 }

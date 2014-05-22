@@ -173,12 +173,11 @@ public class Parser extends TermIterator {
 			writer.printf("| %-7d| %-9d ",tokenNumb++,1);
 			iter++;
 		}
-		for ( int i = iter; i < atoms.size(); i++ ) {
+		for ( int i = iter; i < atoms.size(); i++ ) 
 			if ( atoms.get(i) instanceof Operand) {
 				writer.printf("| %-7d| %-9d ",tokenNumb,((Operand) atoms.get(i)).tokenNumb());
 				tokenNumb +=((Operand) atoms.get(i) ).tokenNumb() + 1;
 			}
-		}
 	}
 
 }

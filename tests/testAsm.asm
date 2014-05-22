@@ -1,29 +1,13 @@
 
-.386
+; .386
 
-data segment use16
-    var$1 db  - 11000000b + 10000000b
-    varD dw 0f3h + 011b * 10  
-    var?2 dd 12551 + 0 + 2*1    
-    ident dd 125*2 - 10 + 25/5 + 89 
-    var@3 dw 765o   
-    var_4 db -15    
-    sVar1 db 5 +++ -6 
-    sVar2 db 5 * 6 - 2   ;; 0Ah 
-    sVar3 dw ((4 + 2)*5 - 101b + 064h)/31q  ;; should be 05h
-    id6 db 0 + (-1)*14*(-1) + 0  ;; should be 0Eh
-    id7 db -1 * 64 * -1  ;; should be 40h
-    id8 dw 8 mod 2   ;; should be 0000h
-    id9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
-data ends 
-
-code segment use16
-   assume cs : code , ds : data
+code segment ;use16
+   ; assume cs : code , ds : data
     
 begin:
     ; mov ax,data
     ; mov ds,ax
-                
+    jmp @end           
     sti 
 @sLbl:
 
@@ -50,6 +34,9 @@ begin:
     
     div byte ptr gs:[edx + esi]
     div word ptr es:[ebx + ecx]
+    
+@loop: jmp @loop
+
     div dword ptr es:[ebx + esi]
     div word ptr fs:[bx + di]
 
@@ -131,8 +118,26 @@ begin:
       
     ; mov ax,4C00h
     ; int 21h   
+@end:
     
 code ends 
+
+data segment ; use16
+    var$1 db  - 11000000b + 10000000b
+    varD dw 0f3h + 011b * 10  
+    var?2 dd 12551 + 0 + 2*1    
+    ident dd 125*2 - 10 + 25/5 + 89 
+    var@3 dw 765o   
+    var_4 db -15
+    sVar1 db 5 +++ -6 
+    sVar2 db 5 * 6 - 2   ;; 0Ah 
+    sVar3 dw ((4 + 2)*5 - 101b + 064h)/31q  ;; should be 05h
+    id6 db 0 + (-1)*14*(-1) + 0  ;; should be 0Eh
+    id7 db -1 * 64 * -1  ;; should be 40h
+    id8 dw 8 mod 2   ;; should be 0000h
+    id9 dd ((9 mod 2 + 0fh) mod 17 ) mod ( -1 + 4 * 3 - ( 4 / 2) ) ;; should be 0007h 
+data ends 
+
     end begin
           
      

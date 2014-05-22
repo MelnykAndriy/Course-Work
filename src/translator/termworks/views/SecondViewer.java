@@ -34,7 +34,7 @@ public class SecondViewer extends TermIterator {
 
 	@Override
 	protected void whenLabelMatched() {
-		((Label) matchedLine.getAtomAt(0)).setOffset(curSeg.getByteSize());
+		((Label) matchedLine.getAtomAt(0)).setOffset(curSeg.byteSize());
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class SecondViewer extends TermIterator {
 		}
 
 		if ( matchedLine.strMatches(defRegex) ) {
-			((Variable ) matchedLine.getAtomAt(0)).setOffset(curSeg.getByteSize());
+			((Variable ) matchedLine.getAtomAt(0)).setOffset(curSeg.byteSize());
 			matchedLine.setLineByteSize(((Variable) matchedLine.getAtomAt(0) ).Size());
 			curSeg.incSize(matchedLine.getLineByteSize());
 			
