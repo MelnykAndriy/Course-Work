@@ -6,6 +6,7 @@ import translator.table.CommandSuit;
 import translator.table.OperandOption;
 import translator.table.tablecomponents.Atom;
 import translator.table.tablecomponents.reserved.Command;
+import translator.table.tablecomponents.reserved.RelativeCmd;
 import translator.table.OperandKind;
 
 public abstract class CommandInitializer  {
@@ -73,14 +74,18 @@ public abstract class CommandInitializer  {
         table.put("or",new Command("or",2,addedCommandSuit));
         
     // JMP
-        addedCommandSuit = new CommandSuit();		 // TODO what does mean cb ???
+        addedCommandSuit = new CommandSuit();		
         addedCommandSuit.addOption(new OperandOption("EB","/r",OperandKind.rel8 ));
-        table.put("jmp",new Command("jmp",1,addedCommandSuit));
+        addedCommandSuit.addOption(new OperandOption("E9","/r",OperandKind.rel16));
+        addedCommandSuit.addOption(new OperandOption("E9","/r",OperandKind.rel32));
+        table.put("jmp",new RelativeCmd("jmp",1,1,addedCommandSuit));
         
     // JAE
         addedCommandSuit = new CommandSuit();
         addedCommandSuit.addOption(new OperandOption("73","/r",OperandKind.rel8));
-        table.put("jae",new Command("jae",1,addedCommandSuit));
+        addedCommandSuit.addOption(new OperandOption("0F 83","/r",OperandKind.rel32 ));
+        addedCommandSuit.addOption(new OperandOption("0F 83","/r",OperandKind.rel32 ));
+        table.put("jae",new RelativeCmd("jae",1,2,addedCommandSuit));
 		
 	}
 

@@ -60,10 +60,10 @@ public class ErrorReporter {
 	
 	public void reportNotInsideSegmentDef(ParsedLine line) {
 		errReported++; 
-		line.errFound(errTab.getErrorMsg(ErrIdent.NoSegmentDataDefinition));
-		errTab.report(ErrIdent.NoSegmentDataDefinition,
-								 line.getLineNumb(),
-						         line.findPos( line.getAtomAt(0) ));
+		ErrIdent err = ( line.getAtomAt(0).getType() == AtomType.Variable )?( ErrIdent.NoSegmentDataDefinition ):
+					   ( ( line.getAtomAt(0).getType() == AtomType.Label )?(ErrIdent.NoSegmentLabelDefinition ):(null) ) ;
+		line.errFound(errTab.getErrorMsg(err));
+		errTab.report(err, line.getLineNumb(), line.findPos( line.getAtomAt(0) ));
 	}
 	
 	public void reportSegmentNotClosed(ParsedLine line) {
@@ -279,4 +279,6 @@ public class ErrorReporter {
 		line.errFound(errTab.getErrorMsg(ErrIdent.SegReopenNotAllowed));
 		errTab.report(ErrIdent.SegReopenNotAllowed, line.getLineNumb() , line.findPos(AtomType.Segment));
 	}
+
 }
+

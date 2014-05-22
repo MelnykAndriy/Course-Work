@@ -89,7 +89,7 @@ public class ErrorsTable {
 					 		UndefMemType, 
 					 		TooLongNames,
 					 		NumberOfSegNotAllowed,
-					 		SegReopenNotAllowed
+					 		SegReopenNotAllowed, NoSegmentLabelDefinition
 						 };
 	
 	private ArrayList<Reportable> FoundErrors;
@@ -150,6 +150,7 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.AlreadyDefNotLabel, new Error("Not label identifier has already defined."));
 		Errors.put(ErrIdent.InitConstantTooBig, new Error("Value out of range.") );
 		Errors.put(ErrIdent.NoSegmentDataDefinition ,new Error("Data defined not inside segment."));
+		Errors.put(ErrIdent.NoSegmentLabelDefinition, new Error("Label defined not inside segment."));
 		Errors.put(ErrIdent.PreviousSegNotFinished ,new Error("Previous segment wasn't ended."));
 		Errors.put(ErrIdent.AlreadyDefNotSegment ,new Error("Not segment identifier has already defined."));
 		Errors.put(ErrIdent.SegmentWasntOpened, new Error("Segment with such name was not declared.")); 

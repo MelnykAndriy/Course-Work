@@ -119,6 +119,11 @@ public class GrammarChecker extends TermIterator {
 
 		@Override
 		public void labelErrorsCheck() {
+			if ( curCheckSeg == null ) {
+				reporter.reportNotInsideSegmentDef( matchedLine );
+				return;
+			}
+			
 			Label curLabel = (Label) matchedLine.getAtomAt(0);
 			if ( SymbolTable.isReserved(curLabel.getName()) ) {
 				reporter.reportReservedNameConflicts(matchedLine);
@@ -416,7 +421,7 @@ public class GrammarChecker extends TermIterator {
 			ArrayList < Segment > segs = new ArrayList < Segment > ();
 			Atom.castCopy(segs,symTab.findAll(AtomType.Segment));
 			
-			if ( segs.size() != NUMBER_OF_ALLOWED_SEGS ) {
+			if ( segs.size() != NUMBER_OF_ALLOWED_SEGS && segs.size() != 0) {
 				reporter.reportWrongSegNumb(segs.get(0).getLineWhereDefined());
 			}
 			
