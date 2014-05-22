@@ -92,6 +92,7 @@ public class FirstViewer extends TermIterator {
 
 	private void segmentDef() {
 		symTab.AddSymbol( curProcessSeg = (Segment) matchedLine.getAtomAt(0) );
+		curProcessSeg.setLineWhereDefined(matchedLine);
 		term.add(matchedLine);
 	}
 
@@ -139,6 +140,11 @@ public class FirstViewer extends TermIterator {
 		}
 	}
 	
+	@Override
+	protected void whenBadFormed() {
+		term.add(matchedLine);
+	}
+
 	@Override
 	public void genOutput(PrintWriter writer) {
 		ArrayList < Segment > allSegments = (ArrayList<Segment>) Atom.castCopy(new ArrayList< Segment >(),symTab.findAll(AtomType.Segment)); 

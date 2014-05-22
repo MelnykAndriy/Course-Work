@@ -30,11 +30,9 @@ public class Translator {
     	flags.ParseArgs(args);
     	SymbolTable mainTab = new SymbolTable();
     	
-    	
     	// lexical analyzer entry point
     	Lexer lex = new Lexer(mainTab,new File(flags.getIFile()));
     	if ( flags.isPrnLexer() ) prnProduct(lex,"lexer");
-    	if ( errTab.isCritical() ) stopBuild();
     	    	
     	// parser entry point
     	Parser syn = new Parser(mainTab,lex.getTerm()); 
@@ -42,15 +40,11 @@ public class Translator {
   	
     	GrammarChecker checker = new GrammarChecker(errTab,mainTab);
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.FirsViewChecks );
-    	if ( errTab.isCritical() ) stopBuild();
-    	    	
+    	
     	FirstViewer firstViewer = new FirstViewer(mainTab);
     	firstViewer.view(syn.getTerm());
-    	prnProduct(firstViewer, "fist-viewer");
     	
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.SecondViewChecks );
-    	if ( errTab.isCritical() ) stopBuild();
-
     	SecondViewer secondViewer = new SecondViewer(mainTab);
     	secondViewer.view(firstViewer.getTerm());
 
@@ -65,7 +59,7 @@ public class Translator {
     		toAppend.close();
     	} catch (FileNotFoundException exc) {
 			System.err.println("Error while creating output file : " + exc.getMessage());
-		} 
+		}
     	
     }
     

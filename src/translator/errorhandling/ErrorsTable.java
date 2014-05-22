@@ -84,8 +84,12 @@ public class ErrorsTable {
 					 		NameConflictsWithReserved,
 					 		UndefOperand,
 					 		UnsupportedOperands,
-					 		DefinedButUnused, BaseIndexComb,
-					 		UndefMemType
+					 		DefinedButUnused, 
+					 		BaseIndexComb,
+					 		UndefMemType, 
+					 		TooLongNames,
+					 		NumberOfSegNotAllowed,
+					 		SegReopenNotAllowed
 						 };
 	
 	private ArrayList<Reportable> FoundErrors;
@@ -105,6 +109,10 @@ public class ErrorsTable {
 		else 
 			errorsCounter++;
 		FoundErrors.add( new ErrorInfo(predef,line,pos) );
+	}
+	
+	public String getErrorMsg(ErrIdent err) {
+		return Errors.get(err).getMessage();
 	}
 	
 	public void PrintFoundErrors() {
@@ -152,7 +160,6 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.WrongDirectiveUsage, new Error("Wrong directive usage."));
 		Errors.put(ErrIdent.LabelExpected, new Error("Wrong operand type. Label expected."));
 		Errors.put(ErrIdent.UndeclaredSegCodeEmission, new Error("Code emission to undeclared segment."));
-		Errors.put(ErrIdent.AbsExprAllowedOnly, new Error("Absolute expression or constant expected."));
 		Errors.put(ErrIdent.MissedAbsExprOperator, new Error("Operator was missed in the absolute expression."));
 		Errors.put(ErrIdent.MissedAbsExprOperand, new Error("Constant was missed in the absolute expression."));
 		Errors.put(ErrIdent.MissedAbsExprCParenthesis, new Error("Missed close parenthesis in the absolute expression."));
@@ -163,6 +170,12 @@ public class ErrorsTable {
 		Errors.put(ErrIdent.UndefinedIdentifier, new Error("Identifier was not declared."));
 		Errors.put(ErrIdent.BaseIndexComb,new Error("Combination of base and index register isn't allowed.") );
 		Errors.put(ErrIdent.UndefMemType, new Error("Memory type is not defined."));
+	
+	// restrictions of variant
+		Errors.put(ErrIdent.AbsExprAllowedOnly, new Error("Absolute expression or constant expected. (restriction of variant)"));
+		Errors.put(ErrIdent.TooLongNames , new Error("Identifier name is too long. (restriction of variant)") );
+		Errors.put(ErrIdent.NumberOfSegNotAllowed, new Error("Wrong number of segments. (restriction of variant)"));
+		Errors.put(ErrIdent.SegReopenNotAllowed, new Error("Reopening of segments is not allowed. (restriction of variant)"));
 	}
 	
 }

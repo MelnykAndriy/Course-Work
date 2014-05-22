@@ -39,13 +39,17 @@ public abstract class TermIterator extends Printable {
 		defSegEndsPattern.add(AtomType.Segment);
 		defSegEndsPattern.add(AtomType.Directive);
 	}
-	
+
 	
 	protected void iterateOverTerm(ArrayList < ParsedLine > term) {
 		try {
 			for ( ParsedLine  line : term  ) {
 				matchedLine = line;
 				beforeStartMatching();
+				if ( matchedLine.isInvalid()  ) {
+					whenBadFormed();
+					continue;
+				}
 				
 				if (line.startsWith( labelPattern ) ) {
 					whenLabelMatched();
@@ -67,12 +71,13 @@ public abstract class TermIterator extends Printable {
 				matchedLine = null;
 			}
 		} catch (StopIterate e) { }
-		
 	}
-
-	protected void beforeStartMatching() throws StopIterate {} 
 	
-	protected void whenNotMatched() {} 
+	protected void whenBadFormed() { }
+
+	protected void beforeStartMatching() throws StopIterate { } 
+	
+	protected void whenNotMatched() { } 
 	
 	protected abstract void whenLabelMatched() ;
 	

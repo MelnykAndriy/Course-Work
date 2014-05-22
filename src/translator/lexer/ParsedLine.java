@@ -11,6 +11,7 @@ public class ParsedLine {
 	private int lineNumb;
 	private ArrayList<Atom> atoms;
 	private String fullLineWithoutComments;
+	private String errorMsg = null;
 	private int lineByteSize;
 	
 	public ParsedLine(int lineNumb, ArrayList<Atom> atoms ,String fullLineWithoutComments) {
@@ -35,6 +36,18 @@ public class ParsedLine {
 
 	public synchronized String getLine() {
 		return fullLineWithoutComments;
+	}
+	
+	public boolean isInvalid() {
+		return errorMsg != null;
+	}
+	
+	public void errFound(String msg) {
+		errorMsg = msg;
+	}
+	
+	public String getErr() {
+		return errorMsg;
 	}
 	
 	public String getIndexName(int indx) {
@@ -130,6 +143,14 @@ public class ParsedLine {
 
 	public void setLineByteSize(int lineByteSize) {
 		this.lineByteSize = lineByteSize;
+	}
+
+	public int findPos(AtomType tp) {
+		for (Atom atom : atoms) 
+			if ( atom.getType() == tp)
+				return fullLineWithoutComments.toLowerCase().indexOf( atom.searchedPosAtom().getName().toLowerCase() ) + 1 ;
+		return -1;
+
 	}
 
 

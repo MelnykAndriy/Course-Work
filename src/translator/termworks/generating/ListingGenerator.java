@@ -50,6 +50,12 @@ public class ListingGenerator extends TermIterator {
 	}
 	
 	@Override
+	protected void whenBadFormed() {
+		dest.printf("%-30s %s\n",buildDefaultHexRep(curOffset,(curSeg != null)?(curSeg.size()):(2)), matchedLine );
+		dest.printf("%-12sError : %s\n","",matchedLine.getErr());
+	}
+	
+	@Override
 	protected void whenDirectiveMatched() {
 		if ( matchedLine.matches(defSegEndsPattern) ) {
 			if ( matchedLine.getAtomAt(1).getName().equals("segment") ) {

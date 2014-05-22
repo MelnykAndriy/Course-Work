@@ -22,6 +22,9 @@ import translator.table.tablecomponents.userdefined.Variable;
 public class GrammarChecker extends TermIterator {
 	public enum AvailableChecks  { FirsViewChecks,SecondViewChecks };
 	
+	private static int MAX_IDENTIFIER_LENGTH = 5; 
+	private static int NUMBER_OF_ALLOWED_SEGS = 2;
+	
 	private SymbolTable symTab;
 	private ErrorReporter reporter;
 	private Checker checker;
@@ -35,22 +38,23 @@ public class GrammarChecker extends TermIterator {
 	public void check(ArrayList < ParsedLine > term, AvailableChecks appliedChecks) {
 		selectChecker(appliedChecks);
 		iterateOverTerm(term);
-		checker.finalChecks(term);
+		if (term.size() > 0)
+			checker.finalChecks(term);
 	}
 		
 	private void selectChecker(AvailableChecks appliedChecks) {
 		switch (appliedChecks) {
-		case FirsViewChecks:
-			if ( !(checker instanceof BeforeFirstViewChecker) )
-				checker = new BeforeFirstViewChecker();
-			break;
-		case SecondViewChecks:
-			if ( !(checker instanceof BeforeSecondViewChecker) )
-				checker = new BeforeSecondViewChecker();
-			break;
-		default:
-			System.err.println("Error : proposed check is not defined.");
-			System.exit(1);
+			case FirsViewChecks:
+				if ( !(checker instanceof BeforeFirstViewChecker) )
+					checker = new BeforeFirstViewChecker();
+				break;
+			case SecondViewChecks:
+				if ( !(checker instanceof BeforeSecondViewChecker) )
+					checker = new BeforeSecondViewChecker();
+				break;
+			default:
+				System.err.println("Error : proposed check is not defined.");
+				System.exit(1);
 		}
 	}
 
@@ -67,7 +71,6 @@ public class GrammarChecker extends TermIterator {
 	@Override
 	protected void whenDirectiveMatched() {
 		checker.directiveErrorsCheck();
-		
 	}
 
 	@Override
@@ -122,13 +125,20 @@ public class GrammarChecker extends TermIterator {
 				return;
 			}
 			
-			if (  checkIfDef(curLabel) )
+			if (  checkIfDef(curLabel) ) {
 				if ( userDefinedNames.get(curLabel.getName().toLowerCase()) == AtomType.Label  ) 
 					reporter.reportAlreadyDefLabel(matchedLine);
 				else 
 					reporter.reportNotLabelAlreadyDef(matchedLine);
-			else 
-				userDefinedNames.put( curLabel.getName().toLowerCase(),AtomType.Label );
+				return;
+			}
+			
+			if ( curLabel.getName().length() > MAX_IDENTIFIER_LENGTH ) {
+				reporter.reportLongName(matchedLine,AtomType.Label);
+				return;
+			}
+			
+			userDefinedNames.put( curLabel.getName().toLowerCase(),AtomType.Label );
 		}
 
 		@Override
@@ -189,14 +199,22 @@ public class GrammarChecker extends TermIterator {
 		private void segmentErrorsCheck() {
 			if ( curCheckSeg != null ) 
 				reporter.reportSegmentNotClosed(matchedLine);
-			
+						
 			Segment seg = (Segment) matchedLine.getAtomAt(0);
-			if ( checkIfDef(seg) && userDefinedNames.get(seg.getName().toLowerCase()) != AtomType.Segment ) {
-				
-				reporter.reportNotSegmentAlreadyDef(matchedLine);
-			} else {
-				userDefinedNames.put(seg.getName().toLowerCase(),AtomType.Segment );
+					
+			if ( seg.getName().length() > MAX_IDENTIFIER_LENGTH ) {
+				reporter.reportLongName(matchedLine,AtomType.Segment);
+				return;
 			}
+						
+			if ( checkIfDef(seg) ) {
+				if (  userDefinedNames.get(seg.getName().toLowerCase() ) == AtomType.Segment ) 
+					reporter.reportSegReopen(matchedLine);
+				else 
+					reporter.reportNotSegmentAlreadyDef(matchedLine);
+				return;
+			} else 
+				userDefinedNames.put(seg.getName().toLowerCase(),AtomType.Segment );
 			curCheckSeg = seg;
 		}
 
@@ -239,6 +257,11 @@ public class GrammarChecker extends TermIterator {
 				return;
 			}
 			
+			if ( defVariable.getName().length() > MAX_IDENTIFIER_LENGTH ) {
+				reporter.reportLongName(matchedLine,AtomType.Variable);
+				return;
+			}
+			
 			if ( checkIfDef(defVariable) ) {
 				if (userDefinedNames.get(defVariable.getName().toLowerCase()) == AtomType.Variable )
 					reporter.reportVariableAlreadyDef(matchedLine);
@@ -269,7 +292,6 @@ public class GrammarChecker extends TermIterator {
 				if ( operands.size() != 1)
 					reporter.reportWrongOperandNumbInDirective(matchedLine);
 			}
-						
 		}
 		
 		@Override
@@ -375,6 +397,11 @@ public class GrammarChecker extends TermIterator {
 		
 		@Override
 		public void finalChecks(ArrayList<ParsedLine> term) {
+			identChecks();
+			segNumbChecks();
+		}
+		
+		private void identChecks() {
 			ArrayList < Identifier > idents = new ArrayList < Identifier >();
 			Atom.castCopy(idents,symTab.findAll(AtomType.Variable));
 			Atom.castAppend(idents, symTab.findAll(AtomType.Label));
@@ -382,7 +409,17 @@ public class GrammarChecker extends TermIterator {
 			for ( Identifier ident : idents) {	
 				if ( !ident.isIdentUsed() ) 
 					reporter.reportDefButUnusedSymbol(ident);	
+			}	
+		}
+		
+		private void segNumbChecks() {
+			ArrayList < Segment > segs = new ArrayList < Segment > ();
+			Atom.castCopy(segs,symTab.findAll(AtomType.Segment));
+			
+			if ( segs.size() != NUMBER_OF_ALLOWED_SEGS ) {
+				reporter.reportWrongSegNumb(segs.get(0).getLineWhereDefined());
 			}
+			
 		}
 	}
 
