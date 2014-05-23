@@ -89,7 +89,7 @@ public class ErrorsTable {
 					 		UndefMemType, 
 					 		TooLongNames,
 					 		NumberOfSegNotAllowed,
-					 		SegReopenNotAllowed, NoSegmentLabelDefinition
+					 		SegReopenNotAllowed, NoSegmentLabelDefinition,
 						 };
 	
 	private ArrayList<Reportable> FoundErrors;

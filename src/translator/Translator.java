@@ -63,7 +63,7 @@ public class Translator {
 			System.err.println("Error while creating output file : " + exc.getMessage());
 		}
     	
-    	System.out.println("spent time " + (System.currentTimeMillis() - start));
+    	System.out.println("Time spent	 " + (System.currentTimeMillis() - start));
     }
     
     public static void stopBuild() {

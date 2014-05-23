@@ -60,9 +60,9 @@ public class SecondViewer extends TermIterator {
 			((Variable ) matchedLine.getAtomAt(0)).setOffset(curSeg.byteSize());
 			matchedLine.setLineByteSize(((Variable) matchedLine.getAtomAt(0) ).Size());
 			curSeg.incSize(matchedLine.getLineByteSize());
-			
 			return;
 		}
+		
 	}
 
 	@Override

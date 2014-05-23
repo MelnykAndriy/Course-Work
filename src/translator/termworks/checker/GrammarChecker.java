@@ -315,7 +315,12 @@ public class GrammarChecker extends TermIterator {
 		public void labelErrorsCheck() {	}
 
 		@Override
-		public void directiveErrorsCheck() {	}
+		public void directiveErrorsCheck() {	
+
+			if ( matchedLine.strMatches("^\\s*end.*$") &&
+				 matchedLine.getAtomAt(1).getType() != AtomType.RelativeOperand)
+				reporter.reportLabelExpected(matchedLine);
+		}
 
 		@Override
 		public void commandErrorsCheck() {

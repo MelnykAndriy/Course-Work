@@ -70,7 +70,7 @@ public abstract class TermIterator extends Printable {
 				whenNotMatched();
 				matchedLine = null;
 			}
-		} catch (StopIterate e) { }
+		} catch (StopIterate e) { 	}
 	}
 	
 	protected void whenBadFormed() { }

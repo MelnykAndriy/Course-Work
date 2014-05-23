@@ -61,6 +61,7 @@ public class FirstViewer extends TermIterator {
 
 	@Override
 	protected void whenDirectiveMatched() {
+
 		if ( matchedLine.matches(defSegEndsPattern) ) {
 			if ( matchedLine.getAtomAt(1).getName().equals("segment") ) {
 				segmentDef();
@@ -87,7 +88,7 @@ public class FirstViewer extends TermIterator {
 	private void endDirectiveProcessing() {
 		if ( matchedLine.getAtomAt(1) instanceof UndefinedOperand ) 
 			FixNeededUndefinedOperands.push(new UndefinedOperandUpdater(matchedLine.getAtoms(), 1));
-		
+
 		term.add(matchedLine);
 	}
 

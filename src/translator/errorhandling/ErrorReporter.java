@@ -135,7 +135,7 @@ public class ErrorReporter {
 		line.errFound(errTab.getErrorMsg(ErrIdent.LabelExpected));
 		errTab.report( ErrIdent.LabelExpected ,
 					   line.getLineNumb(),
-					   line.findPos(AtomType.Identifier));
+					   line.findPos(line.getAtomAt(1)));
 	}
 
 	public void reportEndDirectiveNotFound(ParsedLine line) {
