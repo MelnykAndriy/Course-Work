@@ -9,10 +9,10 @@ code segment
     
 begin:
 
-    div word ptr ds:[ax + di] 
-    div byte ptr ds:[bp]
-    div dword ptr fs:[bx]
-    div dword ptr es:[ebp + esp]
+    div word ptr ds:[ax + di]   ;; error
+    div byte ptr ds:[bp]    ;; error
+    div dword ptr fs:[bx]   ;; error
+    div dword ptr es:[ebp + esp]    ;; error
     
     and al,ident  ;; error  ; Segment override operator is mandatory. 
     and al,ds:ident ;; ok 
@@ -28,9 +28,9 @@ begin:
     
     div fs:[ebx + edi]    ;; memory type can't define
     
-    ; jmp undefLabel ;; error undefLabel is not defined
+    jmp undefLabel ;; error undefLabel is not defined
 
 code ends 
-    end begin
+    end ident
     ;; error  
     ;; end directive is mandatory

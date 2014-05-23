@@ -1,12 +1,12 @@
 
 data segment 
-    ident1 dw   ;;error 
-    ident2      ;; error
-    ident3 dw 0 
-    ident4 dw ident3  ;;error 
-    ident5 dw 0,2,3,4,5 ;;error
-    ident6 db 0 + (-1)*14*(-1) + 0
-    ident7 db -1 * 100 * -1
+    id1 dw   ;;error 
+    id2      ;; error
+    id3 dw 0 
+    id4 dw id3  ;;error 
+    id5 dw 0,2,3,4,5 ;;error
+    id6 db 0 + (-1)*14*(-1) + 0
+    id7 db -1 * 100 * -1
     mod db -1   ;; error - mod is reserved
     eax dw 0    ;; error
     i1 db 2*(2 + ( / 2 ) )  ;; error

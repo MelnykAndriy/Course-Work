@@ -2,23 +2,23 @@
  ident dw 0    ; error
 
 data segment 
-    ident1 db 0ffffffh ;; error  
-    ident2 dw 0fffh
-    ident2 db 2 ;; error
-    labelConcurent dd 0 
-    LABELConCurent db 125 ;;error
+    id1 db 0ffffffh ;; error  
+    id2 dw 0fffh
+    id2 db 2 ;; error
+    lblC dd 0 
+    lblC db 125 ;;error
     data db 1   ;; error
-    segmentConcurent db 0
+    segC db 0
 data ends     
     
     mov ident2,ecx ;; error
 
-segmentConcurent segment 
+segC segment 
 
-segmentConcurent ends
+segC ends
    
 code segment
-   assume cs : code , ds : data
+   ; assume cs : code , ds : data
 begin:
     
 code:   ;;error
@@ -34,12 +34,12 @@ code:   ;;error
     
     mul ax,bx   ;error
     
-labelConcurent:    ;;error
+lblC:    ;;error
     
     
 begin: ;;error
     
-    sub labelConcurent,x    ;; error
+    sub lblC,x    ;; error
     
 code ends 
 

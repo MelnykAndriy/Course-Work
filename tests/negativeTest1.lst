@@ -1,0 +1,91 @@
+    1       
+    2       0000                            ident dw 0    
+            Error : Data defined not inside segment.
+    3       
+    4       0000                       data segment 
+    5       0000                               id1 db 0ffffffh 
+            Error : Value out of range.
+    6       0000                               id2 dw 0fffh
+            Error : Symbol was defined but never used. 
+    7       0000                               id2 db 2 
+            Error : Variable with such name has already defined.
+    8       0000                               lblC dd 0 
+            Error : Symbol was defined but never used. 
+    9       0000                               lblC db 125 
+            Error : Variable with such name has already defined.
+    10      0000                               data db 1   
+            Error : Not variable identifier has already defined.
+    11      0000                               segC db 0
+            Error : Symbol was defined but never used. 
+    12      0000                       data ends     
+    13      
+    14      0000                               mov ident2,ecx 
+            Error : Code emission to undeclared segment.
+    15      
+    16      0000                           segC segment 
+            Error : Not segment identifier has already defined.
+    17      
+    18      0000                           segC ends
+            Error : Segment with such name was not declared.
+    19      
+    20      0000                       code segment
+    21      
+    22      0000                           begin:
+            Error : Symbol was defined but never used. 
+    23      
+    24      0000                           code:   
+            Error : Not label identifier has already defined.
+    25      
+    26      0000                               test al,ds:var?2
+            Error : Identifier was not declared.
+    27      
+    28      0000                               mov     ,al     
+            Error : Operand is missing.
+    29      
+    30      0000                               mov al, 
+            Error : Operand is missing.
+    31      
+    32      0000                               test    
+            Error : Number of provided operands does not match the number of operands for the command.
+    33      0000                               test ax 
+            Error : Number of provided operands does not match the number of operands for the command.
+    34      
+    35      0000                               mul ax,bx   
+            Error : Number of provided operands does not match the number of operands for the command.
+    36      
+    37      0000                           lblC:    
+            Error : Not label identifier has already defined.
+    38      
+    39      
+    40      0000                           begin: 
+            Error : Label with such name has already defined.
+    41      
+    42      0000                               sub lblC,x    
+            Error : Invalid line.
+    43      
+    44      0000                       code ends 
+    45      
+    46      0000                           code segment 
+            Error : Reopening of segments is not allowed. (restriction of variant)
+    47      
+    48      0000                           code ends 
+            Error : Segment with such name was not declared.
+    49      
+    50      0000                               end  
+            Error : Operand is missing.
+
+Summary : 4 Warnings, 21 Errors were found.
+
+
+Segments : 
+                N a m e         		Size	Length
+CODE                                    16 bit  0000    
+DATA                                    16 bit  0000    
+
+Symbols : 
+                N a m e         		Type	 Value	 Attr
+BEGIN                                   NEAR     FFFF    CODE
+ID2                                     WORD     FFFF    DATA
+LBLC                                    DWORD    FFFF    DATA
+SEGC                                    BYTE     FFFF    DATA
+

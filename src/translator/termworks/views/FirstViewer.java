@@ -87,6 +87,7 @@ public class FirstViewer extends TermIterator {
 	private void endDirectiveProcessing() {
 		if ( matchedLine.getAtomAt(1) instanceof UndefinedOperand ) 
 			FixNeededUndefinedOperands.push(new UndefinedOperandUpdater(matchedLine.getAtoms(), 1));
+		
 		term.add(matchedLine);
 	}
 

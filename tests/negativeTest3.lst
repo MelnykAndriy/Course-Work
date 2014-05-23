@@ -1,0 +1,60 @@
+    1       
+    2       
+    3       
+    4       0000                       data segment   
+    5       0000 00                            ident db 0
+    6       0001                       data ends
+    7       
+    8       0000                       code segment 
+    9       
+    10      0000                           begin:
+            Error : Symbol was defined but never used. 
+    11      
+    12      0000                               div word ptr ds:[ax + di]   
+            Error : Not label identifier has already defined.
+    13      0000                               div byte ptr ds:[bp]    
+            Error : Operand type is not defined or not supported.
+    14      0000                               div dword ptr fs:[bx]   
+            Error : Operand type is not defined or not supported.
+    15      0000                               div dword ptr es:[ebp + esp]    
+            Error : Not label identifier has already defined.
+    16      
+    17      0000                               and al,ident  
+            Error : Operand type is not defined or not supported.
+    18      0000 22 06 0000 R                  and al,ds:ident 
+    19      
+    20      0004                               and eax,ds:undefIdent 
+            Error : Identifier was not declared.
+    21      
+    22      0004                               div es:[ebx + ecx]  
+            Error : Memory type is not defined.
+    23      
+    24      0004 67| 84 04 30                  test ds:[eax + esi],al   
+    25      0008                               test [eax + esi],al     
+            Error : Operand type is not defined or not supported.
+    26      
+    27      0008                               test ds:ident[eax + esi],al    
+            Error : Operand type is not defined or not supported.
+    28      
+    29      0008                               div fs:[ebx + edi]    
+            Error : Memory type is not defined.
+    30      
+    31      0008                               jmp undefLabel 
+            Error : Identifier was not declared.
+    32      
+    33      0008                       code ends 
+    34                                         end ident
+
+Summary : 1 Warnings, 11 Errors were found.
+
+
+Segments : 
+                N a m e         		Size	Length
+CODE                                    16 bit  0008    
+DATA                                    16 bit  0001    
+
+Symbols : 
+                N a m e         		Type	 Value	 Attr
+BEGIN                                   NEAR     FFFF    CODE
+IDENT                                   BYTE     0000    DATA
+
