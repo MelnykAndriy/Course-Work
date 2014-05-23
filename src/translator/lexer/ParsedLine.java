@@ -153,5 +153,8 @@ public class ParsedLine {
 
 	}
 
+	public Atom getFirst(AtomType tp) {
+		return atoms.get(firstIndexOf(tp));
+	}
 
 }

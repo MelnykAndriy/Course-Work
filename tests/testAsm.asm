@@ -5,13 +5,12 @@ code segment ;use16
    ; assume cs : code , ds : data
     
 begin:
-    ; mov ax,data
-    ; mov ds,ax
+
     jmp @end           
     sti 
 @sLbl:
 
-    mov ds : var$1, al
+    mov ds : var$1, cl
     and edx, gs : ident
     adc dl, fs : id7
     and al,es:[bx + si]
@@ -115,9 +114,7 @@ begin:
     mov byte ptr gs:[edx + esi],cl
     mov gs:sVar2 , dl
     mov dword ptr ds:sVar3,esp
-      
-    ; mov ax,4C00h
-    ; int 21h   
+
 @end:
     
 code ends 

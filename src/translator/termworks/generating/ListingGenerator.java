@@ -13,7 +13,6 @@ import translator.termworks.syntax.operands.Operand;
 public class ListingGenerator extends TermIterator {
 	private PrintWriter dest;
 	private ArrayList < ParsedLine > term;
-	private CommandListingGenerator localCmdGen;
 	private Segment curSeg;
 	private int curOffset;
 	private int lineIter;
@@ -25,7 +24,6 @@ public class ListingGenerator extends TermIterator {
 	@Override
 	public void genOutput(PrintWriter writer) {
 		dest = writer;
-		localCmdGen = new CommandListingGenerator();
 		lineIter = 1;
 		iterateOverTerm(term);
 	}
@@ -45,7 +43,7 @@ public class ListingGenerator extends TermIterator {
 
 	@Override
 	protected void whenCommandMatched() {
-		dest.printf("%-30s %s\n", localCmdGen.generate(matchedLine,curSeg,curOffset),matchedLine);
+		dest.printf("%-30s %s\n", CommandListingGenerator.generate(matchedLine,curSeg,curOffset),matchedLine);
 		curOffset += matchedLine.getLineByteSize();
 	}
 	

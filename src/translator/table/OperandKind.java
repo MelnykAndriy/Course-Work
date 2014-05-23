@@ -58,6 +58,8 @@ public enum OperandKind {
 	private static OperandKind whatKindOfRelative(int byteSize) {
 		switch (byteSize) {
 			case 1:	return rel8;
+			case 2: return rel16;
+			case 4: return rel32;
 		}
 		return null;
 	}

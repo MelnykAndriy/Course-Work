@@ -83,7 +83,7 @@ public abstract class CommandInitializer  {
     // JAE
         addedCommandSuit = new CommandSuit();
         addedCommandSuit.addOption(new OperandOption("73","/r",OperandKind.rel8));
-        addedCommandSuit.addOption(new OperandOption("0F 83","/r",OperandKind.rel32 ));
+        addedCommandSuit.addOption(new OperandOption("0F 83","/r",OperandKind.rel16 ));
         addedCommandSuit.addOption(new OperandOption("0F 83","/r",OperandKind.rel32 ));
         table.put("jae",new RelativeCmd("jae",1,addedCommandSuit));
 		

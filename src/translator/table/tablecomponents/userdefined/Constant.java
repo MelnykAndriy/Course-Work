@@ -61,7 +61,7 @@ public class Constant extends Atom {
     	if ( value >= (long) -2147483648 && value <= (long) 2*2147483647) return 4;
     	return 8;
     }
-    
+        
     public static int getConstantRadix(String constant) throws BadConstant {
     	if ( !isConstant(constant) ) throw new BadConstant();
     	if ( constant.matches(".*[hH]$") ) return 16;

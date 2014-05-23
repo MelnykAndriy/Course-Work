@@ -27,11 +27,10 @@ public class FirstViewer extends TermIterator {
 			this.lineAtoms = lineAtoms;
 			this.pos = pos;
 		}
-
+		
 		public void update() {
 			lineAtoms.set(pos, Operand.makeOperand( ((UndefinedOperand) lineAtoms.get(pos)).updateSymbolsFromTab(symTab) ));
 		}
-		
 	}
 	
 	public FirstViewer(SymbolTable mainTab) {
@@ -56,7 +55,8 @@ public class FirstViewer extends TermIterator {
 		curLabel.setLineWhereDefined(matchedLine);
 		curProcessSeg.defLabel(curLabel);
 		symTab.AddSymbol( curLabel );
-		term.add(matchedLine);
+		if ( matchedLine.getAtoms().size() == 1 )
+			term.add(matchedLine);
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class Translator {
     	
     	checker.check(syn.getTerm(), GrammarChecker.AvailableChecks.SecondViewChecks );
     	SecondViewer secondViewer = new SecondViewer(mainTab);
-    	secondViewer.view(firstViewer.getTerm());
+    	secondViewer.view( firstViewer.getTerm() );
 
     	try {
     		ListingGenerator listingGenerator = new ListingGenerator(firstViewer.getTerm());

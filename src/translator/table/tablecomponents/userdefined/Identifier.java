@@ -43,6 +43,7 @@ public class Identifier extends Atom {
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
+	
     @Override
     public AtomType getType() {
         return AtomType.Identifier;

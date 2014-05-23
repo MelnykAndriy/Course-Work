@@ -48,5 +48,8 @@ public class Label extends Identifier {
     	return labelType.toString();
     }
 
-    
+	public boolean isDefProcessed() {
+		return getOffset() != -1;
+	}
+	
 }

@@ -19,6 +19,10 @@ public class Relative extends Operand {
 		return operKind;
 	}
 
+	public void clarifyOperKind(OperandKind kind) {
+		operKind = kind;
+	}
+	
 	@Override
 	public int calcSizeInBytes() {
 		return OperandKind.sizeForOperandKind(operKind);
@@ -29,8 +33,8 @@ public class Relative extends Operand {
 		return AtomType.RelativeOperand;
 	}
 	
-	public int calcDistanceTo(int callOffset,int opcodeSize) {
-		return ( (Label) operandAtoms.get(0)).getOffset() - (callOffset + opcodeSize + 1);
+	public int calcDistanceTo(int callOffset,int opcodeSize,int relSize) {
+		return ( (Label) operandAtoms.get(0)).getOffset() - (callOffset + opcodeSize + relSize );
 	}
 	
 	public static boolean isRelative(ArrayList<Atom> operandAtoms) {
@@ -38,6 +42,10 @@ public class Relative extends Operand {
 			 operandAtoms.get(0).getType() == AtomType.Label )
 			return true;
 		return false;
+	}
+
+	public boolean isDefProcessed() {
+		return ((Label)operandAtoms.get(0)).isDefProcessed();
 	}
 
 }
