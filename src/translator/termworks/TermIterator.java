@@ -9,7 +9,6 @@ import translator.table.tablecomponents.userdefined.Identifier;
 
 public abstract class TermIterator extends Printable {
 	public ParsedLine matchedLine;
-	
 
 // Regular expressions
 	public final static String defRegex = "^\\s*("+ Identifier.identRegex + ")\\s+([dD][bBwWdD])\\s+.*\\s*$";
@@ -40,7 +39,6 @@ public abstract class TermIterator extends Printable {
 		defSegEndsPattern.add(AtomType.Directive);
 	}
 
-	
 	protected void iterateOverTerm(ArrayList < ParsedLine > term) {
 		try {
 			for ( ParsedLine  line : term  ) {

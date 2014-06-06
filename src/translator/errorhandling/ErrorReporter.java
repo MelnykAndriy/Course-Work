@@ -240,7 +240,7 @@ public class ErrorReporter {
 
 	public void reportBaseIndexComb(ParsedLine line) {
 		errReported++;
-		line.errFound(errTab.getErrorMsg(ErrIdent.AlreadyDefNotLabel));
+		line.errFound(errTab.getErrorMsg(ErrIdent.BaseIndexComb));
 		errTab.report(ErrIdent.BaseIndexComb,line.getLineNumb(), 
 					  line.findPos(AtomType.Memory));
 	}
